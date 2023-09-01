@@ -1,0 +1,32 @@
+﻿<Project>
+
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+        <!--<WarningsAsErrors/>-->
+        <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <CurrentYear>$([System.DateTime]::Today.Year)</CurrentYear>
+        <Authors>Daniel Woodward</Authors>
+        <Copyright>Copyright Daniel Woodward $(CurrentYear).</Copyright>
+        <Company>$(Authors)</Company>
+
+        <PackageProjectUrl>https://github.com/DrBarnabus/Mimic</PackageProjectUrl>
+        <PackageRequiresLicenseAcceptance>false</PackageRequiresLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <RepositoryUrl>https://github.com/DrBarnabus/Mimic.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+</Project>

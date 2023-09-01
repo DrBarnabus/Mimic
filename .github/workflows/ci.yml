@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+env:
+  DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: 1
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v3
+        name: Install .NET SDK 7.0.400
+        with:
+          dotnet-version: 7.0.400
+        env:
+          DOTNET_INSTALL_DIR: /usr/share/dotnet
+
+      - run: dotnet nuget add source --username DrBarnabus --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name "GitHub" "https://nuget.pkg.github.com/DrBarnabus/index.json"
+        name: Add GitHub Nuget Source
+
+      - uses: gittools/actions/gitversion/setup@v0.9.15
+        name: Setup GitVersion
+        with:
+          versionSpec: 5.x
+      - uses: gittools/actions/gitversion/execute@v0.9.15
+        id: gitversion
+        name: Execute GitVersion
+
+      - uses: actions/cache@v3
+        name: Cache .nuget
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+            ${{ runner.os }}-nuget-
+
+      - run: dotnet restore --locked-mode
+        name: Restore
+      - run: dotnet build -c Release --no-restore -p:PackageVersion=${{ steps.gitversion.outputs.semVer }}
+        name: Build
+
+      - run: dotnet pack src/Mimic -c Release --no-restore --no-build -p:PackageVersion=${{ steps.gitversion.outputs.semVer }} -o _output
+        name: Pack
+      - run: dotnet nuget push _output/*.nupkg --source "GitHub" --api-key ${{ secrets.GITHUB_TOKEN }}
+        name: Push
+        if: github.event_name != 'pull_request'

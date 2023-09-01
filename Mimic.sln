@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimic", "src\Mimic\Mimic.csproj", "{1CBF29EA-9613-4711-A593-D4CD9D8D19F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BC413DBD-20FC-498C-BB54-F52EEEB1FF0E}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimic.Sandbox", "src\Mimic.Sandbox\Mimic.Sandbox.csproj", "{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CBF29EA-9613-4711-A593-D4CD9D8D19F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBF29EA-9613-4711-A593-D4CD9D8D19F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBF29EA-9613-4711-A593-D4CD9D8D19F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBF29EA-9613-4711-A593-D4CD9D8D19F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1CBF29EA-9613-4711-A593-D4CD9D8D19F7} = {BC413DBD-20FC-498C-BB54-F52EEEB1FF0E}
+		{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9} = {BC413DBD-20FC-498C-BB54-F52EEEB1FF0E}
+	EndGlobalSection
+EndGlobal
