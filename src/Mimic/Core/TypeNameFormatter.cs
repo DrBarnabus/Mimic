@@ -19,16 +19,19 @@ internal static class TypeNameFormatter
         [typeof(long)] = "long",
         [typeof(ulong)] = "ulong",
         [typeof(decimal)] = "decimal",
+        [typeof(double)] = "double",
+        [typeof(float)] = "float",
         [typeof(char)] = "char",
         [typeof(string)] = "string",
-        [typeof(object)] = "object"
+        [typeof(object)] = "object",
+        [typeof(void)] = "void",
     };
 
     public static string GetFormattedName(Type type)
     {
         Guard.Assert(type is not null);
 
-        var stringBuilder = new ValueStringBuilder(stackalloc char[512]);
+        var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
 
         AppendFormattedTypeName(ref stringBuilder, type, type);
 
@@ -81,7 +84,7 @@ internal static class TypeNameFormatter
 
         if (type.IsArray)
         {
-            AppendArrayElementType(ref stringBuilder, elementType);
+            AppendArrayElementType(ref stringBuilder, elementType, type);
         }
         else if (type.IsByRef)
         {
@@ -90,8 +93,8 @@ internal static class TypeNameFormatter
         }
         else if (type.IsPointer)
         {
-            stringBuilder.Append('*');
             AppendFormattedTypeName(ref stringBuilder, elementType, elementType);
+            stringBuilder.Append('*');
         }
         else
         {
@@ -100,10 +103,10 @@ internal static class TypeNameFormatter
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void AppendArrayElementType(ref ValueStringBuilder stringBuilder, Type elementType)
+    private static void AppendArrayElementType(ref ValueStringBuilder stringBuilder, Type elementType, Type arrayType)
     {
         var arrayRanks = new Queue<int>();
-        arrayRanks.Enqueue(elementType.GetArrayRank());
+        arrayRanks.Enqueue(arrayType.GetArrayRank());
 
         while (true)
         {
@@ -204,7 +207,7 @@ internal static class TypeNameFormatter
 
         stringBuilder.Append('<');
 
-        if (type is { IsGenericType: true, IsGenericTypeDefinition: false })
+        if (typeWithGenericArguments is { IsGenericType: true, IsGenericTypeDefinition: false })
         {
             var genericArguments = typeWithGenericArguments.GetGenericArguments();
 
