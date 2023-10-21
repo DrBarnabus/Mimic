@@ -16,6 +16,12 @@ internal sealed class NonVoidSetup<T, TResult> : SetupBase, ISetup<T, TResult>, 
         return this;
     }
 
+    public IReturnsResult<T> Returns(Delegate valueFactory)
+    {
+        Setup.SetReturnComputedValueBehaviour(valueFactory);
+        return this;
+    }
+
     public IReturnsResult<T> Returns(Func<TResult?> valueFactory)
     {
         Setup.SetReturnComputedValueBehaviour(valueFactory);

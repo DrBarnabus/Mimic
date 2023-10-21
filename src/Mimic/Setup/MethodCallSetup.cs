@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Mimic.Core;
@@ -70,16 +71,39 @@ internal sealed class MethodCallSetup
         var expectedReturnType = MethodInfo.ReturnType;
 
         if (expectedReturnType == typeof(Delegate))
+        {
             _returnOrThrow = new ReturnValueBehaviour(valueFactory);
+        }
         else
         {
             ValidateDelegateArgumentCount(valueFactory);
-            ValidateDelegateReturnType(valueFactory);
+            ValidateDelegateReturnType(valueFactory, MethodInfo.ReturnType);
 
             _returnOrThrow = valueFactory.CompareParameterTypesTo(Type.EmptyTypes)
                 ? new ReturnComputedValueBehaviour(_ => valueFactory.Invoke())
                 : new ReturnComputedValueBehaviour(invocation => valueFactory.Invoke(invocation.Arguments));
         }
+    }
+
+    public void SetThrowExceptionBehaviour(Exception exception)
+    {
+        Guard.NotNull(exception);
+        Guard.Assert(_returnOrThrow is null);
+
+        _returnOrThrow = new ThrowExceptionBehaviour(exception);
+    }
+
+    public void SetThrowComputedExceptionBehaviour(Delegate exceptionFactory)
+    {
+        Guard.NotNull(exceptionFactory);
+        Guard.Assert(_returnOrThrow is null);
+
+        ValidateDelegateArgumentCount(exceptionFactory);
+        ValidateDelegateReturnType(exceptionFactory, typeof(Exception));
+
+        _returnOrThrow = exceptionFactory.CompareParameterTypesTo(Type.EmptyTypes)
+            ? new ThrowComputedExceptionBehaviour(_ => exceptionFactory.Invoke() as Exception)
+            : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
     }
 
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
@@ -100,20 +124,16 @@ internal sealed class MethodCallSetup
         }
     }
 
-    private void ValidateDelegateReturnType(Delegate delegateFunction)
+    private void ValidateDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
     {
         var actualReturnType = delegateFunction.GetMethodInfo().ReturnType;
-        var expectedReturnType = MethodInfo.ReturnType;
-
-        // TODO: See if we need this check at all
-        // if (actualReturnType == typeof(void))
-        //     throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with a void return type");
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
             throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with return type '{TypeNameFormatter.GetFormattedName(actualReturnType)}'");
     }
 
     [Flags]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private enum Flags : byte
     {
         None = 0,
@@ -142,5 +162,29 @@ internal sealed class MethodCallSetup
         public ReturnComputedValueBehaviour(Func<IInvocation, object?> valueFactory) => _valueFactory = valueFactory;
 
         internal override void Execute(IInvocation invocation) => invocation.SetReturnValue(_valueFactory.Invoke(invocation));
+    }
+
+    private sealed class ThrowExceptionBehaviour : Behaviour
+    {
+        private readonly Exception _exception;
+
+        public ThrowExceptionBehaviour(Exception exception) => _exception = exception;
+
+        internal override void Execute(IInvocation invocation)
+        {
+            throw _exception;
+        }
+    }
+
+    private sealed class ThrowComputedExceptionBehaviour : Behaviour
+    {
+        private readonly Func<IInvocation, Exception?> _exceptionFactory;
+
+        public ThrowComputedExceptionBehaviour(Func<IInvocation, Exception?> exceptionFactory) => _exceptionFactory = exceptionFactory;
+
+        internal override void Execute(IInvocation invocation)
+        {
+            throw _exceptionFactory.Invoke(invocation)!;
+        }
     }
 }
