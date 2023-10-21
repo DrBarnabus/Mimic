@@ -1,8 +1,10 @@
-﻿using Mimic.Core;
+﻿using JetBrains.Annotations;
+using Mimic.Core;
 using Mimic.Proxy;
 
 namespace Mimic;
 
+[PublicAPI]
 public sealed partial class Mimic<T> : IMimic
     where T : class
 {

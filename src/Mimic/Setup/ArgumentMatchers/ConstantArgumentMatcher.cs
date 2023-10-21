@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Mimic.Setup.ArgumentMatchers;
 
-internal class ConstantArgumentMatcher : IArgumentMatcher
+internal sealed class ConstantArgumentMatcher : IArgumentMatcher
 {
     private readonly object? _value;
 

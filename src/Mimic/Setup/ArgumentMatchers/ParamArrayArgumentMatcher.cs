@@ -2,7 +2,7 @@ using Mimic.Core;
 
 namespace Mimic.Setup.ArgumentMatchers;
 
-internal class ParamArrayArgumentMatcher : IArgumentMatcher
+internal sealed class ParamArrayArgumentMatcher : IArgumentMatcher
 {
     private readonly IArgumentMatcher[] _argumentMatchers;
 

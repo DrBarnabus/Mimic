@@ -2,7 +2,7 @@
 
 namespace Mimic.Setup;
 
-internal class NonVoidSetup<T, TResult> : SetupBase, ISetup<T, TResult>, IReturnsResult<T>
+internal sealed class NonVoidSetup<T, TResult> : SetupBase, ISetup<T, TResult>, IReturnsResult<T>
     where T : class
 {
     public NonVoidSetup(MethodCallSetup setup)

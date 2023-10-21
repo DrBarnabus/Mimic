@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
+using JetBrains.Annotations;
 using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic;
 
+[PublicAPI]
 public static class Arg
 {
     public static TValue Any<TValue>()

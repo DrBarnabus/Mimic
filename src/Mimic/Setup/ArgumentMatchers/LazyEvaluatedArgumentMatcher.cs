@@ -3,7 +3,7 @@ using Mimic.Expressions;
 
 namespace Mimic.Setup.ArgumentMatchers;
 
-internal class LazyEvaluatedArgumentMatcher : IArgumentMatcher
+internal sealed class LazyEvaluatedArgumentMatcher : IArgumentMatcher
 {
     private readonly Expression _expression;
 
