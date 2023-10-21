@@ -20,15 +20,17 @@ Completed   = ✔
 ```
 
 -   Mocking of:
-    -   [🚧] Interfaces
+    -   [✔] Interfaces
     -   [❓] Classes (inc support for arguments and calling the base implementation of mocked methods)
--   [🚧] Setup of Methods
--   [📅] Setup of Getters & Setters
+-   [✔] Setup of Methods
+-   [🚧] Setup of Getters & Setters
 -   [📅] Setup of Property Stubbing
 -   [📅] Support for `ref`/`out` arguments
 -   [📅] Verifiable Setup's
 -   [📅] "Strict" Setup mode (Calls throw if not setup)
--   [❓] Execution Limits (Calls throw after n expected calls)
+-   [📅] Execution Limits (Calls throw after n expected calls)
+-   [📅] Conditional Setup of Methods
+-   [📅] Sequential Returns (Calls return next sequential result on each call `.Returns(value1, value2, value3)`)
 -   [❓] Setup of Event Handlers
 
 Mimic makes use of [Castle.Core](https://www.castleproject.org/projects/dynamicproxy)'s `DynamicProxy` internally for generating proxies of types to mock.
