@@ -2,7 +2,7 @@
 
 namespace Mimic.Proxy;
 
-public interface IInvocation
+internal interface IInvocation
 {
     public Type ProxyType { get; }
 

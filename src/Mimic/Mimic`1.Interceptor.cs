@@ -7,13 +7,33 @@ public partial class Mimic<T>
 {
     void IInterceptor.Intercept(IInvocation invocation)
     {
-        if (invocation.Method is { IsSpecialName: true, Name: $"get_{nameof(IMimicked<T>.Mimic)}" }
-            && typeof(IMimicked<T>).IsAssignableFrom(invocation.Method.DeclaringType))
-        {
-            invocation.SetReturnValue(this);
+        if (HandleMimicGetter(invocation, this))
             return;
-        }
 
-        Console.WriteLine($"{invocation.Method} invoked");
+        if (HandleMatchingSetup(invocation, this))
+            return;
+
+        if (invocation.Method.ReturnType != typeof(void))
+            throw new NotImplementedException();
+    }
+
+    private static bool HandleMimicGetter(IInvocation invocation, Mimic<T> mimic)
+    {
+        if (invocation.Method is not { IsSpecialName: true, Name: $"get{nameof(IMimicked<T>.Mimic)}" }
+            || !typeof(IMimicked<T>).IsAssignableFrom(invocation.Method.DeclaringType))
+            return false;
+
+        invocation.SetReturnValue(mimic);
+        return true;
+    }
+
+    private static bool HandleMatchingSetup(IInvocation invocation, Mimic<T> mimic)
+    {
+        var matchingSetup = mimic._setups.FindLast(s => s.MatchesInvocation(invocation));
+        if (matchingSetup is null)
+            return false;
+
+        matchingSetup.Execute(invocation);
+        return true;
     }
 }

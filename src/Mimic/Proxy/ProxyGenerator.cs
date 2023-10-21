@@ -53,8 +53,7 @@ internal sealed class ProxyGenerator
         }
     }
 
-    private sealed class Invocation
-        : IInvocation
+    private sealed class Invocation : IInvocation
     {
         // ReSharper disable once NotAccessedField.Local
         private Castle.DynamicProxy.IInvocation? _underlyingInvocation;

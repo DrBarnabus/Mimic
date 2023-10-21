@@ -3,11 +3,13 @@ using Mimic.Proxy;
 
 namespace Mimic;
 
-public sealed partial class Mimic<T>
+public sealed partial class Mimic<T> : IMimic
     where T : class
 {
     // ReSharper disable once StaticMemberInGenericType
     private static int _instanceCounter;
+
+    private readonly SetupCollection _setups = new();
     private T? _object;
 
     public string Name { get; init; }
