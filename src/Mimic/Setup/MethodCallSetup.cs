@@ -10,7 +10,10 @@ namespace Mimic.Setup;
 internal sealed class MethodCallSetup
 {
     private Flags _flags;
+
     private Behaviour? _returnOrThrow;
+    private CallbackBehaviour? _preReturnCallback;
+    private CallbackBehaviour? _postReturnCallback;
 
     public Expression OriginalExpression { get; }
 
@@ -39,14 +42,18 @@ internal sealed class MethodCallSetup
     {
         _flags |= Flags.Matched;
 
+        _preReturnCallback?.Execute(invocation);
+
         if (_returnOrThrow is not null)
         {
             _returnOrThrow.Execute(invocation);
         }
         else if (invocation.Method.ReturnType != typeof(void))
         {
-            throw new NotImplementedException(); // TODO: Create a specialized exception for this purpose
+            throw new NotImplementedException(); // TODO: Create a specialized exception for this purpose or handle default return types?
         }
+
+        _postReturnCallback?.Execute(invocation);
     }
 
     public void Override()
@@ -106,6 +113,30 @@ internal sealed class MethodCallSetup
             : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
     }
 
+    public void SetCallbackBehaviour(Delegate callbackFunction)
+    {
+        Guard.NotNull(callbackFunction);
+
+        ref var callbackBehaviour = ref _returnOrThrow == null ? ref _preReturnCallback : ref _postReturnCallback;
+
+        if (callbackFunction is Action callbackFunctionWithoutArgs)
+        {
+            callbackBehaviour = new CallbackBehaviour(_ => callbackFunctionWithoutArgs());
+        }
+        else
+        {
+            ValidateDelegateArgumentCount(callbackFunction);
+            if (!callbackFunction.CompareParameterTypesTo(MethodInfo.GetParameters().Select(p => p.ParameterType).ToArray()))
+                throw new ArgumentException($"Setup on method cannot invoke a callback method with wrong argument types");
+
+            var callbackReturnType = callbackFunction.GetMethodInfo().ReturnType;
+            if (callbackReturnType != typeof(void))
+                throw new ArgumentException("Setup on method cannot invoke a callback method with a non-void return type");
+
+            callbackBehaviour = new CallbackBehaviour(invocation => callbackFunction.Invoke(invocation.Arguments));
+        }
+    }
+
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
     {
         var methodInfo = delegateFunction.GetMethodInfo();
@@ -124,9 +155,12 @@ internal sealed class MethodCallSetup
         }
     }
 
-    private void ValidateDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
+    private static void ValidateDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
     {
         var actualReturnType = delegateFunction.GetMethodInfo().ReturnType;
+
+        if (actualReturnType == typeof(void))
+            throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with a void return type");
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
             throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with return type '{TypeNameFormatter.GetFormattedName(actualReturnType)}'");
@@ -185,6 +219,18 @@ internal sealed class MethodCallSetup
         internal override void Execute(IInvocation invocation)
         {
             throw _exceptionFactory.Invoke(invocation)!;
+        }
+    }
+
+    private sealed class CallbackBehaviour : Behaviour
+    {
+        private readonly Action<IInvocation> _callbackFunction;
+
+        public CallbackBehaviour(Action<IInvocation> callbackFunction) => _callbackFunction = callbackFunction;
+
+        internal override void Execute(IInvocation invocation)
+        {
+            _callbackFunction.Invoke(invocation);
         }
     }
 }

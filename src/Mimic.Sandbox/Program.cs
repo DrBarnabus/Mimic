@@ -3,7 +3,13 @@
 var mimic = new Mimic<ITypeToMimic>();
 
 mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
-    .Returns((string a) => Task.FromResult($"Value is: {a}"));
+    .Callback(() => Console.WriteLine($"Callback before {nameof(ITypeToMimic.StringMethod)} returns"))
+    .Returns((string a) =>
+    {
+        Console.WriteLine($"The return function for {nameof(ITypeToMimic.StringMethod)} which was called with {a}");
+        return Task.FromResult($"Value is: {a}");
+    })
+    .Callback((string a) => Console.WriteLine($"Callback after {nameof(ITypeToMimic.StringMethod)} returns. Called with {a}"));
 
 mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));

@@ -5,7 +5,7 @@ namespace Mimic.Setup.Fluent;
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IReturnsResult<TMimic> : IFluent
+public interface IReturnsResult<TMimic> : ICallback, IFluent
     where TMimic : class
 {
 }
