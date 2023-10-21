@@ -1,3 +1,5 @@
+using Mimic.Setup.Fluent;
+
 namespace Mimic.Setup;
 
 internal class VoidSetup<T> : SetupBase, ISetup<T>

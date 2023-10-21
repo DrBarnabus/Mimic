@@ -4,14 +4,14 @@ namespace Mimic.Setup;
 
 internal class SetupBase
 {
-    public SetupBase(MethodCallSetup setup)
+    protected SetupBase(MethodCallSetup setup)
     {
         Guard.NotNull(setup);
 
         Setup = setup;
     }
 
-    public MethodCallSetup Setup { get; }
+    protected MethodCallSetup Setup { get; }
 
     public override string ToString()
     {

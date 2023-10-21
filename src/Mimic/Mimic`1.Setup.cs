@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Mimic.Core;
 using Mimic.Expressions;
 using Mimic.Setup;
+using Mimic.Setup.Fluent;
 
 namespace Mimic;
 
