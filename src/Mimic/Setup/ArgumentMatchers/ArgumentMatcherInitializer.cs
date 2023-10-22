@@ -25,7 +25,7 @@ internal static class ArgumentMatcherInitializer
         return new InitializedMatchers(argumentMatchers, argumentExpressions);
     }
 
-    private static InitializedMatcher Initialize(Expression expression, ParameterInfo parameter)
+    internal static InitializedMatcher Initialize(Expression expression, ParameterInfo parameter)
     {
         if (parameter.ParameterType.IsByRef)
             throw new NotSupportedException("IsByRef type method parameters are not supported yet");
@@ -66,7 +66,7 @@ internal static class ArgumentMatcherInitializer
         return Initialize(expression);
     }
 
-    private static InitializedMatcher Initialize(Expression expression)
+    internal static InitializedMatcher Initialize(Expression expression)
     {
         var originalExpression = expression;
         while (expression.NodeType is ExpressionType.Convert)
@@ -90,7 +90,7 @@ internal static class ArgumentMatcherInitializer
         return evaluatedExpression.NodeType switch
         {
             ExpressionType.Constant => new InitializedMatcher(new ConstantArgumentMatcher(((ConstantExpression)evaluatedExpression).Value), evaluatedExpression),
-            ExpressionType.Quote => new InitializedMatcher(null!, evaluatedExpression),
+            ExpressionType.Quote => new InitializedMatcher(null!, evaluatedExpression), // TODO: Fix the implementation here, this was a placeholder that's been left in by accident
             _ => throw new NotSupportedException($"Unsupported parameter expression: {originalExpression}")
         };
     }
@@ -105,5 +105,5 @@ internal static class ArgumentMatcherInitializer
 
     internal sealed record InitializedMatchers(IArgumentMatcher[] ArgumentMatchers, Expression[] ArgumentExpressions);
 
-    private sealed record InitializedMatcher(IArgumentMatcher ArgumentMatchers, Expression ArgumentExpressions);
+    internal sealed record InitializedMatcher(IArgumentMatcher ArgumentMatchers, Expression ArgumentExpressions);
 }
