@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using Castle.DynamicProxy;
 using Mimic.Core;
 
@@ -95,6 +96,112 @@ internal sealed class ProxyGenerator
         public void Detatch()
         {
             _underlyingInvocation = null;
+        }
+
+        public override string ToString()
+        {
+            var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
+
+            TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, Method.DeclaringType!);
+            stringBuilder.Append('.');
+
+            if (Method.IsSpecialName && Method.Name.StartsWith("get_", StringComparison.Ordinal))
+            {
+                stringBuilder.Append(Method.Name.AsSpan(4));
+            }
+            else if (Method.IsSpecialName && Method.Name.StartsWith("set_", StringComparison.Ordinal))
+            {
+                stringBuilder.Append(Method.Name.AsSpan(4));
+                stringBuilder.Append(" = ".AsSpan());
+                AppendValue(ref stringBuilder, Arguments[0]);
+            }
+            else
+            {
+                stringBuilder.Append(Method.Name.AsSpan());
+                if (Method.IsGenericMethod)
+                {
+                    stringBuilder.Append('<');
+
+                    var genericArguments = Method.GetGenericArguments();
+                    for (int i = 0; i < genericArguments.Length; i++)
+                    {
+                        if (i > 0)
+                            stringBuilder.Append(", ".AsSpan());
+
+                        TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, genericArguments[i]);
+                    }
+
+                    stringBuilder.Append('>');
+                }
+
+                stringBuilder.Append('(');
+
+                for (int i = 0; i < Arguments.Length; i++)
+                {
+                    if (i > 0)
+                        stringBuilder.Append(", ".AsSpan());
+
+                    AppendValue(ref stringBuilder, Arguments[i]);
+                }
+
+                stringBuilder.Append(')');
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private static void AppendValue(ref ValueStringBuilder stringBuilder, object? value)
+        {
+            if (value is null)
+            {
+                stringBuilder.Append("null".AsSpan());
+                return;
+            }
+
+            if (value is string stringValue)
+            {
+                stringBuilder.Append('"');
+                stringBuilder.Append(stringValue.AsSpan());
+                stringBuilder.Append('"');
+                return;
+            }
+
+            var valueType = value.GetType();
+            if (valueType.IsEnum)
+            {
+                TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, valueType);
+                stringBuilder.Append('.');
+                stringBuilder.Append(value.ToString());
+            }
+            else if (valueType.IsArray || (valueType.IsConstructedGenericType && valueType.GetGenericTypeDefinition() == typeof(List<>)))
+            {
+                stringBuilder.Append('[');
+
+                var enumerator = ((IEnumerable)value).GetEnumerator();
+                for (int i = 0; enumerator.MoveNext() && i < 10 + 1; ++i)
+                {
+                    if (i > 0)
+                        stringBuilder.Append(", ".AsSpan());
+
+                    if (i == 10)
+                    {
+                        stringBuilder.Append("...".AsSpan());
+                        break;
+                    }
+
+                    AppendValue(ref stringBuilder, enumerator.Current);
+                }
+
+                stringBuilder.Append(']');
+            }
+            else
+            {
+                string? formattedValue = value.ToString();
+                if (formattedValue is null || formattedValue == valueType.ToString())
+                    TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, valueType);
+                else
+                    stringBuilder.Append(formattedValue);
+            }
         }
 
         private record struct ExceptionReturnValue(Exception Exception);

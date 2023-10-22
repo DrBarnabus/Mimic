@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using JetBrains.Annotations;
+using Mimic.Exceptions;
 
 namespace Mimic.Core;
 
@@ -85,8 +87,10 @@ internal static partial class Guard
         throw new AssertionException(message, paramName);
     }
 
-    internal sealed class AssertionException : Exception
+    internal sealed class AssertionException : MimicException
     {
+        public override string Identifier => "mimic_assertion";
+
         public AssertionException(string message, string? expression)
             : base($"{message} (Expression '{expression}')")
         {
@@ -94,5 +98,11 @@ internal static partial class Guard
         }
 
         public string? Expression { get; }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue(nameof(Expression), Expression);
+        }
     }
 }

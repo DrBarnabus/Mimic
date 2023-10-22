@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Setup;
 
 namespace Mimic.Expressions;
@@ -26,7 +27,7 @@ internal static class ExpressionSplitter
         if (parts.Count is 1 && remainder is ParameterExpression)
             return parts;
 
-        throw new NotSupportedException($"Unsupported expression: {expression}");
+        throw new UnsupportedExpressionException(expression);
     }
 
     private static bool CanSplitExpression(Expression expression)
@@ -52,7 +53,7 @@ internal static class ExpressionSplitter
             ExpressionType.Call => SplitMethodCallExpression(expression, out remainder),
             ExpressionType.Index => SplitIndexExpression(expression, out remainder, isAssignment),
             ExpressionType.MemberAccess => SplitMemberExpression(expression, out remainder, isAssignment),
-            _ => throw new InvalidOperationException()
+            _ => throw new UnsupportedExpressionException(expression)
         };
     }
 

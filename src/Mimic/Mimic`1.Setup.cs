@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Expressions;
 using Mimic.Setup;
 using Mimic.Setup.Fluent;
@@ -27,7 +28,7 @@ public partial class Mimic<T>
 
         var expectations = ExpressionSplitter.Split(expression);
         if (expectations.Count != 1)
-            throw new NotSupportedException($"Unsupported expression: {expression}");
+            throw new UnsupportedExpressionException(expression);
 
         var setup = new MethodCallSetup(expression, mimic, expectations.Pop());
         mimic._setups.Add(setup);

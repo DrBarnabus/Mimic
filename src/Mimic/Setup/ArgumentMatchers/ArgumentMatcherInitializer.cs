@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Expressions;
 
 namespace Mimic.Setup.ArgumentMatchers;
@@ -28,7 +29,7 @@ internal static class ArgumentMatcherInitializer
     internal static InitializedMatcher Initialize(Expression expression, ParameterInfo parameter)
     {
         if (parameter.ParameterType.IsByRef)
-            throw new NotSupportedException("IsByRef type method parameters are not supported yet");
+            throw new UnsupportedExpressionException(expression, UnsupportedExpressionException.UnsupportedReason.RefTypeParameters);
 
         if (parameter.IsDefined(typeof(ParamArrayAttribute), true) && expression.NodeType == ExpressionType.NewArrayInit)
         {
@@ -58,8 +59,8 @@ internal static class ArgumentMatcherInitializer
                     ? argumentMatcher.GetType().GenericTypeArguments[0]
                     : convertExpression.Operand.Type;
 
-                // TODO: Revisit this and find a nicer exception/warning to throw
-                Guard.Assert(!matchedValueTypes.IsAssignableFrom(parameter.ParameterType), $"ArgumentMatcher '{convertExpression.Operand.ToString()}' is unmatchable. An implict conversion of argument from type '{TypeNameFormatter.GetFormattedName(convertExpression.Operand.Type)}' to type '{TypeNameFormatter.GetFormattedName(parameter.ParameterType)}' which is an incompatible assignment");
+                if (!matchedValueTypes.IsAssignableFrom(parameter.ParameterType))
+                    throw MimicException.UnmatchableArgumentMatcher(convertExpression.Operand, parameter.ParameterType);
             }
         }
 
@@ -91,7 +92,7 @@ internal static class ArgumentMatcherInitializer
         {
             ExpressionType.Constant => new InitializedMatcher(new ConstantArgumentMatcher(((ConstantExpression)evaluatedExpression).Value), evaluatedExpression),
             ExpressionType.Quote => new InitializedMatcher(new ExpressionArgumentMatcher(((UnaryExpression)expression).Operand), evaluatedExpression),
-            _ => throw new NotSupportedException($"Unsupported parameter expression: {originalExpression}")
+            _ => throw new UnsupportedExpressionException(originalExpression)
         };
     }
 

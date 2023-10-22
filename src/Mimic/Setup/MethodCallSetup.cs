@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Proxy;
 
 namespace Mimic.Setup;
@@ -50,7 +51,7 @@ internal sealed class MethodCallSetup
         }
         else if (invocation.Method.ReturnType != typeof(void))
         {
-            throw new NotImplementedException(); // TODO: Create a specialized exception for this purpose or handle default return types?
+            throw MimicException.ReturnRequired(invocation);
         }
 
         _postReturnCallback?.Execute(invocation);
@@ -84,7 +85,7 @@ internal sealed class MethodCallSetup
         else
         {
             ValidateDelegateArgumentCount(valueFactory);
-            ValidateDelegateReturnType(valueFactory, MethodInfo.ReturnType);
+            ValidateReturnDelegateReturnType(valueFactory, MethodInfo.ReturnType);
 
             _returnOrThrow = valueFactory.CompareParameterTypesTo(Type.EmptyTypes)
                 ? new ReturnComputedValueBehaviour(_ => valueFactory.Invoke())
@@ -106,7 +107,7 @@ internal sealed class MethodCallSetup
         Guard.Assert(_returnOrThrow is null);
 
         ValidateDelegateArgumentCount(exceptionFactory);
-        ValidateDelegateReturnType(exceptionFactory, typeof(Exception));
+        ValidateReturnDelegateReturnType(exceptionFactory, typeof(Exception));
 
         _returnOrThrow = exceptionFactory.CompareParameterTypesTo(Type.EmptyTypes)
             ? new ThrowComputedExceptionBehaviour(_ => exceptionFactory.Invoke() as Exception)
@@ -126,12 +127,14 @@ internal sealed class MethodCallSetup
         else
         {
             ValidateDelegateArgumentCount(callbackFunction);
-            if (!callbackFunction.CompareParameterTypesTo(MethodInfo.GetParameters().Select(p => p.ParameterType).ToArray()))
-                throw new ArgumentException($"Setup on method cannot invoke a callback method with wrong argument types");
+
+            var expectedArguments = MethodInfo.GetParameters();
+            if (!callbackFunction.CompareParameterTypesTo(expectedArguments.Select(p => p.ParameterType).ToArray()))
+                throw MimicException.WrongCallbackArgumentTypes(expectedArguments, callbackFunction.GetMethodInfo().GetParameters());
 
             var callbackReturnType = callbackFunction.GetMethodInfo().ReturnType;
             if (callbackReturnType != typeof(void))
-                throw new ArgumentException("Setup on method cannot invoke a callback method with a non-void return type");
+                throw MimicException.WrongCallbackReturnType();
 
             callbackBehaviour = new CallbackBehaviour(invocation => callbackFunction.Invoke(invocation.Arguments));
         }
@@ -150,20 +153,20 @@ internal sealed class MethodCallSetup
             int expectedNumberOfArguments = MethodInfo.GetParameters().Length;
             if (actualNumberOfArguments != expectedNumberOfArguments)
             {
-                throw new ArgumentException($"Setup on method with {expectedNumberOfArguments} expected argument(s) cannot cannot invoke a callback method with only {actualNumberOfArguments} argument(s)");
+                throw MimicException.WrongCallbackArgumentCount(expectedNumberOfArguments, actualNumberOfArguments);
             }
         }
     }
 
-    private static void ValidateDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
+    private static void ValidateReturnDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
     {
         var actualReturnType = delegateFunction.GetMethodInfo().ReturnType;
 
         if (actualReturnType == typeof(void))
-            throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with a void return type");
+            throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, null);
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
-            throw new ArgumentException($"Setup on method with return type '{TypeNameFormatter.GetFormattedName(expectedReturnType)}' cannot invoke a callback method with return type '{TypeNameFormatter.GetFormattedName(actualReturnType)}'");
+            throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, actualReturnType);
     }
 
     [Flags]

@@ -1,4 +1,5 @@
-﻿using Mimic.Proxy;
+﻿using Mimic.Exceptions;
+using Mimic.Proxy;
 
 namespace Mimic;
 
@@ -14,7 +15,7 @@ public partial class Mimic<T>
             return;
 
         if (invocation.Method.ReturnType != typeof(void))
-            throw new NotImplementedException();
+            throw MimicException.ReturnRequired(invocation);
     }
 
     private static bool HandleMimicGetter(IInvocation invocation, Mimic<T> mimic)

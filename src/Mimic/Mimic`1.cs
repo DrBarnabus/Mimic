@@ -21,7 +21,7 @@ public sealed partial class Mimic<T> : IMimic
     public Mimic()
     {
         if (!typeof(T).IsInterface)
-            throw new NotSupportedException($"Type {typeof(T)} must be an interface.");
+            throw new NotSupportedException($"Type to mimic {TypeNameFormatter.GetFormattedName(typeof(T))} must be an interface");
 
         int instanceNumber = Interlocked.Increment(ref _instanceCounter);
         Name = $"Mimic<{TypeNameFormatter.GetFormattedName(typeof(T))}>:{instanceNumber}";

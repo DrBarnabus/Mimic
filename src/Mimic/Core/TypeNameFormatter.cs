@@ -27,15 +27,20 @@ internal static class TypeNameFormatter
         [typeof(void)] = "void",
     };
 
-    public static string GetFormattedName(Type type)
+    internal static string GetFormattedName(Type type)
     {
-        Guard.Assert(type is not null);
+        Guard.NotNull(type);
 
         var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
+        AppendFormattedTypeName(ref stringBuilder, type);
+        return stringBuilder.ToString();
+    }
+
+    internal static void AppendFormattedTypeName(ref ValueStringBuilder stringBuilder, Type type)
+    {
+        Guard.NotNull(type);
 
         AppendFormattedTypeName(ref stringBuilder, type, type);
-
-        return stringBuilder.ToString();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
