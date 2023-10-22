@@ -71,4 +71,4 @@ jobs:
         run: dotnet nuget push _output/*.nupkg --source "GitHub" --api-key ${{ secrets.GITHUB_TOKEN }}
       - name: Push to NuGet
         if: github.event_name == 'release' && github.event.action == 'created'
-        run: dotnet nuget push _output/*.nupkg --soruce https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push _output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
