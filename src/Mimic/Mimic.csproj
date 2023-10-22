@@ -2,6 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        
+        <PackageId>Mimic</PackageId>
+        <PackageTags>mimic;mock;mocking;fake;substitute;spy;tdd;aaa;test;testing;unit-test;unit-testing</PackageTags>
+        <Description>Fast, friendly and familiar mocking library for modern .NET</Description>
     </PropertyGroup>
 
     <ItemGroup>

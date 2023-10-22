@@ -1,6 +1,6 @@
 # Mimic
 
-#### Friendly, fast and familiar mocking library for .NET
+#### Fast, friendly and familiar mocking library for modern .NET
 
 [![Build Status][gh-actions-badge]][gh-actions]
 
