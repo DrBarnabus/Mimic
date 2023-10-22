@@ -90,7 +90,7 @@ internal static class ArgumentMatcherInitializer
         return evaluatedExpression.NodeType switch
         {
             ExpressionType.Constant => new InitializedMatcher(new ConstantArgumentMatcher(((ConstantExpression)evaluatedExpression).Value), evaluatedExpression),
-            ExpressionType.Quote => new InitializedMatcher(null!, evaluatedExpression), // TODO: Fix the implementation here, this was a placeholder that's been left in by accident
+            ExpressionType.Quote => new InitializedMatcher(new ExpressionArgumentMatcher(((UnaryExpression)expression).Operand), evaluatedExpression),
             _ => throw new NotSupportedException($"Unsupported parameter expression: {originalExpression}")
         };
     }
