@@ -2,6 +2,8 @@
 
 #### Fast, friendly and familiar mocking library for modern .NET
 
+[![GitHub Release][gh-release-badge]][gh-release]
+[![NuGet Downloads][nuget-downloads-badge]][nuget-downloads]
 [![Build Status][gh-actions-badge]][gh-actions]
 
 #### [Planned Features](#planned-features) | [License](#license)
@@ -41,5 +43,9 @@ Licensed under [MIT](./LICENSE), Copyright (c) 2023 Daniel Woodward
 
 <!-- Links -->
 
+[gh-release-badge]: https://img.shields.io/github/v/release/DrBarnabus/Mimic?color=g&style=for-the-badge
+[gh-release]: https://github.com/DrBarnabus/Mimic/releases/latest
+[nuget-downloads-badge]: https://img.shields.io/nuget/dt/Mimic?color=g&logo=nuget&style=for-the-badge
+[nuget-downloads]: https://www.nuget.org/packages/Mimic
 [gh-actions-badge]: https://img.shields.io/github/actions/workflow/status/DrBarnabus/Mimic/ci.yml?logo=github&branch=main&style=for-the-badge
 [gh-actions]: https://github.com/DrBarnabus/Mimic/actions/workflows/ci.yml
