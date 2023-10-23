@@ -41,6 +41,17 @@ public class MimicException : Exception
         return new MimicException($"Invocation of '{invocation}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");
     }
 
+    internal static MimicException ExpressionNotProperty(Expression expression)
+    {
+        return new MimicException($"Expression ({expression}) is not a property accessor");
+    }
+
+    internal static MimicException ExpressionNotPropertyGetter(PropertyInfo property)
+    {
+        string formattedDeclaringTypeName = TypeNameFormatter.GetFormattedName(property.DeclaringType!);
+        return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a getter");
+    }
+
     internal static MimicException WrongCallbackArgumentCount(int expectedCount, int actualCount)
     {
         return new MimicException($"Setup on method with {expectedCount} expected argument(s) cannot invoke a callback method with {actualCount} argument(s)");

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
+using System.Reflection;
 using Mimic.Core;
+using Mimic.Core.Extensions;
 using Mimic.Exceptions;
 using Mimic.Expressions;
 using Mimic.Setup;
@@ -20,6 +22,23 @@ public partial class Mimic<T>
     {
         var setup = Setup(this, expression);
         return new NonVoidSetup<T, TResult>(setup);
+    }
+
+    public IGetterSetup<T, TProperty> SetupGet<TProperty>(Expression<Func<T, TProperty>> expression)
+    {
+        Guard.NotNull(expression);
+
+        if (expression.Body is not (IndexExpression or MethodCallExpression { Method.IsSpecialName: true }))
+        {
+            if (expression.Body is not MemberExpression { Member: PropertyInfo property })
+                throw MimicException.ExpressionNotProperty(expression);
+
+            if (!property.CanReadProperty(out _, out _))
+                throw MimicException.ExpressionNotPropertyGetter(property);
+        }
+
+        var setup = Setup(this, expression);
+        return new NonVoidSetup<T, TProperty>(setup);
     }
 
     private static MethodCallSetup Setup(Mimic<T> mimic, LambdaExpression expression)

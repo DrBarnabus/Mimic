@@ -2,7 +2,7 @@
 
 namespace Mimic.Setup;
 
-internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult>, ICallbackResult<TMimic, TResult>, IReturnsResult<TMimic>
+internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult>, IGetterSetup<TMimic, TResult>, ICallbackResult<TMimic, TResult>, IGetterCallbackResult<TMimic, TResult>, IReturnsResult<TMimic>
     where TMimic : class
 {
     public NonVoidSetup(MethodCallSetup setup)
@@ -115,6 +115,16 @@ internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, 
     }
 
     public new ICallbackResult<TMimic, TResult> Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callback)
+    {
+        Setup.SetCallbackBehaviour(callback);
+        return this;
+    }
+
+    #endregion
+
+    #region GetterCallback
+
+    IGetterCallbackResult<TMimic, TResult> IGetterCallback<TMimic, TResult>.Callback(Action callback)
     {
         Setup.SetCallbackBehaviour(callback);
         return this;

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Mimic.Core;
+using Mimic.Core.Extensions;
 using Mimic.Exceptions;
 using Mimic.Setup;
 
@@ -69,12 +70,12 @@ internal static class ExpressionSplitter
         var property = (PropertyInfo)memberExpression.Member;
 
         MethodInfo? method = null;
-        if (!isAssignment && CanReadProperty(property, out var getter, out var getterProperty))
+        if (!isAssignment && property.CanReadProperty(out var getter, out var getterProperty))
         {
             method = getter;
             property = getterProperty;
         }
-        else if (CanWriteProperty(property, out var setter, out var setterProperty))
+        else if (property.CanWriteProperty(out var setter, out var setterProperty))
         {
             method = setter;
             property = setterProperty;
@@ -97,12 +98,12 @@ internal static class ExpressionSplitter
         var arguments = indexExpression.Arguments;
 
         MethodInfo? method = null;
-        if (!isAssignment && CanReadProperty(indexer!, out var getter, out var getterIndexer))
+        if (!isAssignment && indexer!.CanReadProperty(out var getter, out var getterIndexer))
         {
             method = getter;
             indexer = getterIndexer;
         }
-        else if (CanWriteProperty(indexer!, out var setter, out var setterIndexer))
+        else if (indexer!.CanWriteProperty(out var setter, out var setterIndexer))
         {
             method = setter;
             indexer = setterIndexer;
@@ -184,71 +185,5 @@ internal static class ExpressionSplitter
     private static bool IsExtention(MethodBase method)
     {
         return method.IsStatic && method.IsDefined(typeof(ExtensionAttribute));
-    }
-
-    private static bool CanWriteProperty(this PropertyInfo property, out MethodInfo? setter, out PropertyInfo? setterProperty)
-    {
-        while (true)
-        {
-            if (property.CanWrite)
-            {
-                setter = property.GetSetMethod(true)!;
-                setterProperty = property;
-
-                Guard.NotNull(setter);
-                return true;
-            }
-
-            var getter = property.GetGetMethod(true);
-            Guard.NotNull(getter);
-
-            var baseSetter = getter.GetBaseDefinition();
-            if (baseSetter != getter)
-            {
-                var baseProperty = baseSetter.DeclaringType!.GetMember(property.Name, MemberTypes.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Cast<PropertyInfo>()
-                    .First(p => p.GetSetMethod(true) == baseSetter);
-
-                property = baseProperty;
-                continue;
-            }
-
-            setter = null;
-            setterProperty = null;
-            return false;
-        }
-    }
-
-    private static bool CanReadProperty(this PropertyInfo property, out MethodInfo? getter, out PropertyInfo? getterProperty)
-    {
-        while (true)
-        {
-            if (property.CanRead)
-            {
-                getter = property.GetGetMethod(true)!;
-                getterProperty = property;
-
-                Guard.NotNull(getter);
-                return true;
-            }
-
-            var setter = property.GetSetMethod(true);
-            Guard.NotNull(setter);
-
-            var baseSetter = setter.GetBaseDefinition();
-            if (baseSetter != setter)
-            {
-                var baseProperty = baseSetter.DeclaringType!.GetMember(property.Name, MemberTypes.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Cast<PropertyInfo>()
-                    .First(p => p.GetSetMethod(true) == baseSetter);
-
-                property = baseProperty;
-                continue;
-            }
-
-            getter = null;
-            getterProperty = null;
-            return false;
-        }
     }
 }

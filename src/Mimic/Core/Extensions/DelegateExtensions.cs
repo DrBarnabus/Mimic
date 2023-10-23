@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.ExceptionServices;
 
-namespace Mimic.Core;
+namespace Mimic.Core.Extensions;
 
 internal static class DelegateExtensions
 {

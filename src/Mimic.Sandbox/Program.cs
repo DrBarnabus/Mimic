@@ -14,6 +14,9 @@ mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
 mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));
 
+mimic.SetupGet(m => m.Property)
+    .Returns(() => $"{Random.Shared.Next():x8}");
+
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();
 
@@ -34,6 +37,8 @@ catch (Exception ex)
 
 public interface ITypeToMimic
 {
+    string Property { get; set; }
+
     void VoidMethod();
 
     Task<string> StringMethod(string value);
