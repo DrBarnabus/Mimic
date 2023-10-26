@@ -4,6 +4,8 @@ internal sealed class ArgumentMatcher<TValue> : ArgumentMatcher
 {
     private readonly Predicate<TValue?> _condition;
 
+    internal override Type Type => typeof(TValue);
+
     internal ArgumentMatcher(Predicate<TValue?> condition) => _condition = condition;
 
     protected override bool Matches(object? argument)

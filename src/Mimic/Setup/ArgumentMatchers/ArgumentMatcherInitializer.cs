@@ -73,6 +73,9 @@ internal static class ArgumentMatcherInitializer
         while (expression.NodeType is ExpressionType.Convert)
             expression = ((UnaryExpression)expression).Operand;
 
+        if (expression is ArgumentMatcherExpression argumentMatcherExpression)
+            return new InitializedMatcher(argumentMatcherExpression.ArgumentMatcher, argumentMatcherExpression);
+
         if (expression is MethodCallExpression methodCallExpression)
         {
             if (IsArgumentMatcher(expression, out var argumentMatcher))

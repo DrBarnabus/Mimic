@@ -2,6 +2,8 @@ namespace Mimic.Setup.ArgumentMatchers;
 
 internal abstract class ArgumentMatcher : IArgumentMatcher
 {
+    internal abstract Type Type { get; }
+
     protected abstract bool Matches(object? argument);
 
     bool IArgumentMatcher.Matches(object? argument, Type type) => Matches(argument);

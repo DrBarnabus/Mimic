@@ -50,6 +50,11 @@ internal sealed class ArgumentMatcherObserver : IDisposable
         return false;
     }
 
+    internal int GetCounter() => Interlocked.Increment(ref _counter);
+
+    internal IEnumerable<ArgumentMatcher> GetArgumentMatchersBetween(int fromCounter, int toCounter)
+        => _observations.Where(o => fromCounter <= o.Counter && o.Counter < toCounter).Select(o => o.ArgumentMatcher);
+
     public void Dispose()
     {
         Guard.Assert(_observers is { Count: > 0 });

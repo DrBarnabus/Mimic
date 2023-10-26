@@ -52,6 +52,11 @@ public class MimicException : Exception
         return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a getter");
     }
 
+    internal static MimicException ExpressionNotPropertySetter(LambdaExpression expression)
+    {
+        return new MimicException($"Expression ({expression}) is not a property setter");
+    }
+
     internal static MimicException WrongCallbackArgumentCount(int expectedCount, int actualCount)
     {
         return new MimicException($"Setup on method with {expectedCount} expected argument(s) cannot invoke a callback method with {actualCount} argument(s)");
