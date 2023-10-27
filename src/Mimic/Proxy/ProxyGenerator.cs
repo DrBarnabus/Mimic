@@ -2,6 +2,7 @@
 using System.Reflection;
 using Castle.DynamicProxy;
 using Mimic.Core;
+using Mimic.Core.Extensions;
 
 namespace Mimic.Proxy;
 
@@ -105,11 +106,11 @@ internal sealed class ProxyGenerator
             TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, Method.DeclaringType!);
             stringBuilder.Append('.');
 
-            if (Method.IsSpecialName && Method.Name.StartsWith("get_", StringComparison.Ordinal))
+            if (Method.IsGetter())
             {
                 stringBuilder.Append(Method.Name.AsSpan(4));
             }
-            else if (Method.IsSpecialName && Method.Name.StartsWith("set_", StringComparison.Ordinal))
+            else if (Method.IsSetter())
             {
                 stringBuilder.Append(Method.Name.AsSpan(4));
                 stringBuilder.Append(" = ".AsSpan());

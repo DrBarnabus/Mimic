@@ -6,7 +6,7 @@ using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic.Setup;
 
-internal sealed class MethodExpectation
+internal sealed class MethodExpectation : IExpectation
 {
     private readonly IArgumentMatcher[] _argumentMatchers;
 

@@ -1,275 +1,56 @@
-﻿using Mimic.Core;
-using Mimic.Setup.Fluent;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using Mimic.Core;
+using Mimic.Proxy;
 
 namespace Mimic.Setup;
 
-internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
+internal abstract class SetupBase
 {
-    protected SetupBase(MethodCallSetup setup)
-    {
-        Guard.NotNull(setup);
+    private Flags _flags;
 
-        Setup = setup;
+    public Expression? OriginalExpression { get; }
+
+    public IMimic Mimic { get; }
+
+    public IExpectation Expectation { get; }
+
+    public LambdaExpression Expression => Expectation.Expression;
+
+    public bool Matched => (_flags & Flags.Matched) != 0;
+
+    public bool Overriden => (_flags & Flags.Overriden) != 0;
+
+    protected SetupBase(Expression? originalExpression, IMimic mimic, IExpectation expectation)
+    {
+        OriginalExpression = originalExpression;
+        Mimic = mimic;
+        Expectation = expectation;
     }
 
-    protected MethodCallSetup Setup { get; }
+    public bool MatchesInvocation(IInvocation invocation) => Expectation.MatchesInvocation(invocation);
 
-    #region Callback
-
-    public ICallbackResult Callback(Delegate callback)
+    public void Execute(IInvocation invocation)
     {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
+        _flags |= Flags.Matched;
+
+        ExecuteCore(invocation);
     }
 
-    public ICallbackResult Callback(Action callback)
+    protected abstract void ExecuteCore(IInvocation invocation);
+
+    public void Override()
     {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
+        Guard.Assert(!Overriden);
+        _flags |= Flags.Overriden;
     }
 
-    public ICallbackResult Callback<T>(Action<T> callback)
+    [Flags]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    private enum Flags : byte
     {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2>(Action<T1, T2> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3>(Action<T1, T2, T3> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4>(Action<T1, T2, T3, T4> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callback)
-    {
-        Setup.SetCallbackBehaviour(callback);
-        return this;
-    }
-
-    #endregion
-
-    #region Throws
-
-    public IThrowsResult Throws(Exception exception)
-    {
-        Setup.SetThrowExceptionBehaviour(exception);
-        return this;
-    }
-
-    public IThrowsResult Throws<TException>()
-        where TException : Exception, new()
-    {
-        Setup.SetThrowExceptionBehaviour(new TException());
-        return this;
-    }
-
-    public IThrowsResult Throws(Delegate exceptionFactory)
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<TException>(Func<TException?> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T, TException>(Func<T, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, TException>(Func<T1, T2, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, TException>(Func<T1, T2, T3, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, TException>(Func<T1, T2, T3, T4, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, TException>(Func<T1, T2, T3, T4, T5, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, TException>(Func<T1, T2, T3, T4, T5, T6, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, TException>(Func<T1, T2, T3, T4, T5, T6, T7, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException> exceptionFactory)
-        where TException : Exception
-    {
-        Setup.SetThrowComputedExceptionBehaviour(exceptionFactory);
-        return this;
-    }
-
-    #endregion
-
-    public override string ToString()
-    {
-        return Setup.Expression.ToString();
+        None = 0,
+        Matched = 1 << 0,
+        Overriden = 1 << 1,
     }
 }

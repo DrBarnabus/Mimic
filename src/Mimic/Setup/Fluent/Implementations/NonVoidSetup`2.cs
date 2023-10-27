@@ -1,6 +1,4 @@
-﻿using Mimic.Setup.Fluent;
-
-namespace Mimic.Setup;
+﻿namespace Mimic.Setup.Fluent.Implementations;
 
 internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult>, IGetterSetup<TMimic, TResult>, ICallbackResult<TMimic, TResult>, IGetterCallbackResult<TMimic, TResult>, IReturnsResult<TMimic>
     where TMimic : class

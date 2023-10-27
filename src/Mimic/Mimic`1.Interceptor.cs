@@ -20,7 +20,7 @@ public partial class Mimic<T>
 
     private static bool HandleMimicGetter(IInvocation invocation, Mimic<T> mimic)
     {
-        if (invocation.Method is not { IsSpecialName: true, Name: $"get{nameof(IMimicked<T>.Mimic)}" }
+        if (invocation.Method is not { IsSpecialName: true, Name: $"get_{nameof(IMimicked<T>.Mimic)}" }
             || !typeof(IMimicked<T>).IsAssignableFrom(invocation.Method.DeclaringType))
             return false;
 

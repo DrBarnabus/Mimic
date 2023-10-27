@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using Mimic.Core;
+using Mimic.Core.Extensions;
 using Mimic.Exceptions;
 using Mimic.Expressions;
 
@@ -82,7 +83,7 @@ internal static class ArgumentMatcherInitializer
                 return new InitializedMatcher(argumentMatcher, expression);
 
             var method = methodCallExpression.Method;
-            if (!(method.IsSpecialName && method.Name.StartsWith("get_", StringComparison.Ordinal)))
+            if (!method.IsGetter())
                 return new InitializedMatcher(new LazyEvaluatedArgumentMatcher(originalExpression), originalExpression);
         }
         else if (expression is MemberExpression or IndexExpression && IsArgumentMatcher(expression, out var argumentMatcher))

@@ -1,6 +1,4 @@
-using Mimic.Setup.Fluent;
-
-namespace Mimic.Setup;
+namespace Mimic.Setup.Fluent.Implementations;
 
 internal class VoidSetup<TMimic> : SetupBase, ISetup<TMimic>
     where TMimic : class

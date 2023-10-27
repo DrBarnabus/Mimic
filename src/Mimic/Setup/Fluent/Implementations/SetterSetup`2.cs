@@ -1,6 +1,4 @@
-﻿using Mimic.Setup.Fluent;
-
-namespace Mimic.Setup;
+﻿namespace Mimic.Setup.Fluent.Implementations;
 
 internal sealed class SetterSetup<TMimic, TProperty> : VoidSetup<TMimic>, ISetterSetup<TMimic, TProperty>
     where TMimic : class

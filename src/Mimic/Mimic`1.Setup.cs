@@ -7,6 +7,7 @@ using Mimic.Exceptions;
 using Mimic.Expressions;
 using Mimic.Setup;
 using Mimic.Setup.Fluent;
+using Mimic.Setup.Fluent.Implementations;
 
 namespace Mimic;
 
@@ -63,6 +64,29 @@ public partial class Mimic<T>
         return new SetterSetup<T, TProperty>(setup);
     }
 
+    public Mimic<T> SetupProperty<TProperty>(Expression<Func<T, TProperty>> propertyExpression, TProperty? initialValue = default)
+    {
+        Guard.NotNull(propertyExpression);
+
+        if (propertyExpression.Body is not MemberExpression { Member: PropertyInfo property })
+            throw MimicException.ExpressionNotProperty(propertyExpression);
+
+        if (!property.CanReadProperty(out var getter, out _))
+            throw MimicException.ExpressionNotPropertyGetter(property);
+
+        if (!property.CanWriteProperty(out var setter, out _))
+            throw MimicException.ExpressionNotPropertySetter(property);
+
+        var expectations = ExpressionSplitter.Split(propertyExpression);
+        if (expectations.Count != 1)
+            throw new UnsupportedExpressionException(propertyExpression);
+
+        var setup = new PropertyStubSetup(this, propertyExpression, getter, setter, initialValue);
+        _setups.Add(setup);
+
+        return this;
+    }
+
     private static MethodCallSetup Setup(Mimic<T> mimic, LambdaExpression expression)
     {
         Guard.NotNull(expression);
@@ -86,19 +110,19 @@ public partial class Mimic<T>
         if (expression.Body.NodeType is ExpressionType.Call)
         {
             var call = (MethodCallExpression)expression.Body;
-            if (call.Method.IsSpecialName && call.Method.Name.StartsWith("set_", StringComparison.Ordinal))
+            if (call.Method.IsSetter())
                 return;
         }
 
         throw MimicException.ExpressionNotPropertySetter(expression);
     }
 
-    private sealed class SetupCollection : IReadOnlyList<MethodCallSetup>
+    private sealed class SetupCollection : IReadOnlyList<Setup.SetupBase>
     {
-        private readonly List<MethodCallSetup> _setups = new();
-        private readonly HashSet<MethodExpectation> _activeSetups = new();
+        private readonly List<Setup.SetupBase> _setups = new();
+        private readonly HashSet<IExpectation> _activeSetups = new();
 
-        public void Add(MethodCallSetup setup)
+        public void Add(Setup.SetupBase setup)
         {
             lock (_setups)
             {
@@ -109,7 +133,7 @@ public partial class Mimic<T>
             }
         }
 
-        public MethodCallSetup? FindLast(Predicate<MethodCallSetup> predicate)
+        public Setup.SetupBase? FindLast(Predicate<Setup.SetupBase> predicate)
         {
             lock (_setups)
             {
@@ -139,7 +163,7 @@ public partial class Mimic<T>
             }
         }
 
-        public MethodCallSetup this[int index]
+        public Setup.SetupBase this[int index]
         {
             get
             {
@@ -150,7 +174,7 @@ public partial class Mimic<T>
             }
         }
 
-        public IEnumerator<MethodCallSetup> GetEnumerator()
+        public IEnumerator<Setup.SetupBase> GetEnumerator()
         {
             lock (_setups)
             {
@@ -162,7 +186,7 @@ public partial class Mimic<T>
 
         private void MarkOverridenSetups()
         {
-            var visitedExpectations = new HashSet<MethodExpectation>();
+            var visitedExpectations = new HashSet<IExpectation>();
 
             for (int i = _setups.Count - 1; i >= 0 ; i--)
             {

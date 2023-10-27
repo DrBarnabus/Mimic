@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Mimic.Core.Extensions;
 
 internal static class PropertyInfoExtensions
 {
-    internal static bool CanReadProperty(this PropertyInfo property, out MethodInfo? getter, out PropertyInfo? getterProperty)
+    internal static bool CanReadProperty(
+        this PropertyInfo property,
+        [NotNullWhen(true)] out MethodInfo? getter,
+        [NotNullWhen(true)] out PropertyInfo? getterProperty)
     {
         while (true)
         {
@@ -37,7 +41,10 @@ internal static class PropertyInfoExtensions
         }
     }
 
-    internal static bool CanWriteProperty(this PropertyInfo property, out MethodInfo? setter, out PropertyInfo? setterProperty)
+    internal static bool CanWriteProperty(
+        this PropertyInfo property,
+        [NotNullWhen(true)] out MethodInfo? setter,
+        [NotNullWhen(true)] out PropertyInfo? setterProperty)
     {
         while (true)
         {

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Mimic.Core;
@@ -9,41 +8,21 @@ using Mimic.Proxy;
 
 namespace Mimic.Setup;
 
-internal sealed class MethodCallSetup
+internal sealed class MethodCallSetup : SetupBase
 {
-    private Flags _flags;
-
     private Behaviour? _returnOrThrow;
     private CallbackBehaviour? _preReturnCallback;
     private CallbackBehaviour? _postReturnCallback;
 
-    public Expression OriginalExpression { get; }
-
-    public IMimic Mimic { get; }
-
-    public MethodExpectation Expectation { get; }
-
-    public LambdaExpression Expression => Expectation.Expression;
-
-    public MethodInfo MethodInfo => Expectation.MethodInfo;
-
-    public bool Matched => (_flags & Flags.Matched) != 0;
-
-    public bool Overriden => (_flags & Flags.Overriden) != 0;
+    public MethodInfo MethodInfo => ((MethodExpectation)Expectation).MethodInfo;
 
     public MethodCallSetup(Expression originalExpression, IMimic mimic, MethodExpectation expectation)
+        : base(originalExpression, mimic, expectation)
     {
-        OriginalExpression = originalExpression;
-        Mimic = mimic;
-        Expectation = expectation;
     }
 
-    public bool MatchesInvocation(IInvocation invocation) => Expectation.MatchesInvocation(invocation);
-
-    public void Execute(IInvocation invocation)
+    protected override void ExecuteCore(IInvocation invocation)
     {
-        _flags |= Flags.Matched;
-
         _preReturnCallback?.Execute(invocation);
 
         if (_returnOrThrow is not null)
@@ -56,12 +35,6 @@ internal sealed class MethodCallSetup
         }
 
         _postReturnCallback?.Execute(invocation);
-    }
-
-    public void Override()
-    {
-        Guard.Assert(!Overriden);
-        _flags |= Flags.Overriden;
     }
 
     public void SetReturnValueBehaviour(object? value)
@@ -168,15 +141,6 @@ internal sealed class MethodCallSetup
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
             throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, actualReturnType);
-    }
-
-    [Flags]
-    [SuppressMessage("ReSharper", "UnusedMember.Local")]
-    private enum Flags : byte
-    {
-        None = 0,
-        Matched = 1 << 0,
-        Overriden = 1 << 1,
     }
 
     private abstract class Behaviour

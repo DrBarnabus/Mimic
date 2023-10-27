@@ -52,6 +52,12 @@ public class MimicException : Exception
         return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a getter");
     }
 
+    internal static MimicException ExpressionNotPropertySetter(PropertyInfo property)
+    {
+        string formattedDeclaringTypeName = TypeNameFormatter.GetFormattedName(property.DeclaringType!);
+        return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a setter");
+    }
+
     internal static MimicException ExpressionNotPropertySetter(LambdaExpression expression)
     {
         return new MimicException($"Expression ({expression}) is not a property setter");

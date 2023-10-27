@@ -14,11 +14,7 @@ mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
 mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));
 
-mimic.SetupGet(m => m.Property)
-    .Returns(() => $"{Random.Shared.Next():x8}");
-
-mimic.SetupSet(m => m.Property = Arg.Any<string>())
-    .Callback((string property) => Console.WriteLine($"Property set to: {property}"));
+mimic.SetupProperty(m => m.Property);
 
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();
@@ -39,6 +35,7 @@ catch (Exception ex)
 }
 
 mimickedObject.Property = "Test?";
+Console.WriteLine(mimickedObject.Property);
 
 public interface ITypeToMimic
 {
