@@ -14,7 +14,7 @@ mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
 mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));
 
-mimic.SetupProperty(m => m.Property);
+mimic.SetupAllProperties();
 
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();

@@ -81,9 +81,13 @@ public partial class Mimic<T>
         if (expectations.Count != 1)
             throw new UnsupportedExpressionException(propertyExpression);
 
-        var setup = new PropertyStubSetup(this, propertyExpression, getter, setter, initialValue);
-        _setups.Add(setup);
+        _setups.Add(new PropertyStubSetup(this, propertyExpression, getter, setter, initialValue));
+        return this;
+    }
 
+    public Mimic<T> SetupAllProperties()
+    {
+        _setups.Add(new AllPropertiesStubSetup(this));
         return this;
     }
 

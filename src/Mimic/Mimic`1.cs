@@ -27,6 +27,14 @@ public sealed partial class Mimic<T> : IMimic
         Name = $"Mimic<{TypeNameFormatter.GetFormattedName(typeof(T))}>:{instanceNumber}";
     }
 
+    public static Mimic<T> FromObject(T objectInstance)
+    {
+        if (objectInstance is not IMimicked<T> mimicked)
+            throw new ArgumentException($"Object was not created by Mimic, it does not implement {nameof(IMimicked<T>)}", nameof(objectInstance));
+
+        return mimicked.Mimic;
+    }
+
     private T GetOrInitializeObject()
     {
         return _object ??= (T)ProxyGenerator.Instance.GenerateProxy(
