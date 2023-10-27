@@ -6,7 +6,7 @@
 [![NuGet Downloads][nuget-downloads-badge]][nuget-downloads]
 [![Build Status][gh-actions-badge]][gh-actions]
 
-#### [Planned Features](#planned-features) | [License](#license)
+#### [Planned Features](#planned-features)
 
 ---
 
@@ -25,8 +25,8 @@ Completed   = ✔
     -   [✔] Interfaces
     -   [❓] Classes (inc support for arguments and calling the base implementation of mocked methods)
 -   [✔] Setup of Methods
--   [🚧] Setup of Getters & Setters
--   [📅] Setup of Property Stubbing
+-   [✔] Setup of Getters & Setters
+-   [🚧] Setup of Property Stubbing
 -   [📅] Support for `ref`/`out` arguments
 -   [📅] Verifiable Setup's
 -   [📅] "Strict" Setup mode (Calls throw if not setup)
@@ -36,10 +36,6 @@ Completed   = ✔
 -   [❓] Setup of Event Handlers
 
 Mimic makes use of [Castle.Core](https://www.castleproject.org/projects/dynamicproxy)'s `DynamicProxy` internally for generating proxies of types to mock.
-
-# License
-
-Licensed under [MIT](./LICENSE), Copyright (c) 2023 Daniel Woodward
 
 <!-- Links -->
 
