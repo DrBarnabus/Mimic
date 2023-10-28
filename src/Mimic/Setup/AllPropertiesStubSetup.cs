@@ -32,12 +32,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
         {
             Guard.Assert(invocation.Method.IsGetter());
 
-            object? currentValue = _currentValues.GetOrAdd(propertyName, () =>
-            {
-                var returnType = invocation.Method.ReturnType;
-                return returnType.IsValueType ? Activator.CreateInstance(returnType) : null;
-            });
-
+            object? currentValue = _currentValues.GetOrAdd(propertyName, () => invocation.Method.ReturnType.GetDefaultValue());
             invocation.SetReturnValue(currentValue);
         }
     }

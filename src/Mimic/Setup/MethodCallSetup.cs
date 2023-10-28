@@ -31,7 +31,11 @@ internal sealed class MethodCallSetup : SetupBase
         }
         else if (invocation.Method.ReturnType != typeof(void))
         {
-            throw MimicException.ReturnRequired(invocation);
+            if (Mimic.Strict)
+                throw MimicException.ReturnRequired(invocation);
+
+            object? defaultValue = DefaultValueFactory.GetDefaultValue(invocation.Method.ReturnType);
+            invocation.SetReturnValue(defaultValue);
         }
 
         _postReturnCallback?.Execute(invocation);

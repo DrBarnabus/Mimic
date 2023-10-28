@@ -36,6 +36,11 @@ public class MimicException : Exception
         return new MimicException($"ArgumentMatcher for argument '{argumentExpression}' is unmatchable. An implicit conversion of the argument from type '{formattedFromType}' to type '{formattedToType}' which is an incompatible assignment");
     }
 
+    internal static MimicException NotMatchingSetup(IInvocation invocation)
+    {
+        return new MimicException($"Invocation of '{invocation}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown");
+    }
+
     internal static MimicException ReturnRequired(IInvocation invocation)
     {
         return new MimicException($"Invocation of '{invocation}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");

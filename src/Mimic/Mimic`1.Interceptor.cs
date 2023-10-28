@@ -1,4 +1,5 @@
-﻿using Mimic.Exceptions;
+﻿using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Proxy;
 
 namespace Mimic;
@@ -11,11 +12,20 @@ public partial class Mimic<T>
         if (HandleMimicGetter(invocation, this))
             return;
 
+        if (HandleToString(invocation, this))
+            return;
+
         if (HandleMatchingSetup(invocation, this))
             return;
 
-        if (invocation.Method.ReturnType != typeof(void))
-            throw MimicException.ReturnRequired(invocation);
+        if (Strict)
+            throw MimicException.NotMatchingSetup(invocation);
+
+        if (invocation.Method.ReturnType == typeof(void))
+            return;
+
+        object? defaultValue = DefaultValueFactory.GetDefaultValue(invocation.Method.ReturnType);
+        invocation.SetReturnValue(defaultValue);
     }
 
     private static bool HandleMimicGetter(IInvocation invocation, Mimic<T> mimic)
@@ -25,6 +35,15 @@ public partial class Mimic<T>
             return false;
 
         invocation.SetReturnValue(mimic);
+        return true;
+    }
+
+    private static bool HandleToString(IInvocation invocation, Mimic<T> mimic)
+    {
+        if (invocation.Method.DeclaringType != typeof(object) || mimic._setups.FindLast(s => s.MatchesInvocation(invocation)) is not null)
+            return false;
+
+        invocation.SetReturnValue($"{mimic}.Object");
         return true;
     }
 

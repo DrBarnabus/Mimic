@@ -27,7 +27,7 @@ Completed   = ✔
 -   [✔] Setup of Methods
 -   [✔] Setup of Getters & Setters
 -   [✔] Setup of Property Stubbing
--   [📅] "Strict" Setup mode (Calls throw if not setup)
+-   [✔] "Strict" Setup mode (Calls throw if not setup)
 -   [📅] Verifiable Setup's
 -   [📅] Execution Limits (Calls throw after n expected calls)
 -   [📅] Conditional Setup of Methods

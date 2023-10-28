@@ -16,6 +16,8 @@ public sealed partial class Mimic<T> : IMimic
 
     public string Name { get; init; }
 
+    public bool Strict { get; init; } = true;
+
     public T Object => GetOrInitializeObject();
 
     public Mimic()

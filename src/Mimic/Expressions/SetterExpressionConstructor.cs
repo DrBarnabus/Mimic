@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using Mimic.Core.Extensions;
 using Mimic.Exceptions;
 using Mimic.Proxy;
 using Mimic.Setup.ArgumentMatchers;
@@ -102,7 +103,7 @@ internal static class SetterExpressionConstructor
 
         object? GetDefaultValue(Type matcherType, Type parameterType)
         {
-            object? defaultValue = matcherType.IsValueType ? Activator.CreateInstance(matcherType) : null;
+            object? defaultValue = matcherType.GetDefaultValue();
 
             try
             {
