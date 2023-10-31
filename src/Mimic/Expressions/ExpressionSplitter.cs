@@ -129,7 +129,7 @@ internal static class ExpressionSplitter
             var parameter = ParameterFromExpression(remainder);
 
             return new MethodExpectation(
-                Expression.Lambda(Expression.Call(parameter, method, arguments)),
+                Expression.Lambda(Expression.Call(parameter, method, arguments), parameter),
                 method,
                 arguments);
         }
@@ -142,6 +142,7 @@ internal static class ExpressionSplitter
 
             var parameter = ParameterFromExpression(remainder);
             var mutableArguments = arguments.ToArray();
+            mutableArguments[0] = parameter;
 
             return new MethodExpectation(
                 Expression.Lambda(Expression.Call(method, mutableArguments), parameter),
