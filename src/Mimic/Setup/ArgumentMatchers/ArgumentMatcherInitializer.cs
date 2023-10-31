@@ -100,7 +100,7 @@ internal static class ArgumentMatcherInitializer
         };
     }
 
-    private static bool IsArgumentMatcher(Expression expression, [NotNullWhen(true)] out ArgumentMatcher? argumentMatcher)
+    internal static bool IsArgumentMatcher(Expression expression, [NotNullWhen(true)] out ArgumentMatcher? argumentMatcher)
     {
         using var observer = ArgumentMatcherObserver.ActivateObserver();
 

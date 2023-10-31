@@ -1,17 +1,33 @@
 ﻿using System.Linq.Expressions;
 using Mimic.Core;
+using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic.Expressions;
 
 internal static class ExpressionEvaluator
 {
-    internal static Expression PartiallyEvaluate(Expression expression)
+    internal static Expression PartiallyEvaluate(Expression expression, bool argumentMatcherAware = false)
     {
-        var evaluatableExpressions = new EvaluatableExpressionNominator(e => e.NodeType != ExpressionType.Parameter).Nominate(expression);
+        Func<Expression,bool> canEvaluate = !argumentMatcherAware
+            ? e => e.NodeType != ExpressionType.Parameter
+            : ArgumentMatcherCanEvaluate;
+
+        var evaluatableExpressions = new EvaluatableExpressionNominator(canEvaluate).Nominate(expression);
         var partiallyEvaluatedExpression = new ExpressionSubtreeEvaluator(evaluatableExpressions).Evaluate(expression);
         Guard.NotNull(partiallyEvaluatedExpression);
 
         return partiallyEvaluatedExpression;
+    }
+
+    private static bool ArgumentMatcherCanEvaluate(Expression expression)
+    {
+        return expression.NodeType switch
+        {
+            ExpressionType.Quote or ExpressionType.Parameter => false,
+            ExpressionType.Extension => expression is not ArgumentMatcherExpression,
+            ExpressionType.Call or ExpressionType.MemberAccess => !ArgumentMatcherInitializer.IsArgumentMatcher(expression, out _),
+            _ => true
+        };
     }
 
     private class ExpressionSubtreeEvaluator : ExpressionVisitor

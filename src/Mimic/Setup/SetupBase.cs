@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Mimic.Core;
 using Mimic.Exceptions;
+using Mimic.Expressions;
 using Mimic.Proxy;
 
 namespace Mimic.Setup;
@@ -59,6 +60,20 @@ internal abstract class SetupBase
         {
             throw MimicException.SetupNotMatched(this);
         }
+    }
+
+    public override string ToString()
+    {
+        var type = Expression.Parameters[0].Type;
+        var partiallyEvaluatedExpression = ExpressionEvaluator.PartiallyEvaluate(Expression, true);
+
+        var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
+
+        TypeNameFormatter.AppendFormattedTypeName(ref stringBuilder, type);
+        stringBuilder.Append(' ');
+        stringBuilder.Append(partiallyEvaluatedExpression.ToString());
+
+        return stringBuilder.ToString();
     }
 
     [Flags]
