@@ -33,6 +33,11 @@ internal sealed class PropertyStubSetup : SetupBase
         }
     }
 
+    internal override void Verify()
+    {
+        // intentionally empty
+    }
+
     private sealed class PropertyStubExpectation : IExpectation
     {
         private readonly MethodInfo _getter;

@@ -14,10 +14,13 @@ mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
 mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));
 
+mimic.Setup(m => m.VoidMethod())
+    .Verifiable();
+
 mimic.SetupAllProperties();
 
 var mimickedObject = mimic.Object;
-mimickedObject.VoidMethod();
+// mimickedObject.VoidMethod();
 
 string result = await mimickedObject.StringMethod("other");
 Console.WriteLine(result);
@@ -36,6 +39,8 @@ catch (Exception ex)
 
 mimickedObject.Property = "Test?";
 Console.WriteLine(mimickedObject.Property);
+
+mimic.Verify();
 
 public interface ITypeToMimic
 {

@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Mimic.Core;
 using Mimic.Proxy;
+using Mimic.Setup;
 
 namespace Mimic.Exceptions;
 
@@ -39,6 +40,11 @@ public class MimicException : Exception
     internal static MimicException NotMatchingSetup(IInvocation invocation)
     {
         return new MimicException($"Invocation of '{invocation}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown");
+    }
+
+    internal static MimicException SetupNotMatched(SetupBase setup)
+    {
+        return new MimicException($"Setup '{setup}' which was marked as verifiable has not been matched");
     }
 
     internal static MimicException ReturnRequired(IInvocation invocation)

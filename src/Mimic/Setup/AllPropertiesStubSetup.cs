@@ -37,6 +37,11 @@ internal sealed class AllPropertiesStubSetup : SetupBase
         }
     }
 
+    internal override void Verify()
+    {
+        // intentionally empty
+    }
+
     private sealed class AllPropertiesStubExpectation : IExpectation
     {
         public LambdaExpression Expression { get; }

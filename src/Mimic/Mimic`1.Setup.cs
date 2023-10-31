@@ -8,6 +8,7 @@ using Mimic.Expressions;
 using Mimic.Setup;
 using Mimic.Setup.Fluent;
 using Mimic.Setup.Fluent.Implementations;
+using SetupBase = Mimic.Setup.SetupBase;
 
 namespace Mimic;
 
@@ -121,12 +122,12 @@ public partial class Mimic<T>
         throw MimicException.ExpressionNotPropertySetter(expression);
     }
 
-    private sealed class SetupCollection : IReadOnlyList<Setup.SetupBase>
+    private sealed class SetupCollection : IReadOnlyList<SetupBase>
     {
-        private readonly List<Setup.SetupBase> _setups = new();
+        private readonly List<SetupBase> _setups = new();
         private readonly HashSet<IExpectation> _activeSetups = new();
 
-        public void Add(Setup.SetupBase setup)
+        public void Add(SetupBase setup)
         {
             lock (_setups)
             {
@@ -137,7 +138,13 @@ public partial class Mimic<T>
             }
         }
 
-        public Setup.SetupBase? FindLast(Predicate<Setup.SetupBase> predicate)
+        public List<SetupBase> FindAll(Predicate<SetupBase> predicate)
+        {
+            lock (_setups)
+                return _setups.Where(setup => !setup.Overriden && predicate(setup)).ToList();
+        }
+
+        public SetupBase? FindLast(Predicate<SetupBase> predicate)
         {
             lock (_setups)
             {
@@ -167,7 +174,7 @@ public partial class Mimic<T>
             }
         }
 
-        public Setup.SetupBase this[int index]
+        public SetupBase this[int index]
         {
             get
             {
@@ -178,7 +185,7 @@ public partial class Mimic<T>
             }
         }
 
-        public IEnumerator<Setup.SetupBase> GetEnumerator()
+        public IEnumerator<SetupBase> GetEnumerator()
         {
             lock (_setups)
             {

@@ -267,6 +267,11 @@ internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
 
     #endregion
 
+    public void Verifiable()
+    {
+        Setup.FlagAsVerifiable();
+    }
+
     public override string ToString()
     {
         return Setup.Expression.ToString();

@@ -37,6 +37,12 @@ public sealed partial class Mimic<T> : IMimic
         return mimicked.Mimic;
     }
 
+    public void Verify()
+    {
+        foreach (var setup in _setups.FindAll(s => s.Verifiable))
+            setup.Verify();
+    }
+
     private T GetOrInitializeObject()
     {
         return _object ??= (T)ProxyGenerator.Instance.GenerateProxy(

@@ -5,6 +5,6 @@ namespace Mimic.Setup.Fluent;
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IThrowsResult : IFluent
+public interface IThrowsResult : IVerifiable, IFluent
 {
 }

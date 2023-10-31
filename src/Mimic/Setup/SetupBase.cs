@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Proxy;
 
 namespace Mimic.Setup;
@@ -20,6 +21,8 @@ internal abstract class SetupBase
     public bool Matched => (_flags & Flags.Matched) != 0;
 
     public bool Overriden => (_flags & Flags.Overriden) != 0;
+
+    public bool Verifiable => (_flags & Flags.Verifiable) != 0;
 
     protected SetupBase(Expression? originalExpression, IMimic mimic, IExpectation expectation)
     {
@@ -45,6 +48,19 @@ internal abstract class SetupBase
         _flags |= Flags.Overriden;
     }
 
+    public void FlagAsVerifiable()
+    {
+        _flags |= Flags.Verifiable;
+    }
+
+    internal virtual void Verify()
+    {
+        if (!Matched)
+        {
+            throw MimicException.SetupNotMatched(this);
+        }
+    }
+
     [Flags]
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private enum Flags : byte
@@ -52,5 +68,6 @@ internal abstract class SetupBase
         None = 0,
         Matched = 1 << 0,
         Overriden = 1 << 1,
+        Verifiable = 1 << 2
     }
 }
