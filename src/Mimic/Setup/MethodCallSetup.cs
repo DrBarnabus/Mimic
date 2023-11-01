@@ -10,16 +10,21 @@ namespace Mimic.Setup;
 
 internal sealed class MethodCallSetup : SetupBase
 {
+    private readonly Func<bool>? _condition;
     private Behaviour? _returnOrThrow;
     private CallbackBehaviour? _preReturnCallback;
     private CallbackBehaviour? _postReturnCallback;
 
     public MethodInfo MethodInfo => ((MethodExpectation)Expectation).MethodInfo;
 
-    public MethodCallSetup(Expression originalExpression, IMimic mimic, MethodExpectation expectation)
+    public MethodCallSetup(Expression originalExpression, IMimic mimic, MethodExpectation expectation, Func<bool>? condition)
         : base(originalExpression, mimic, expectation)
     {
+        _condition = condition;
     }
+
+    public override bool MatchesInvocation(IInvocation invocation) =>
+        base.MatchesInvocation(invocation) && (_condition == null || _condition.Invoke());
 
     protected override void ExecuteCore(IInvocation invocation)
     {

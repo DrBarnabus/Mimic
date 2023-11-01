@@ -92,7 +92,7 @@ public partial class Mimic<T>
         return this;
     }
 
-    private static MethodCallSetup Setup(Mimic<T> mimic, LambdaExpression expression)
+    internal static MethodCallSetup Setup(Mimic<T> mimic, LambdaExpression expression, Func<bool>? condition = null)
     {
         Guard.NotNull(expression);
 
@@ -100,12 +100,12 @@ public partial class Mimic<T>
         if (expectations.Count != 1)
             throw new UnsupportedExpressionException(expression);
 
-        var setup = new MethodCallSetup(expression, mimic, expectations.Pop());
+        var setup = new MethodCallSetup(expression, mimic, expectations.Pop(), condition);
         mimic._setups.Add(setup);
         return setup;
     }
 
-    private static void ValidateSetterExpression(Expression<Action<T>> expression)
+    internal static void ValidateSetterExpression(Expression<Action<T>> expression)
     {
         Guard.NotNull(expression);
 

@@ -32,7 +32,7 @@ internal abstract class SetupBase
         Expectation = expectation;
     }
 
-    public bool MatchesInvocation(IInvocation invocation) => Expectation.MatchesInvocation(invocation);
+    public virtual bool MatchesInvocation(IInvocation invocation) => Expectation.MatchesInvocation(invocation);
 
     public void Execute(IInvocation invocation)
     {

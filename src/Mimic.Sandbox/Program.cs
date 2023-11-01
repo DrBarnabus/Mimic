@@ -11,8 +11,17 @@ mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
     })
     .Callback((string a) => Console.WriteLine($"Callback after {nameof(ITypeToMimic.StringMethod)} returns. Called with {a}"));
 
-mimic.Setup(m => m.ThrowsException(Arg.Any<string>()))
+bool shouldThrow = false;
+mimic
+    .When(() => shouldThrow)
+    .Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Throws((string innerMessage) => new Exception($"Test Exception {innerMessage}"));
+
+mimic
+    .When(() => !shouldThrow)
+    .Setup(m => m.ThrowsException(Arg.Any<string>()))
+    .Callback(() => Console.WriteLine("Shouldn't have thrown?"))
+    .Verifiable();
 
 mimic.Setup(m => m.VoidMethod())
     .Verifiable();
@@ -20,13 +29,17 @@ mimic.Setup(m => m.VoidMethod())
 mimic.SetupAllProperties();
 
 var mimickedObject = mimic.Object;
-// mimickedObject.VoidMethod();
+mimickedObject.VoidMethod();
 
 string result = await mimickedObject.StringMethod("other");
 Console.WriteLine(result);
 
 string secondResult = await mimickedObject.StringMethod("constant");
 Console.WriteLine(secondResult);
+
+mimickedObject.ThrowsException("shouldn't throw");
+
+shouldThrow = true;
 
 try
 {

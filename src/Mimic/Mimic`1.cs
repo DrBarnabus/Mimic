@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Mimic.Core;
 using Mimic.Proxy;
+using Mimic.Setup.Fluent;
+using Mimic.Setup.Fluent.Implementations;
 
 namespace Mimic;
 
@@ -36,6 +38,8 @@ public sealed partial class Mimic<T> : IMimic
 
         return mimicked.Mimic;
     }
+
+    public IConditionalSetup<T> When(Func<bool> condition) => new ConditionalSetup<T>(this, condition);
 
     public void Verify()
     {
