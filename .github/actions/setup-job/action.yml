@@ -1,0 +1,49 @@
+name: 'Setup Job'
+description: 'Setup Job'
+inputs:
+  dotnet_sdk_version:
+    description: 'Version of .NET SDK to install'
+    required: true
+  ignore_dotnet_on_cake_cache_hit:
+    description: 'Whether to ignore installing .NET SDK is cache cache is hit'
+    default: 'false'
+outputs:
+  cake-cache-hit:
+    description: 'If the cache for Cake was found or not'
+    value: ${{ steps.cache-cake.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+
+    # Caches
+    - name: Cache Cake Frosting
+      uses: actions/cache@v3
+      id: cache-cake
+      with:
+        path: run
+        key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+    - name: Cache Cake Tools
+      uses: actions/cache@v3
+      with:
+        path: tools
+        key: tools-${{ runner.os }}-${{ hashFiles('./build/**') }}
+    - name: Cache .nuget
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+          nuget-${{ runner.os }}-
+
+    # Required SDKs
+    - name: Install .NET SDK ${{ inputs.dotnet_sdk_version }}
+      uses: actions/setup-dotnet@v3
+      if: inputs.ignore_dotnet_on_cake_cache_hit == 'false' || steps.cache-cake.outputs.cache-hit != 'true'
+      with:
+        dotnet-version: ${{ inputs.dotnet_sdk_version }}
+
+      # TODO: Investigate using pre-installed .NET SDK
+      # env:
+      #   DOTNET_INSTALL_DIR: /usr/share/dotnet

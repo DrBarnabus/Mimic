@@ -1,0 +1,43 @@
+<Project>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputPath>..\..\run\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cake.Compression" />
+        <PackageReference Include="Cake.Frosting" />
+        <PackageReference Include="Cake.Incubator" />
+        <PackageReference Include="Cake.DotNetLocalTools.Module"  />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System.Text" />
+        <Using Include="System.Reflection" />
+
+        <!-- Cake Includes -->
+        <Using Include="Cake.Common" />
+        <Using Include="Cake.Common.Build" />
+        <Using Include="Cake.Common.Diagnostics" />
+        <Using Include="Cake.Common.IO" />
+        <Using Include="Cake.Common.Tools.DotNet" />
+        <Using Include="Cake.Common.Tools.DotNet.Build" />
+        <Using Include="Cake.Common.Tools.DotNet.MSBuild" />
+        <Using Include="Cake.Common.Tools.DotNet.Pack" />
+        <Using Include="Cake.Common.Tools.DotNet.Restore" />
+        <Using Include="Cake.Common.Tools.DotNet.Test" />
+        <Using Include="Cake.Core" />
+        <Using Include="Cake.Core.IO" />
+        <Using Include="Cake.Coverlet" />
+        <Using Include="Cake.Frosting" />
+        <Using Include="Cake.Incubator.LoggingExtensions" />
+    </ItemGroup>
+
+</Project>
+

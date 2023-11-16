@@ -1,0 +1,64 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  schedule:
+    - cron: '20 2 * * 0'
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: 1
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [csharp]
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Initialize
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+
+      # Setup
+      - name: Setup Job
+        id: setup-job
+        uses: ./.github/actions/setup-job
+        with:
+          dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
+
+      # Prepare
+      - name: '[Prepare]'
+        if: steps.setup-job.outputs.cake-cache-hit != 'true'
+        run: dotnet build build/CI.sln -c Release
+
+      # Build
+      - name: '[Build]'
+        run: dotnet run/build.dll --target=Build
+
+      # Analyze
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

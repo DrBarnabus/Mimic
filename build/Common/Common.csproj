@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cake.Coverlet" />
+        <PackageReference Include="xunit.assert" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Addins\" />
+    </ItemGroup>
+
+</Project>
