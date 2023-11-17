@@ -20,7 +20,7 @@
         <PackageRequiresLicenseAcceptance>false</PackageRequiresLicenseAcceptance>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>icon_128.jpeg</PackageIcon>
+        <PackageIcon>icon_128.png</PackageIcon>
 
         <RepositoryUrl>https://github.com/DrBarnabus/Mimic.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -28,7 +28,7 @@
 
     <ItemGroup>
         <None Include="../../README.md" Pack="true" PackagePath="/" />
-        <None Include="../../images/icon_128.jpeg" Pack="true" PackagePath="/" />
+        <None Include="../../images/icon_128.png" Pack="true" PackagePath="/" />
     </ItemGroup>
 
 </Project>
