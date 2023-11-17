@@ -9,8 +9,4 @@
         <PackageReference Include="xunit.assert" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Addins\" />
-    </ItemGroup>
-
 </Project>

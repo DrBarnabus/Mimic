@@ -3,6 +3,21 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+## [0.3.0](https://github.com/DrBarnabus/Mimic/compare/v0.2.0...v0.3.0) (2023-11-17)
+
+
+### Features
+
+* Add `Verifiable` flag to setups and `Verify` method on `Mimic<T>` ([6cbac49](https://github.com/DrBarnabus/Mimic/commit/6cbac49753a43bb6934eebbc0971d3e78e9e7561))
+* Implement `Strict` mode (default: `true`) to require an invocation to have a matching setup or else throw an exception ([5c54b69](https://github.com/DrBarnabus/Mimic/commit/5c54b69b4a156684e44ed5a641b8b1fc76b3c3e5))
+* Implement conditional setups with `Mimic<T>.When(Func<bool> condition)` ([97ac200](https://github.com/DrBarnabus/Mimic/commit/97ac20014b7851ff397b009f885b0a944ad70b82))
+
+
+### Bug Fixes
+
+* Change ExpressionSplitter to maintain mocked type for method call expressions ([d8fd281](https://github.com/DrBarnabus/Mimic/commit/d8fd28142aeee1e913bec0446987090903d35655))
+* Properly implement `ToString` on `SetupBase` ([4669d18](https://github.com/DrBarnabus/Mimic/commit/4669d188638ae6a7eae6490176efa03a375c180a))
+
 ## [0.2.0](https://github.com/DrBarnabus/Mimic/compare/v0.1.0...v0.2.0) (2023-10-27)
 
 
