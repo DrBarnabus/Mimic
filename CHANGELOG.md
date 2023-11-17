@@ -3,6 +3,13 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+### [0.3.1](https://github.com/DrBarnabus/Mimic/compare/v0.3.0...v0.3.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* Change icon_128.jpeg to PNG ([4c2456e](https://github.com/DrBarnabus/Mimic/commit/4c2456eb930192747e8007fe94af1bd11aaa443a))
+
 ## [0.3.0](https://github.com/DrBarnabus/Mimic/compare/v0.2.0...v0.3.0) (2023-11-17)
 
 

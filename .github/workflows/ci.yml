@@ -6,8 +6,9 @@ on:
   pull_request:
     branches: [main]
 
-  repository_dispatch:
-    types: [ release ]
+  # Disabled Release for now, not sure if it's needed or not still working out the release workflow
+  # repository_dispatch:
+  #   types: [ release ]
 
 permissions:
   contents: read
