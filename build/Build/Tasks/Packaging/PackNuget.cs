@@ -3,7 +3,8 @@
 namespace Build.Tasks.Packaging;
 
 [TaskName(nameof(PackNuget))]
-[TaskDescription("Packs the nuget package")]
+[TaskDescription("Packs the NuGet package")]
+[IsDependentOn(typeof(Build))]
 public sealed class PackNuget : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
