@@ -1,0 +1,52 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".Generated.cs" #>
+using Mimic.Setup.Fluent;
+
+namespace Mimic;
+
+public static partial class ReturnsExtensions
+{
+    #region Task<T>
+
+    <# for (int argumentCount = 2; argumentCount <= 15; argumentCount++) {
+    #>public static IReturnsResult<TMimic> Returns<TMimic, <#
+        for (int i = 1; i <= argumentCount; i++) { #>T<#=i#>, <# }
+        #>TResult>(this IReturns<TMimic, Task<TResult>> mimic, Func<<#
+        for (int i = 1; i <= argumentCount; i++) { #>T<#=i#>, <# } #>TResult> valueFunction)
+        where TMimic : class
+    {
+        return mimic.Returns((<#
+        for (int i = 1; i <= argumentCount; i++)
+        { #>T<#=i#> t<#=i#><#
+            if (i != argumentCount) { #>, <# }
+        } #>) => Task.FromResult(valueFunction(<#
+        for (int i = 1; i <= argumentCount; i++)
+        { #>t<#=i#><#
+            if (i != argumentCount) { #>, <# }
+        } #>)));
+    }
+
+    <# } #>#endregion
+
+    #region ValueTask<T>
+
+    <# for (int argumentCount = 2; argumentCount <= 15; argumentCount++) {
+    #>public static IReturnsResult<TMimic> Returns<TMimic, <#
+        for (int i = 1; i <= argumentCount; i++) { #>T<#=i#>, <# }
+        #>TResult>(this IReturns<TMimic, ValueTask<TResult>> mimic, Func<<#
+        for (int i = 1; i <= argumentCount; i++) { #>T<#=i#>, <# } #>TResult> valueFunction)
+        where TMimic : class
+    {
+        return mimic.Returns((<#
+        for (int i = 1; i <= argumentCount; i++)
+        { #>T<#=i#> t<#=i#><#
+            if (i != argumentCount) { #>, <# }
+        } #>) => new ValueTask<TResult>(valueFunction(<#
+        for (int i = 1; i <= argumentCount; i++)
+        { #>t<#=i#><#
+            if (i != argumentCount) { #>, <# }
+        } #>)));
+    }
+
+    <# } #>#endregion
+}
