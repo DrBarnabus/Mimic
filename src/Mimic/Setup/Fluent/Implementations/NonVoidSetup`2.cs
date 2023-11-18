@@ -138,12 +138,6 @@ internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, 
         return this;
     }
 
-    public IReturnsResult<TMimic> Returns(Delegate valueFactory)
-    {
-        Setup.SetReturnComputedValueBehaviour(valueFactory);
-        return this;
-    }
-
     public IReturnsResult<TMimic> Returns(Func<TResult?> valueFactory)
     {
         Setup.SetReturnComputedValueBehaviour(valueFactory);

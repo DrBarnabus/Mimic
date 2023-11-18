@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Mimic\Mimic.csproj" />
+        <ProjectReference Include="..\Mimic\Mimic.csproj" />
     </ItemGroup>
 
 </Project>

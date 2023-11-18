@@ -10,8 +10,6 @@ public interface IReturns<TMimic, in TResult> : IFluent
 {
     IReturnsResult<TMimic> Returns(TResult? value);
 
-    IReturnsResult<TMimic> Returns(Delegate valueFactory);
-
     IReturnsResult<TMimic> Returns(Func<TResult?> valueFunction);
 
     IReturnsResult<TMimic> Returns<T>(Func<T, TResult> valueFunction);
