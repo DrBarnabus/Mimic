@@ -3,6 +3,10 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+### [0.3.2](https://github.com/DrBarnabus/Mimic/compare/v0.3.1...v0.3.2) (2023-11-18)
+
+_Pushed again to fix the Icon of the Package_
+
 ### [0.3.1](https://github.com/DrBarnabus/Mimic/compare/v0.3.0...v0.3.1) (2023-11-17)
 
 
