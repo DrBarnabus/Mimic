@@ -32,7 +32,7 @@ Completed   = ✔
 -   [🚧] Verifiable Setup's
 -   [✔] Execution Limits (Calls throw after n expected calls)
 -   [✔] Conditional Setup of Methods
--   [📅] Sequential Returns (Calls return next sequential result on each call `.Returns(value1, value2, value3)`)
+-   [✔] Sequential Returns (Calls return next sequential result on each call ~`.Returns(value1, value2, value3)`~)
 -   [📅] Support for `ref`/`out` arguments
 -   [❓] Setup of Event Handlers
 

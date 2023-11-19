@@ -23,6 +23,12 @@ mimic
 mimic.Setup(m => m.VoidMethod())
     .Verifiable();
 
+var reference = mimic.Setup(m => m.Sequence()).AsSequence()
+    .Next()
+    .Next();
+
+reference.Throws(new Exception("Test Exception from void?"));
+
 mimic.SetupAllProperties();
 
 var mimickedObject = mimic.Object;
@@ -50,6 +56,18 @@ catch (Exception ex)
 mimickedObject.Property = "Test?";
 Console.WriteLine(mimickedObject.Property);
 
+mimickedObject.Sequence();
+mimickedObject.Sequence();
+
+try
+{
+    mimickedObject.Sequence();
+}
+catch (Exception ex)
+{
+    Console.Write($"Exception thrown with message: {ex.Message}");
+}
+
 mimic.Verify();
 
 public interface ITypeToMimic
@@ -61,4 +79,6 @@ public interface ITypeToMimic
     Task<string> StringMethod(string value);
 
     void ThrowsException(string innerMessage);
+
+    void Sequence();
 }
