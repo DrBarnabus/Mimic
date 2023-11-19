@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Linq.Expressions;
-using System.Reflection;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Exceptions;
-using Mimic.Expressions;
+﻿using Mimic.Expressions;
 using Mimic.Setup;
 using Mimic.Setup.Fluent;
 using Mimic.Setup.Fluent.Implementations;

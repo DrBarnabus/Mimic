@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
-using Castle.DynamicProxy;
-using Mimic.Core;
-using Mimic.Core.Extensions;
+﻿using Castle.DynamicProxy;
 
 namespace Mimic.Proxy;
 

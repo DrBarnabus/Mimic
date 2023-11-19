@@ -1,6 +1,4 @@
-﻿using Mimic.Core;
-
-namespace Mimic.Setup.Fluent.Implementations;
+﻿namespace Mimic.Setup.Fluent.Implementations;
 
 internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
 {

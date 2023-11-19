@@ -1,9 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Proxy;
-using Mimic.Setup.ArgumentMatchers;
+﻿using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic.Setup;
 

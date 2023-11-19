@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-
-namespace Mimic.Core;
+﻿namespace Mimic.Core;
 
 internal static class TypeNameFormatter
 {

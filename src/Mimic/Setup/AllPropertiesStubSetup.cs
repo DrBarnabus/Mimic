@@ -1,9 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Linq.Expressions;
-using System.Reflection;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Proxy;
 using Expr = System.Linq.Expressions.Expression;
 
 namespace Mimic.Setup;

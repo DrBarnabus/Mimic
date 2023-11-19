@@ -1,6 +1,4 @@
-﻿using Mimic.Proxy;
-
-namespace Mimic.Setup.Behaviours;
+﻿namespace Mimic.Setup.Behaviours;
 
 internal abstract class Behaviour
 {

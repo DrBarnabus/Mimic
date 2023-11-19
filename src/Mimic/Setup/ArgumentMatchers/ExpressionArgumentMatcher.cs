@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Mimic.Expressions;
+﻿using Mimic.Expressions;
 
 namespace Mimic.Setup.ArgumentMatchers;
 

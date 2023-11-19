@@ -1,5 +1,3 @@
-using Mimic.Proxy;
-
 namespace Mimic.Setup.Behaviours;
 
 internal sealed class ReturnValueBehaviour : Behaviour

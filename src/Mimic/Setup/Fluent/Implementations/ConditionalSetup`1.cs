@@ -1,9 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Exceptions;
-using Mimic.Expressions;
+﻿using Mimic.Expressions;
 
 namespace Mimic.Setup.Fluent.Implementations;
 

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Mimic.Proxy;
+﻿namespace Mimic.Proxy;
 
 internal interface IInvocation
 {

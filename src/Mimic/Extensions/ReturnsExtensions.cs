@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Mimic.Setup.Fluent;
+﻿using Mimic.Setup.Fluent;
 
 namespace Mimic;
 

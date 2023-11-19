@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Mimic.Core.Extensions;
+﻿namespace Mimic.Core.Extensions;
 
 internal static class TypeExtensions
 {

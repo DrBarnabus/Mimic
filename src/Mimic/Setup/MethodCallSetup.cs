@@ -1,11 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Exceptions;
-using Mimic.Proxy;
-using Mimic.Setup.Behaviours;
+﻿using Mimic.Setup.Behaviours;
 
 namespace Mimic.Setup;
 

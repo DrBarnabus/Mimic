@@ -1,9 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Mimic.Core;
-
-namespace Mimic.Expressions;
+﻿namespace Mimic.Expressions;
 
 internal sealed class ExpressionEqualityComparer : IEqualityComparer<Expression>
 {

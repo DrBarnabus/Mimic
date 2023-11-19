@@ -1,9 +1,3 @@
-using System.Linq.Expressions;
-using System.Reflection;
-using Mimic.Core;
-using Mimic.Core.Extensions;
-using Mimic.Proxy;
-
 namespace Mimic.Setup;
 
 internal sealed class PropertyStubSetup : SetupBase

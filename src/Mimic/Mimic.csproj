@@ -18,9 +18,24 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Using Include="JetBrains.Annotations" />
+        <Using Include="Mimic.Core" />
+        <Using Include="Mimic.Core.Extensions" />
+        <Using Include="Mimic.Exceptions" />
+        <Using Include="Mimic.Proxy" />
+        <Using Include="System.Collections" />
+        <Using Include="System.ComponentModel" />
+        <Using Include="System.Diagnostics" />
+        <Using Include="System.Diagnostics.CodeAnalysis" />
+        <Using Include="System.Linq.Expressions" />
+        <Using Include="System.Reflection" />
+        <Using Include="System.Runtime.CompilerServices" />
+    </ItemGroup>
+
+    <ItemGroup>
         <InternalsVisibleTo Include="Mimic.UnitTests" />
     </ItemGroup>
-    
+
     <!-- Extensions\ReturnsExtensions.tt -->
     <ItemGroup>
         <None Update="Extensions\ReturnsExtensions.tt">

@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace Mimic.Setup.ArgumentMatchers;
 
 internal sealed class ConstantArgumentMatcher : IArgumentMatcher

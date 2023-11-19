@@ -1,6 +1,3 @@
-using Mimic.Exceptions;
-using Mimic.Proxy;
-
 namespace Mimic.Setup.Behaviours;
 
 internal sealed class ExecutionLimitBehaviour : Behaviour

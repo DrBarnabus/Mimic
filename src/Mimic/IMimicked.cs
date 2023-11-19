@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using JetBrains.Annotations;
-
-namespace Mimic;
+﻿namespace Mimic;
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]

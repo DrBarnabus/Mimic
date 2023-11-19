@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq.Expressions;
-using JetBrains.Annotations;
-
-namespace Mimic.Setup.Fluent;
+﻿namespace Mimic.Setup.Fluent;
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]

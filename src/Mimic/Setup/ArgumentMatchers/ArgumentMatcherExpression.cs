@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Mimic.Setup.ArgumentMatchers;
+﻿namespace Mimic.Setup.ArgumentMatchers;
 
 internal sealed class ArgumentMatcherExpression : Expression
 {

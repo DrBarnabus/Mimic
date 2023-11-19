@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace Mimic.Core;
+﻿namespace Mimic.Core;
 
 internal partial class Guard
 {

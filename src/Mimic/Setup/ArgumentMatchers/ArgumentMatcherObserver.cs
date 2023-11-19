@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Mimic.Core;
-
-namespace Mimic.Setup.ArgumentMatchers;
+﻿namespace Mimic.Setup.ArgumentMatchers;
 
 internal sealed class ArgumentMatcherObserver : IDisposable
 {

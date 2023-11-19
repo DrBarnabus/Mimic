@@ -1,9 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
-using Mimic.Core;
-using Mimic.Exceptions;
 using Mimic.Expressions;
-using Mimic.Proxy;
 
 namespace Mimic.Setup;
 

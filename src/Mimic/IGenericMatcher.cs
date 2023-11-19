@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Mimic;
+﻿namespace Mimic;
 
 [PublicAPI]
 public interface IGenericMatcher

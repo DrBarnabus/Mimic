@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using Mimic.Core;
-using Mimic.Setup.ArgumentMatchers;
+﻿using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic.Expressions;
 

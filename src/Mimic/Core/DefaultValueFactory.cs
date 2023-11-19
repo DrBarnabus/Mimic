@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using Mimic.Core.Extensions;
-
-namespace Mimic.Core;
+﻿namespace Mimic.Core;
 
 internal static class DefaultValueFactory
 {

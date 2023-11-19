@@ -1,8 +1,4 @@
-﻿using Mimic.Core;
-using Mimic.Exceptions;
-using Mimic.Proxy;
-
-namespace Mimic;
+﻿namespace Mimic;
 
 public partial class Mimic<T>
     : IInterceptor

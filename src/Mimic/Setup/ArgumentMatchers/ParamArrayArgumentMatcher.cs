@@ -1,5 +1,3 @@
-using Mimic.Core;
-
 namespace Mimic.Setup.ArgumentMatchers;
 
 internal sealed class ParamArrayArgumentMatcher : IArgumentMatcher

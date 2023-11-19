@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-
-namespace Mimic.Core.Extensions;
+﻿namespace Mimic.Core.Extensions;
 
 internal static class PropertyInfoExtensions
 {

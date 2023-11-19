@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Mimic.Core;
-using Mimic.Proxy;
-using Mimic.Setup.Fluent;
+﻿using Mimic.Setup.Fluent;
 using Mimic.Setup.Fluent.Implementations;
 
 namespace Mimic;
