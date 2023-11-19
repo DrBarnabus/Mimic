@@ -1,7 +1,6 @@
 ﻿using Mimic.Expressions;
 using Mimic.Setup;
 using Mimic.Setup.Fluent;
-using Mimic.Setup.Fluent.Implementations;
 using SetupBase = Mimic.Setup.SetupBase;
 
 namespace Mimic;

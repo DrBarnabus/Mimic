@@ -1,7 +1,5 @@
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ output extension=".Generated.cs" #>
-using Mimic.Setup.Fluent;
-
 namespace Mimic;
 
 public static partial class ReturnsExtensions

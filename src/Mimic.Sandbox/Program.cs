@@ -71,6 +71,8 @@ catch (Exception ex)
     Console.Write($"Exception thrown with message: {ex.Message}");
 }
 
+mimickedObject.Generic<int>();
+
 mimic.Verify();
 
 public interface ITypeToMimic

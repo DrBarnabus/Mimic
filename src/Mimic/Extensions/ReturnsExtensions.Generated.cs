@@ -1,5 +1,3 @@
-using Mimic.Setup.Fluent;
-
 namespace Mimic;
 
 public static partial class ReturnsExtensions

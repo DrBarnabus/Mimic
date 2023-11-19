@@ -1,5 +1,4 @@
 ﻿using Mimic.Setup.Fluent;
-using Mimic.Setup.Fluent.Implementations;
 
 namespace Mimic;
 
