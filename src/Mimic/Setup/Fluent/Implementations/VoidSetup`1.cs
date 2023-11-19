@@ -6,4 +6,6 @@ internal class VoidSetup<TMimic> : SetupBase, ISetup<TMimic>
     public VoidSetup(MethodCallSetup setup) : base(setup)
     {
     }
+
+    public ISequenceSetup AsSequence() => new SequenceSetup(Setup);
 }

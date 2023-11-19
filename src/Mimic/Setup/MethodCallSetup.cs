@@ -34,20 +34,14 @@ internal sealed class MethodCallSetup : SetupBase
         _preReturnCallback?.Execute(invocation);
 
         if (_returnOrThrow is not null)
-        {
             _returnOrThrow.Execute(invocation);
-        }
         else if (invocation.Method.ReturnType != typeof(void))
-        {
-            if (Mimic.Strict)
-                throw MimicException.ReturnRequired(invocation);
-
-            object? defaultValue = DefaultValueFactory.GetDefaultValue(invocation.Method.ReturnType);
-            invocation.SetReturnValue(defaultValue);
-        }
+            StrictThrowOrReturnDefault(invocation);
 
         _postReturnCallback?.Execute(invocation);
     }
+
+    #region SetBehaviours
 
     public void SetReturnValueBehaviour(object? value)
     {
@@ -113,6 +107,73 @@ internal sealed class MethodCallSetup : SetupBase
         Guard.Assert(_executionLimit is null);
 
         _executionLimit = new ExecutionLimitBehaviour(this, executionLimit);
+    }
+
+    #endregion
+
+    #region AddBehaviours
+
+    public void AddReturnValueBehaviour(object? value)
+    {
+        Guard.Assert(MethodInfo.ReturnType != typeof(void));
+
+        AddBehaviour(new ReturnValueBehaviour(value));
+    }
+
+    public void AddReturnComputedValueBehaviour(Delegate valueFactory)
+    {
+        Guard.Assert(MethodInfo.ReturnType != typeof(void));
+
+        AddBehaviour(ReturnValueBehaviourFromValueFactory(valueFactory));
+    }
+
+    public void AddThrowExceptionBehaviour(Exception exception)
+    {
+        Guard.NotNull(exception);
+
+        AddBehaviour(new ThrowExceptionBehaviour(exception));
+    }
+
+    public void AddThrowComputedExceptionBehaviour(Delegate exceptionFactory)
+    {
+        Guard.NotNull(exceptionFactory);
+
+        AddBehaviour(ThrowExceptionBehaviourFromExecptionFactory(exceptionFactory));
+    }
+
+    public void AddNoOpBehaviour()
+    {
+        Guard.Assert(MethodInfo.ReturnType == typeof(void));
+
+        AddBehaviour(NoOpBehaviour.Instance);
+    }
+
+    private void AddBehaviour(Behaviour behaviour)
+    {
+        Guard.Assert(_returnOrThrow is null or SequenceBehaviour);
+
+        _returnOrThrow ??= new SequenceBehaviour(this);
+        if (_returnOrThrow is SequenceBehaviour sequenceBehaviour)
+            sequenceBehaviour.AddBehaviour(behaviour);
+    }
+
+    #endregion
+
+    internal override void Verify()
+    {
+        base.Verify();
+
+        if (_returnOrThrow is SequenceBehaviour { Remaining: >0 } sequenceBehaviour)
+            throw MimicException.SequenceSetupNotMatched(this, sequenceBehaviour.Remaining);
+    }
+
+    internal void StrictThrowOrReturnDefault(IInvocation invocation)
+    {
+        if (Mimic.Strict)
+            throw MimicException.ReturnRequired(invocation);
+
+        object? defaultValue = DefaultValueFactory.GetDefaultValue(invocation.Method.ReturnType);
+        invocation.SetReturnValue(defaultValue);
     }
 
     private Behaviour ReturnValueBehaviourFromValueFactory(Delegate valueFactory)

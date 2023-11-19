@@ -47,6 +47,11 @@ public class MimicException : Exception
         return new MimicException($"Setup '{setup}' which was marked as verifiable has not been matched");
     }
 
+    internal static MimicException SequenceSetupNotMatched(SetupBase setup, int remaining)
+    {
+        return new MimicException($"Setup '{setup}' with sequence which was marked as verifiable has not been matched ({remaining} {(remaining == 1 ? "seqeuence" : "seqeuences")} result has not been used).");
+    }
+
     internal static MimicException ReturnRequired(IInvocation invocation)
     {
         return new MimicException($"Invocation of '{invocation}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");
