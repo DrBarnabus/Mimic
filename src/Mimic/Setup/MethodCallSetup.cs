@@ -5,6 +5,7 @@ using Mimic.Core;
 using Mimic.Core.Extensions;
 using Mimic.Exceptions;
 using Mimic.Proxy;
+using Mimic.Setup.Behaviours;
 
 namespace Mimic.Setup;
 
@@ -61,21 +62,7 @@ internal sealed class MethodCallSetup : SetupBase
         Guard.Assert(MethodInfo.ReturnType != typeof(void));
         Guard.Assert(_returnOrThrow is null);
 
-        var expectedReturnType = MethodInfo.ReturnType;
-
-        if (expectedReturnType == typeof(Delegate))
-        {
-            _returnOrThrow = new ReturnValueBehaviour(valueFactory);
-        }
-        else
-        {
-            ValidateDelegateArgumentCount(valueFactory);
-            ValidateReturnDelegateReturnType(valueFactory, MethodInfo.ReturnType);
-
-            _returnOrThrow = valueFactory.CompareParameterTypesTo(Type.EmptyTypes)
-                ? new ReturnComputedValueBehaviour(_ => valueFactory.Invoke())
-                : new ReturnComputedValueBehaviour(invocation => valueFactory.Invoke(invocation.Arguments));
-        }
+        _returnOrThrow = ReturnValueBehaviourFromValueFactory(valueFactory);
     }
 
     public void SetThrowExceptionBehaviour(Exception exception)
@@ -91,12 +78,7 @@ internal sealed class MethodCallSetup : SetupBase
         Guard.NotNull(exceptionFactory);
         Guard.Assert(_returnOrThrow is null);
 
-        ValidateDelegateArgumentCount(exceptionFactory);
-        ValidateReturnDelegateReturnType(exceptionFactory, typeof(Exception));
-
-        _returnOrThrow = exceptionFactory.CompareParameterTypesTo(Type.EmptyTypes)
-            ? new ThrowComputedExceptionBehaviour(_ => exceptionFactory.Invoke() as Exception)
-            : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
+        _returnOrThrow = ThrowExceptionBehaviourFromExecptionFactory(exceptionFactory);
     }
 
     public void SetCallbackBehaviour(Delegate callbackFunction)
@@ -133,6 +115,30 @@ internal sealed class MethodCallSetup : SetupBase
         _executionLimit = new ExecutionLimitBehaviour(this, executionLimit);
     }
 
+    private Behaviour ReturnValueBehaviourFromValueFactory(Delegate valueFactory)
+    {
+        var expectedReturnType = MethodInfo.ReturnType;
+        if (expectedReturnType == typeof(Delegate))
+            return new ReturnValueBehaviour(valueFactory);
+
+        ValidateDelegateArgumentCount(valueFactory);
+        ValidateReturnDelegateReturnType(valueFactory, expectedReturnType);
+
+        return valueFactory.CompareParameterTypesTo(Type.EmptyTypes)
+            ? new ReturnComputedValueBehaviour(_ => valueFactory.Invoke())
+            : new ReturnComputedValueBehaviour(invocation => valueFactory.Invoke(invocation.Arguments));
+    }
+
+    private ThrowComputedExceptionBehaviour ThrowExceptionBehaviourFromExecptionFactory(Delegate exceptionFactory)
+    {
+        ValidateDelegateArgumentCount(exceptionFactory);
+        ValidateReturnDelegateReturnType(exceptionFactory, typeof(Exception));
+
+        return exceptionFactory.CompareParameterTypesTo(Type.EmptyTypes)
+            ? new ThrowComputedExceptionBehaviour(_ => exceptionFactory.Invoke() as Exception)
+            : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
+    }
+
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
     {
         var methodInfo = delegateFunction.GetMethodInfo();
@@ -160,80 +166,5 @@ internal sealed class MethodCallSetup : SetupBase
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
             throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, actualReturnType);
-    }
-
-    private abstract class Behaviour
-    {
-        internal abstract void Execute(IInvocation invocation);
-    }
-
-    private sealed class ReturnValueBehaviour : Behaviour
-    {
-        private readonly object? _value;
-
-        public ReturnValueBehaviour(object? value) => _value = value;
-
-        internal override void Execute(IInvocation invocation) => invocation.SetReturnValue(_value);
-    }
-
-    private sealed class ReturnComputedValueBehaviour : Behaviour
-    {
-        private readonly Func<IInvocation, object?> _valueFactory;
-
-        public ReturnComputedValueBehaviour(Func<IInvocation, object?> valueFactory) => _valueFactory = valueFactory;
-
-        internal override void Execute(IInvocation invocation) => invocation.SetReturnValue(_valueFactory.Invoke(invocation));
-    }
-
-    private sealed class ThrowExceptionBehaviour : Behaviour
-    {
-        private readonly Exception _exception;
-
-        public ThrowExceptionBehaviour(Exception exception) => _exception = exception;
-
-        internal override void Execute(IInvocation invocation)
-        {
-            throw _exception;
-        }
-    }
-
-    private sealed class ThrowComputedExceptionBehaviour : Behaviour
-    {
-        private readonly Func<IInvocation, Exception?> _exceptionFactory;
-
-        public ThrowComputedExceptionBehaviour(Func<IInvocation, Exception?> exceptionFactory) => _exceptionFactory = exceptionFactory;
-
-        internal override void Execute(IInvocation invocation)
-        {
-            throw _exceptionFactory.Invoke(invocation)!;
-        }
-    }
-
-    private sealed class CallbackBehaviour : Behaviour
-    {
-        private readonly Action<IInvocation> _callbackFunction;
-
-        public CallbackBehaviour(Action<IInvocation> callbackFunction) => _callbackFunction = callbackFunction;
-
-        internal override void Execute(IInvocation invocation)
-        {
-            _callbackFunction.Invoke(invocation);
-        }
-    }
-
-    private sealed class ExecutionLimitBehaviour : Behaviour
-    {
-        private readonly MethodCallSetup _setup;
-        private readonly int _executionLimit;
-        private int _executionCount = 0;
-
-        public ExecutionLimitBehaviour(MethodCallSetup setup, int executionLimit) => (_setup, _executionLimit) = (setup, executionLimit);
-
-        internal override void Execute(IInvocation invocation)
-        {
-            _executionCount++;
-            if (_executionCount > _executionLimit)
-                throw MimicException.ExecutionLimitExceeded(_setup, _executionLimit, _executionCount);
-        }
     }
 }
