@@ -22,8 +22,43 @@ public static class Arg
         return ArgumentMatcher.Create<TValue>(argument => Equals(argument, value))!;
     }
 
+    public static TValue Is<TValue>(TValue value, IEqualityComparer<TValue> comparer)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => comparer.Equals(argument, value))!;
+    }
+
     public static TValue Is<TValue>(Expression<Func<TValue, bool>> match)
     {
         return ArgumentMatcher.Create<TValue>(argument => match.Compile().Invoke(argument!))!;
+    }
+
+    public static TValue In<TValue>(IEnumerable<TValue> values)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => values.Contains(argument))!;
+    }
+
+    public static TValue In<TValue>(IEnumerable<TValue> values, IEqualityComparer<TValue> comparer)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => values.Contains(argument, comparer!))!;
+    }
+
+    public static TValue In<TValue>(params TValue[] values)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => values.Contains(argument))!;
+    }
+
+    public static TValue NotIn<TValue>(IEnumerable<TValue> values)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => !values.Contains(argument))!;
+    }
+
+    public static TValue NotIn<TValue>(IEnumerable<TValue> values, IEqualityComparer<TValue> comparer)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => !values.Contains(argument, comparer!))!;
+    }
+
+    public static TValue NotIn<TValue>(params TValue[] values)
+    {
+        return ArgumentMatcher.Create<TValue>(argument => !values.Contains(argument))!;
     }
 }
