@@ -132,4 +132,9 @@ public class MimicException : Exception
     {
         return new MimicException("Setup on method cannot invoke a callback method with a non-void return type");
     }
+
+    internal static MimicException ExecutionLimitExceeded(MethodCallSetup setup, int limit, int count)
+    {
+        return new MimicException($"Setup '{setup}' has been limited to {limit} {(limit == 1 ? "execution" : "executions")} but was actually executed {count} times");
+    }
 }

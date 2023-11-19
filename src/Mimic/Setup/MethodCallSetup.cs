@@ -14,6 +14,7 @@ internal sealed class MethodCallSetup : SetupBase
     private Behaviour? _returnOrThrow;
     private CallbackBehaviour? _preReturnCallback;
     private CallbackBehaviour? _postReturnCallback;
+    private ExecutionLimitBehaviour? _executionLimit;
 
     public MethodInfo MethodInfo => ((MethodExpectation)Expectation).MethodInfo;
 
@@ -28,6 +29,7 @@ internal sealed class MethodCallSetup : SetupBase
 
     protected override void ExecuteCore(IInvocation invocation)
     {
+        _executionLimit?.Execute(invocation);
         _preReturnCallback?.Execute(invocation);
 
         if (_returnOrThrow is not null)
@@ -123,6 +125,14 @@ internal sealed class MethodCallSetup : SetupBase
         }
     }
 
+    public void SetExecutionLimitBehaviour(int executionLimit)
+    {
+        Guard.Assert(executionLimit >= 1);
+        Guard.Assert(_executionLimit is null);
+
+        _executionLimit = new ExecutionLimitBehaviour(this, executionLimit);
+    }
+
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
     {
         var methodInfo = delegateFunction.GetMethodInfo();
@@ -208,6 +218,22 @@ internal sealed class MethodCallSetup : SetupBase
         internal override void Execute(IInvocation invocation)
         {
             _callbackFunction.Invoke(invocation);
+        }
+    }
+
+    private sealed class ExecutionLimitBehaviour : Behaviour
+    {
+        private readonly MethodCallSetup _setup;
+        private readonly int _executionLimit;
+        private int _executionCount = 0;
+
+        public ExecutionLimitBehaviour(MethodCallSetup setup, int executionLimit) => (_setup, _executionLimit) = (setup, executionLimit);
+
+        internal override void Execute(IInvocation invocation)
+        {
+            _executionCount++;
+            if (_executionCount > _executionLimit)
+                throw MimicException.ExecutionLimitExceeded(_setup, _executionLimit, _executionCount);
         }
     }
 }

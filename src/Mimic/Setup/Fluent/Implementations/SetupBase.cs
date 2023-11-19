@@ -267,6 +267,12 @@ internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
 
     #endregion
 
+    public IVerifiable Limit(int executionLimit = 1)
+    {
+        Setup.SetExecutionLimitBehaviour(executionLimit);
+        return this;
+    }
+
     public void Verifiable()
     {
         Setup.FlagAsVerifiable();

@@ -5,7 +5,8 @@ var mimic = new Mimic<ITypeToMimic>();
 mimic.Setup(m => m.StringMethod(Arg.Any<string>()))
     .Callback(() => Console.WriteLine($"Callback before {nameof(ITypeToMimic.StringMethod)} returns"))
     .Returns((string a) => $"Value is: {a}")
-    .Callback((string a) => Console.WriteLine($"Callback after {nameof(ITypeToMimic.StringMethod)} returns. Called with {a}"));
+    .Callback((string a) => Console.WriteLine($"Callback after {nameof(ITypeToMimic.StringMethod)} returns. Called with {a}"))
+    .Limit(2);
 
 bool shouldThrow = false;
 mimic
