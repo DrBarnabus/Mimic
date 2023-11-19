@@ -31,6 +31,9 @@ reference.Throws(new Exception("Test Exception from void?"));
 
 mimic.SetupAllProperties();
 
+mimic.Setup(m => m.Generic<Generic.AnyType>())
+    .Verifiable();
+
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();
 
@@ -81,4 +84,6 @@ public interface ITypeToMimic
     void ThrowsException(string innerMessage);
 
     void Sequence();
+
+    void Generic<T>();
 }

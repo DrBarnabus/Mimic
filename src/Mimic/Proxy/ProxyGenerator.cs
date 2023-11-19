@@ -60,10 +60,13 @@ internal sealed class ProxyGenerator
         // ReSharper disable once NotAccessedField.Local
         private Castle.DynamicProxy.IInvocation? _underlyingInvocation;
         private object? _returnValue;
+        private MethodInfo? _methodImplementation;
 
         public Type ProxyType { get; }
 
         public MethodInfo Method { get; }
+
+        public MethodInfo MethodImplementation => _methodImplementation ??= Method.GetImplementingMethod(ProxyType);
 
         public object[] Arguments { get; }
 

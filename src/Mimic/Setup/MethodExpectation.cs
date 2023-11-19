@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using Mimic.Core;
+using Mimic.Core.Extensions;
 using Mimic.Proxy;
 using Mimic.Setup.ArgumentMatchers;
 
@@ -9,6 +10,7 @@ namespace Mimic.Setup;
 internal sealed class MethodExpectation : IExpectation
 {
     private readonly IArgumentMatcher[] _argumentMatchers;
+    private MethodInfo? _methodImplementation;
 
     public LambdaExpression Expression { get; }
 
@@ -42,7 +44,7 @@ internal sealed class MethodExpectation : IExpectation
 
     public bool MatchesInvocation(IInvocation invocation)
     {
-        if (invocation.Method != MethodInfo)
+        if (invocation.Method != MethodInfo && !IsMatchedGenericMethod(invocation))
             return false;
 
         object[] arguments = invocation.Arguments;
@@ -55,5 +57,19 @@ internal sealed class MethodExpectation : IExpectation
         }
 
         return true;
+    }
+
+    private bool IsMatchedGenericMethod(IInvocation invocation)
+    {
+        Guard.Assert(invocation.Method != MethodInfo);
+
+        _methodImplementation ??= MethodInfo.GetImplementingMethod(invocation.ProxyType);
+        if (invocation.MethodImplementation != _methodImplementation)
+            return false;
+
+        if (!MethodInfo.IsGenericMethod && !invocation.Method.IsGenericMethod)
+            return true;
+
+        return MethodInfo.GetGenericArguments().CompareWith(invocation.Method.GetGenericArguments());
     }
 }
