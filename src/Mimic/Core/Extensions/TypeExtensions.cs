@@ -46,10 +46,7 @@ internal static class TypeExtensions
         if (type.HasElementType)
             return IsOrContainsGenericMatcher(type.GetElementType()!);
 
-        if (type.IsGenericType)
-            return type.GetGenericArguments().Any(IsOrContainsGenericMatcher);
-
-        return false;
+        return type.IsGenericType && type.GetGenericArguments().Any(IsOrContainsGenericMatcher);
     }
 
     private static Type SubstituteGenericMatchers(this Type type, Type otherType)
@@ -62,51 +59,77 @@ internal static class TypeExtensions
         }
         else if (type.HasElementType && otherType.HasElementType)
         {
-            var typeElementType = type.GetElementType()!;
-            var otherTypeElementType = otherType.GetElementType()!;
-
-            if (type.IsArray && otherType.IsArray)
-            {
-                int typeArrayRank = type.GetArrayRank();
-                if (typeArrayRank == otherType.GetArrayRank())
-                {
-                    var substitutedElementType = typeElementType.SubstituteGenericMatchers(otherTypeElementType);
-                    if (substitutedElementType == typeElementType)
-                        return type;
-
-                    return typeArrayRank == 1
-                        ? substitutedElementType.MakeArrayType()
-                        : substitutedElementType.MakeArrayType(typeArrayRank);
-                }
-            }
+            return SubstituteGenericMatcherInElementType(type, otherType);
         }
         else if (type.IsGenericType && otherType.IsGenericType)
         {
-            var typeDefinition = type.GetGenericTypeDefinition();
-            var otherTypeDefinition = otherType.GetGenericTypeDefinition();
-
-            if (typeDefinition != otherTypeDefinition)
-                return type;
-
-            var typeGenericArguments = type.GetGenericArguments();
-            var otherTypeGenericArguments = otherType.GetGenericArguments();
-
-            Guard.Assert(typeGenericArguments.Length == otherTypeGenericArguments.Length);
-
-            bool changed = false;
-            for (int i = 0; i < typeGenericArguments.Length; i++)
-            {
-                var substitutedTypeGenericArgument = typeGenericArguments[i].SubstituteGenericMatchers(otherTypeGenericArguments[i]);
-                if (substitutedTypeGenericArgument == typeGenericArguments[i])
-                    continue;
-
-                changed = true;
-                typeGenericArguments[i] = substitutedTypeGenericArgument;
-            }
-
-            return changed ? typeDefinition.MakeGenericType(typeGenericArguments) : type;
+            return SubstituteGenericMatchersInGenericType(type, otherType);
         }
 
         return type;
+    }
+
+    private static Type SubstituteGenericMatcherInElementType(Type type, Type otherType)
+    {
+        Guard.Assert(type.HasElementType);
+        Guard.Assert(otherType.HasElementType);
+
+        var typeElementType = type.GetElementType()!;
+        var otherTypeElementType = otherType.GetElementType()!;
+
+        if (type.IsArray && otherType.IsArray)
+        {
+            int typeArrayRank = type.GetArrayRank();
+            if (typeArrayRank == otherType.GetArrayRank())
+            {
+                var substitutedElementType = typeElementType.SubstituteGenericMatchers(otherTypeElementType);
+                if (substitutedElementType == typeElementType)
+                    return type;
+
+                return typeArrayRank == 1
+                    ? substitutedElementType.MakeArrayType()
+                    : substitutedElementType.MakeArrayType(typeArrayRank);
+            }
+        }
+        else if (type.IsByRef && otherType.IsByRef)
+        {
+            var substitutedElementType = typeElementType.SubstituteGenericMatchers(otherTypeElementType);
+            return substitutedElementType == typeElementType ? type : substitutedElementType.MakeByRefType();
+        }
+        else if (type.IsPointer && otherType.IsPointer)
+        {
+            var substitutedElementType = typeElementType.SubstituteGenericMatchers(otherTypeElementType);
+            return substitutedElementType == typeElementType ? type : substitutedElementType.MakePointerType();
+        }
+
+        return type;
+    }
+
+    private static Type SubstituteGenericMatchersInGenericType(Type type, Type otherType)
+    {
+        var typeDefinition = type.GetGenericTypeDefinition();
+        var otherTypeDefinition = otherType.GetGenericTypeDefinition();
+
+        if (typeDefinition != otherTypeDefinition)
+            return type;
+
+        var typeGenericArguments = type.GetGenericArguments();
+        var otherTypeGenericArguments = otherType.GetGenericArguments();
+
+        Guard.Assert(typeGenericArguments.Length == otherTypeGenericArguments.Length);
+
+        bool changed = false;
+        for (int i = 0; i < typeGenericArguments.Length; i++)
+        {
+            var substitutedTypeGenericArgument =
+                typeGenericArguments[i].SubstituteGenericMatchers(otherTypeGenericArguments[i]);
+            if (substitutedTypeGenericArgument == typeGenericArguments[i])
+                continue;
+
+            changed = true;
+            typeGenericArguments[i] = substitutedTypeGenericArgument;
+        }
+
+        return changed ? typeDefinition.MakeGenericType(typeGenericArguments) : type;
     }
 }
