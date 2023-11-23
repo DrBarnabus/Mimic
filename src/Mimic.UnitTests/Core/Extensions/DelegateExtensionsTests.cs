@@ -31,19 +31,19 @@ public class DelegateExtensionsTests
     public void CompareParameterTypesTo_WithMatchingParameterTypes_ShouldReturnTrue()
     {
         var delegateWithParameters = new DelegateThatDoesNotThrow((s, i) => $"{s} - {i}") as Delegate;
-        delegateWithParameters.CompareParameterTypesTo(new[] { typeof(string), typeof(int) });
+        delegateWithParameters.CompareParameterTypesTo(new[] { typeof(string), typeof(int) }).ShouldBeTrue();
 
         var delegateThatThrows = new DelegateThatThrows(() => throw new Exception()) as Delegate;
-        delegateThatThrows.CompareParameterTypesTo(Type.EmptyTypes);
+        delegateThatThrows.CompareParameterTypesTo(Type.EmptyTypes).ShouldBeTrue();
     }
 
     [Fact]
     public void CompareParameterTypesTo_WithNonMatchingParameterTypes_ShouldReturnFalse()
     {
         var delegateWithParameters = new DelegateThatDoesNotThrow((s, i) => $"{s} - {i}") as Delegate;
-        delegateWithParameters.CompareParameterTypesTo(new[] { typeof(object), typeof(char) });
+        delegateWithParameters.CompareParameterTypesTo(new[] { typeof(object), typeof(char) }).ShouldBeFalse();
 
         var delegateThatThrows = new DelegateThatThrows(() => throw new Exception()) as Delegate;
-        delegateThatThrows.CompareParameterTypesTo(new[] { typeof(int) });
+        delegateThatThrows.CompareParameterTypesTo(new[] { typeof(int) }).ShouldBeFalse();
     }
 }

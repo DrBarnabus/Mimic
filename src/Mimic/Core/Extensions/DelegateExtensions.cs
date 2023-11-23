@@ -8,7 +8,7 @@ internal static class DelegateExtensions
     {
         try
         {
-            return delegateFunction.DynamicInvoke(arguments as object[] ?? arguments?.ToArray());
+            return delegateFunction.DynamicInvoke(arguments?.ToArray());
         }
         catch (TargetInvocationException ex)
         {
