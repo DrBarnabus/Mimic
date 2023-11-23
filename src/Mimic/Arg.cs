@@ -61,4 +61,11 @@ public static class Arg
     {
         return ArgumentMatcher.Create<TValue>(argument => !values.Contains(argument))!;
     }
+
+    public static class Ref<TValue>
+    {
+        #pragma warning disable CA2211
+        public static TValue Any = default!;
+        #pragma warning restore CA2211
+    }
 }

@@ -64,7 +64,7 @@ internal sealed class ProxyGenerator
 
         public MethodInfo MethodImplementation => _methodImplementation ??= Method.GetImplementingMethod(ProxyType);
 
-        public object[] Arguments { get; }
+        public object?[] Arguments { get; }
 
         public object? ReturnValue => _returnValue is ExceptionReturnValue ? null : _returnValue;
 

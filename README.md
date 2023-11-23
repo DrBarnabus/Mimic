@@ -33,7 +33,7 @@ Completed   = ✔
 -   [✔] Execution Limits (Calls throw after n expected calls)
 -   [✔] Conditional Setup of Methods
 -   [✔] Sequential Returns (Calls return next sequential result on each call ~`.Returns(value1, value2, value3)`~)
--   [📅] Support for `ref`/`out` arguments
+-   [✔] Support for `ref`/`out` arguments
 -   [❓] Setup of Event Handlers
 
 Mimic makes use of [Castle.Core](https://www.castleproject.org/projects/dynamicproxy)'s `DynamicProxy` internally for generating proxies of types to mock.

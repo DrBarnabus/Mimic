@@ -1,10 +1,15 @@
-﻿using Mimic.Setup.Behaviours;
+﻿using Mimic.Expressions;
+using Mimic.Setup.Behaviours;
 
 namespace Mimic.Setup;
+
+using OutValue = (int Position, object? Value);
 
 internal sealed class MethodCallSetup : SetupBase
 {
     private readonly Func<bool>? _condition;
+    private readonly List<OutValue> _outValues;
+
     private Behaviour? _returnOrThrow;
     private CallbackBehaviour? _preReturnCallback;
     private CallbackBehaviour? _postReturnCallback;
@@ -16,6 +21,8 @@ internal sealed class MethodCallSetup : SetupBase
         : base(originalExpression, mimic, expectation)
     {
         _condition = condition;
+
+        _outValues = FindAndEvaluateOutValues(expectation.Arguments, expectation.MethodInfo.GetParameters());
     }
 
     public override bool MatchesInvocation(IInvocation invocation) =>
@@ -23,6 +30,8 @@ internal sealed class MethodCallSetup : SetupBase
 
     protected override void ExecuteCore(IInvocation invocation)
     {
+        SetOutParameters(invocation);
+
         _executionLimit?.Execute(invocation);
         _preReturnCallback?.Execute(invocation);
 
@@ -193,6 +202,12 @@ internal sealed class MethodCallSetup : SetupBase
             : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
     }
 
+    private void SetOutParameters(IInvocation invocation)
+    {
+        foreach ((int position, object? value) in _outValues)
+            invocation.Arguments[position] = value;
+    }
+
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
     {
         var methodInfo = delegateFunction.GetMethodInfo();
@@ -220,5 +235,24 @@ internal sealed class MethodCallSetup : SetupBase
 
         if (!expectedReturnType.IsAssignableFrom(actualReturnType))
             throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, actualReturnType);
+    }
+
+    private static List<OutValue> FindAndEvaluateOutValues(IReadOnlyList<Expression> arguments, IReadOnlyList<ParameterInfo> parameters)
+    {
+        var outValues = new List<OutValue>();
+
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            var parameter = parameters[i];
+            if (!parameter.ParameterType.IsByRef || (parameter.Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) != ParameterAttributes.Out)
+                continue;
+
+            if (ExpressionEvaluator.PartiallyEvaluate(arguments[i]) is not ConstantExpression constantExpression)
+                throw MimicException.OutExpressionMustBeConstantValue();
+
+            outValues.Add((i, constantExpression.Value));
+        }
+
+        return outValues;
     }
 }

@@ -24,7 +24,20 @@ internal static class ArgumentMatcherInitializer
     internal static InitializedMatcher Initialize(Expression expression, ParameterInfo parameter)
     {
         if (parameter.ParameterType.IsByRef)
-            throw new UnsupportedExpressionException(expression, UnsupportedExpressionException.UnsupportedReason.RefTypeParameters);
+        {
+            if ((parameter.Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) == ParameterAttributes.Out)
+                return new InitializedMatcher(AnyArgumentMatcher.Instance, expression);
+
+            if (expression is MemberExpression { Member.Name: nameof(Arg.Ref<object>.Any) } memberExpression)
+            {
+                var declaringType = memberExpression.Member.DeclaringType!;
+                if (declaringType.IsGenericType && declaringType.GetGenericTypeDefinition() == typeof(Arg.Ref<>))
+                    return new InitializedMatcher(AnyArgumentMatcher.Instance, expression);
+            }
+
+            if (ExpressionEvaluator.PartiallyEvaluate(expression) is ConstantExpression constantExpression)
+                return new InitializedMatcher(new RefArgumentMatcher(constantExpression.Value), constantExpression);
+        }
 
         if (parameter.IsDefined(typeof(ParamArrayAttribute), true) && expression.NodeType == ExpressionType.NewArrayInit)
         {
@@ -39,7 +52,6 @@ internal static class ArgumentMatcherInitializer
             for (int i = 0; i < newArrayExpression.Expressions.Count; i++)
             {
                 (argumentMatchers[i], arrayInitializers[i]) = Initialize(newArrayExpression.Expressions[i]);
-                // TODO: Do we need to convert the value, for example initializer with int but expecting long?
             }
 
             return new InitializedMatcher(new ParamArrayArgumentMatcher(argumentMatchers), Expression.NewArrayInit(elementType, arrayInitializers));

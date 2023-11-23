@@ -8,7 +8,7 @@ internal interface IInvocation
 
     MethodInfo MethodImplementation { get; }
 
-    object[] Arguments { get; }
+    object?[] Arguments { get; }
 
     public void SetReturnValue(object? returnValue);
 

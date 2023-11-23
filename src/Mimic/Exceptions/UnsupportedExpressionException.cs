@@ -33,7 +33,6 @@ public sealed class UnsupportedExpressionException : MimicException
     public enum UnsupportedReason : byte
     {
         Unknown,
-        RefTypeParameters,
         MemberNotInterceptable,
         ExpressionThrewAnException,
         UnableToDetermineArgumentMatchers

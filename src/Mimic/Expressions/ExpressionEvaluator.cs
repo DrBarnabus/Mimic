@@ -86,7 +86,7 @@ internal static class ExpressionEvaluator
 
         public override Expression? Visit(Expression? node)
         {
-            if (node is not { NodeType: ExpressionType.Quote })
+            if (node is null or { NodeType: ExpressionType.Quote })
                 return node;
 
             bool notPossibleToEvaluate = _notPossibleToEvaluate;

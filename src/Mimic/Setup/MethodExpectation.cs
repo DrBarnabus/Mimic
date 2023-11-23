@@ -42,7 +42,7 @@ internal sealed class MethodExpectation : IExpectation
         if (invocation.Method != MethodInfo && !IsMatchedGenericMethod(invocation))
             return false;
 
-        object[] arguments = invocation.Arguments;
+        object?[] arguments = invocation.Arguments;
         var parameters = invocation.Method.GetParameters();
 
         for (int i = 0; i < _argumentMatchers.Length; i++)

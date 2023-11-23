@@ -34,6 +34,8 @@ mimic.SetupAllProperties();
 mimic.Setup(m => m.Generic<Generic.AnyType>())
     .Verifiable();
 
+SetupRef(mimic);
+
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();
 
@@ -68,12 +70,22 @@ try
 }
 catch (Exception ex)
 {
-    Console.Write($"Exception thrown with message: {ex.Message}");
+    Console.WriteLine($"Exception thrown with message: {ex.Message}");
 }
 
 mimickedObject.Generic<int>();
 
+int refInt = 10;
+mimickedObject.Ref(ref refInt, out string outResult);
+Console.WriteLine(outResult);
+
 mimic.Verify();
+
+static void SetupRef(Mimic<ITypeToMimic> mimic1)
+{
+    string outValue = "OutValue?";
+    mimic1.Setup(m => m.Ref(ref Arg.Ref<int>.Any, out outValue));
+}
 
 public interface ITypeToMimic
 {
@@ -88,4 +100,6 @@ public interface ITypeToMimic
     void Sequence();
 
     void Generic<T>();
+
+    void Ref(ref int reference, out string outValue);
 }

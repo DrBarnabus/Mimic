@@ -137,4 +137,6 @@ public class MimicException : Exception
     {
         return new MimicException($"Setup '{setup}' has been limited to {limit} {(limit == 1 ? "execution" : "executions")} but was actually executed {count} times");
     }
+
+    internal static MimicException OutExpressionMustBeConstantValue() => new("Out expression must evaluate to a constant value");
 }
