@@ -121,8 +121,7 @@ internal static class TypeExtensions
         bool changed = false;
         for (int i = 0; i < typeGenericArguments.Length; i++)
         {
-            var substitutedTypeGenericArgument =
-                typeGenericArguments[i].SubstituteGenericMatchers(otherTypeGenericArguments[i]);
+            var substitutedTypeGenericArgument = typeGenericArguments[i].SubstituteGenericMatchers(otherTypeGenericArguments[i]);
             if (substitutedTypeGenericArgument == typeGenericArguments[i])
                 continue;
 
