@@ -28,6 +28,7 @@
 
     <ItemGroup>
         <Using Include="AutoFixture.Xunit2" />
+        <Using Include="Mimic.UnitTests.Fixtures" />
         <Using Include="Shouldly" />
         <Using Include="Xunit" />
     </ItemGroup>
