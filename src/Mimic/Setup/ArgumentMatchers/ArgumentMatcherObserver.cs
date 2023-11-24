@@ -5,8 +5,10 @@ internal sealed class ArgumentMatcherObserver : IDisposable
     [ThreadStatic]
     private static Stack<ArgumentMatcherObserver>? _observers;
 
-    private readonly List<Observation> _observations = new();
+    private readonly List<Observation> _observations = [];
     private int _counter;
+
+    internal IReadOnlyList<Observation> Observations => _observations;
 
     internal static ArgumentMatcherObserver ActivateObserver()
     {
@@ -32,7 +34,7 @@ internal sealed class ArgumentMatcherObserver : IDisposable
 
     internal void AddArgumentMatcher(ArgumentMatcher argumentMatcher)
     {
-        _observations.Add(new Observation(Interlocked.Increment(ref _counter), argumentMatcher));
+        _observations.Add(new Observation(GetCounter(), argumentMatcher));
     }
 
     internal bool TryGetLastArgumentMatcher([NotNullWhen(true)] out ArgumentMatcher? lastArgumentMatcher)
@@ -58,5 +60,5 @@ internal sealed class ArgumentMatcherObserver : IDisposable
         _observers.Pop();
     }
 
-    private record struct Observation(int Counter, ArgumentMatcher ArgumentMatcher);
+    internal record struct Observation(int Counter, ArgumentMatcher ArgumentMatcher);
 }
