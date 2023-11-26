@@ -4,10 +4,7 @@ internal sealed class ConstantArgumentMatcher : IArgumentMatcher
 {
     private readonly object? _value;
 
-    public ConstantArgumentMatcher(object? value)
-    {
-        _value = value;
-    }
+    public ConstantArgumentMatcher(object? value) => _value = value;
 
     public bool Matches(object? argument, Type type)
     {

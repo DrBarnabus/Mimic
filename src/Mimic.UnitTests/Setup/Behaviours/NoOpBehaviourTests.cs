@@ -5,7 +5,7 @@ namespace Mimic.UnitTests.Setup.Behaviours;
 public class NoOpBehaviourTests
 {
     [Fact]
-    public void Instance_ShouldBeAlwaysReturnTheSameReference()
+    public void Instance_ShouldAlwaysReturnTheSameReference()
     {
         var instance = NoOpBehaviour.Instance;
         instance.ShouldBeSameAs(NoOpBehaviour.Instance);

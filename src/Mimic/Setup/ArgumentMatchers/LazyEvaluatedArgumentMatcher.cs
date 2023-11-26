@@ -6,10 +6,7 @@ internal sealed class LazyEvaluatedArgumentMatcher : IArgumentMatcher
 {
     private readonly Expression _expression;
 
-    public LazyEvaluatedArgumentMatcher(Expression expression)
-    {
-        _expression = expression;
-    }
+    public LazyEvaluatedArgumentMatcher(Expression expression) => _expression = expression;
 
     public bool Matches(object? argument, Type type)
     {
