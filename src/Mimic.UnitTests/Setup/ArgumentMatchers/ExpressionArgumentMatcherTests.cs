@@ -11,7 +11,7 @@ public class ExpressionArgumentMatcherTests
         Expression expression = () => new ExpressionArgumentMatcherTests();
         var argumentMatcher = new ExpressionArgumentMatcher(expression);
 
-        argumentMatcher.Matches(expression, typeof(Expression)).ShouldBeTrue();
+        argumentMatcher.Matches(expression).ShouldBeTrue();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class ExpressionArgumentMatcherTests
         var argumentMatcher = new ExpressionArgumentMatcher(expression);
 
         Expression differentExpression = (() => new ExpressionArgumentMatcherTests().ToString());
-        argumentMatcher.Matches(differentExpression, typeof(Expression)).ShouldBeFalse();
+        argumentMatcher.Matches(differentExpression).ShouldBeFalse();
     }
 
     [Fact]
@@ -30,6 +30,6 @@ public class ExpressionArgumentMatcherTests
         Expression expression = () => new ExpressionArgumentMatcherTests();
         var argumentMatcher = new ExpressionArgumentMatcher(expression);
 
-        argumentMatcher.Matches(100, typeof(int)).ShouldBeFalse();
+        argumentMatcher.Matches(100).ShouldBeFalse();
     }
 }

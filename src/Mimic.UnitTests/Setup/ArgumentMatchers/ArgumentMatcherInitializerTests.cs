@@ -22,7 +22,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(null, typeof(object)).ShouldBeTrue();
+        argumentMatcher.Matches(null).ShouldBeTrue();
     }
 
     [Theory]
@@ -33,7 +33,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(object)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -44,7 +44,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(IEnumerable<char>)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -55,7 +55,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
+        argumentMatcher.Matches(value).ShouldBeFalse();
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(object)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -87,7 +87,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(IEnumerable<char>)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -98,7 +98,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
+        argumentMatcher.Matches(value).ShouldBeFalse();
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(null, typeof(object)).ShouldBeFalse();
+        argumentMatcher.Matches(null).ShouldBeFalse();
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -145,7 +145,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
+        argumentMatcher.Matches(value).ShouldBeFalse();
     }
 
     [Fact]
@@ -169,7 +169,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
+        argumentMatcher.Matches(value).ShouldBeTrue();
     }
 
     [Theory]
@@ -182,7 +182,7 @@ public class ArgumentMatcherInitializerTests
 
         var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-        argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
+        argumentMatcher.Matches(value).ShouldBeFalse();
     }
 
     // TODO: Additional tests for ArgumentMatcherInitializer.Initialize(expression) covering; Convert, get_Methods, Member/Index, Constant & Quote

@@ -11,7 +11,7 @@ public class LazyEvaluatedArgumentMatcherTests
         Expression expression = (int m) => m.ToString();
         var argumentMatcher = new LazyEvaluatedArgumentMatcher(expression);
 
-        argumentMatcher.Matches(null, typeof(string)).ShouldBeFalse();
+        argumentMatcher.Matches(null).ShouldBeFalse();
     }
 
     [Fact]
@@ -19,7 +19,7 @@ public class LazyEvaluatedArgumentMatcherTests
     {
         var argumentMatcher = new LazyEvaluatedArgumentMatcher(Expression.Constant("value"));
 
-        argumentMatcher.Matches("value", typeof(string)).ShouldBeTrue();
+        argumentMatcher.Matches("value").ShouldBeTrue();
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class LazyEvaluatedArgumentMatcherTests
     {
         var argumentMatcher = new LazyEvaluatedArgumentMatcher(Expression.Constant("value"));
 
-        argumentMatcher.Matches("different", typeof(string)).ShouldBeFalse();
+        argumentMatcher.Matches("different").ShouldBeFalse();
     }
 }

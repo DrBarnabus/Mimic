@@ -6,7 +6,7 @@ internal sealed class RefArgumentMatcher : IArgumentMatcher
 
     public RefArgumentMatcher(object? reference) => _reference = reference;
 
-    public bool Matches(object? argument, Type type) =>
+    public bool Matches(object? argument) =>
         _reference?.GetType().IsValueType ?? false
             ? Equals(_reference, argument)
             : ReferenceEquals(_reference, argument);

@@ -43,11 +43,9 @@ internal sealed class MethodExpectation : IExpectation
             return false;
 
         object?[] arguments = invocation.Arguments;
-        var parameters = invocation.Method.GetParameters();
-
         for (int i = 0; i < _argumentMatchers.Length; i++)
         {
-            if (!_argumentMatchers[i].Matches(arguments[i], parameters[i].ParameterType))
+            if (!_argumentMatchers[i].Matches(arguments[i]))
                 return false;
         }
 

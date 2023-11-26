@@ -13,8 +13,8 @@ public class AnyArgumentMatcherTests
 
     [Theory]
     [AutoData]
-    public void Matches_ShouldAlwaysReturnTrue(string argument, Type type)
+    public void Matches_ShouldAlwaysReturnTrue(string argument)
     {
-        AnyArgumentMatcher.Instance.Matches(argument, type).ShouldBeTrue();
+        AnyArgumentMatcher.Instance.Matches(argument).ShouldBeTrue();
     }
 }

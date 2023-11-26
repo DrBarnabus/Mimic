@@ -25,6 +25,6 @@ public class ConstantArgumentMatcherTests
     {
         var argumentMatcher = new ConstantArgumentMatcher(value);
 
-        argumentMatcher.Matches(argument, typeof(void)).ShouldBe(expectedResult);
+        argumentMatcher.Matches(argument).ShouldBe(expectedResult);
     }
 }

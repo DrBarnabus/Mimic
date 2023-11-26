@@ -6,7 +6,7 @@ internal sealed class ConstantArgumentMatcher : IArgumentMatcher
 
     public ConstantArgumentMatcher(object? value) => _value = value;
 
-    public bool Matches(object? argument, Type type)
+    public bool Matches(object? argument)
     {
         if (Equals(argument, _value))
             return true;

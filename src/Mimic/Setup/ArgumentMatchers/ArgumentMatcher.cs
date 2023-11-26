@@ -6,7 +6,7 @@ internal abstract class ArgumentMatcher : IArgumentMatcher
 
     protected abstract bool Matches(object? argument);
 
-    bool IArgumentMatcher.Matches(object? argument, Type type) => Matches(argument);
+    bool IArgumentMatcher.Matches(object? argument) => Matches(argument);
 
     public static TValue? Create<TValue>(Predicate<TValue?> condition)
     {

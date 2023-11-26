@@ -19,7 +19,7 @@ public class ParamArrayArgumentMatcherTests
         IArgumentMatcher[] argumentMatchers = { AnyArgumentMatcher.Instance, AnyArgumentMatcher.Instance };
         var argumentMatcher = new ParamArrayArgumentMatcher(argumentMatchers);
 
-        argumentMatcher.Matches(100, typeof(int)).ShouldBeFalse();
+        argumentMatcher.Matches(100).ShouldBeFalse();
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class ParamArrayArgumentMatcherTests
         var argumentMatcher = new ParamArrayArgumentMatcher(argumentMatchers);
 
         int[] argument = { 100 };
-        argumentMatcher.Matches(argument, typeof(int[])).ShouldBeFalse();
+        argumentMatcher.Matches(argument).ShouldBeFalse();
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class ParamArrayArgumentMatcherTests
         var argumentMatcher = new ParamArrayArgumentMatcher(argumentMatchers);
 
         int[] argument = { 100, 200 };
-        argumentMatcher.Matches(argument, typeof(int[])).ShouldBeFalse();
+        argumentMatcher.Matches(argument).ShouldBeFalse();
     }
 
     [Fact]
@@ -49,6 +49,6 @@ public class ParamArrayArgumentMatcherTests
         var argumentMatcher = new ParamArrayArgumentMatcher(argumentMatchers);
 
         int[] argument = { 100, 200 };
-        argumentMatcher.Matches(argument, typeof(int[])).ShouldBeTrue();
+        argumentMatcher.Matches(argument).ShouldBeTrue();
     }
 }
