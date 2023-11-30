@@ -29,7 +29,7 @@ public class MimicException : Exception
         string formattedFromType = TypeNameFormatter.GetFormattedName(argumentExpression.Type);
         string formattedToType = TypeNameFormatter.GetFormattedName(expectedType);
 
-        return new MimicException($"ArgumentMatcher for argument '{argumentExpression}' is unmatchable. An implicit conversion of the argument from type '{formattedFromType}' to type '{formattedToType}' which is an incompatible assignment");
+        return new MimicException($"ArgumentMatcher for argument '{argumentExpression}' is unmatchable. Due to an implicit conversion of the argument from type '{formattedFromType}' to type '{formattedToType}' which is an incompatible assignment");
     }
 
     internal static MimicException NotMatchingSetup(IInvocation invocation)
