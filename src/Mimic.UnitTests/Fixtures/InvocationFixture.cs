@@ -15,9 +15,5 @@ public sealed class InvocationFixture : IInvocation
 
     public void SetReturnValue(object? returnValue) => ReturnValue = returnValue;
 
-    public void SetException(Exception exception) => Exception = exception;
-
     public object? ReturnValue { get; private set; }
-
-    public Exception? Exception { get; private set; }
 }

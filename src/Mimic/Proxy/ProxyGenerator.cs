@@ -39,11 +39,6 @@ internal sealed class ProxyGenerator
                 _interceptor.Intercept(invocation);
                 underlyingInvocation.ReturnValue = invocation.ReturnValue;
             }
-            catch (Exception ex)
-            {
-                invocation.SetException(ex);
-                throw;
-            }
             finally
             {
                 invocation.Detatch();
@@ -53,7 +48,6 @@ internal sealed class ProxyGenerator
 
     private sealed class Invocation : IInvocation
     {
-        // ReSharper disable once NotAccessedField.Local
         private Castle.DynamicProxy.IInvocation? _underlyingInvocation;
         private object? _returnValue;
         private MethodInfo? _methodImplementation;
@@ -66,9 +60,7 @@ internal sealed class ProxyGenerator
 
         public object?[] Arguments { get; }
 
-        public object? ReturnValue => _returnValue is ExceptionReturnValue ? null : _returnValue;
-
-        public Exception? Exception => _returnValue is ExceptionReturnValue r ? r.Exception : null;
+        public object? ReturnValue => _returnValue;
 
         public Invocation(Castle.DynamicProxy.IInvocation underlyingInvocation)
         {
@@ -82,15 +74,7 @@ internal sealed class ProxyGenerator
         public void SetReturnValue(object? returnValue)
         {
             Guard.Assert(_returnValue is null);
-
             _returnValue = returnValue;
-        }
-
-        public void SetException(Exception exception)
-        {
-            Guard.Assert(_returnValue is null);
-
-            _returnValue = new ExceptionReturnValue(exception);
         }
 
         public void Detatch()
@@ -178,7 +162,7 @@ internal sealed class ProxyGenerator
                 stringBuilder.Append('[');
 
                 var enumerator = ((IEnumerable)value).GetEnumerator();
-                for (int i = 0; enumerator.MoveNext() && i < 10 + 1; ++i)
+                for (int i = 0; enumerator.MoveNext() && i <= 10; ++i)
                 {
                     if (i > 0)
                         stringBuilder.Append(", ".AsSpan());
@@ -203,7 +187,5 @@ internal sealed class ProxyGenerator
                     stringBuilder.Append(formattedValue);
             }
         }
-
-        private record struct ExceptionReturnValue(Exception Exception);
     }
 }

@@ -11,6 +11,4 @@ internal interface IInvocation
     object?[] Arguments { get; }
 
     public void SetReturnValue(object? returnValue);
-
-    public void SetException(Exception exception);
 }
