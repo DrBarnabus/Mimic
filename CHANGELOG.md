@@ -3,6 +3,18 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+## [0.4.0](https://github.com/DrBarnabus/Mimic/compare/v0.3.2...v0.4.0) (2023-12-14)
+
+
+### Features
+
+* Add `AsSequence()` method to allow for setting up a sequence of returns/throws for repeated calls ([#3](https://github.com/DrBarnabus/Mimic/issues/3)) ([3d5c8ab](https://github.com/DrBarnabus/Mimic/commit/3d5c8abaf78dd68757004bc4ab6e4ba971d0ee36))
+* Add Extension methods for `.Returns` of `Task<T>` and `ValueTask<T>` ([#2](https://github.com/DrBarnabus/Mimic/issues/2)) ([343ad00](https://github.com/DrBarnabus/Mimic/commit/343ad001ba506853edd03def9359ad47c61166a2))
+* Add new argument matchers `Arg.In<TValue>` and `Arg.NotIn<TValue>` ([e250c5d](https://github.com/DrBarnabus/Mimic/commit/e250c5d19290aa12b399137aedeca4203dc09260))
+* Add option to `.Limit(...)` number of allowed executions ([a031467](https://github.com/DrBarnabus/Mimic/commit/a0314678bcf88d4b2cdc2223437ed373de24e396))
+* Add support for `Generic` type matchers in setups ([87e56de](https://github.com/DrBarnabus/Mimic/commit/87e56def947175fe967fb0fb4e63c92c465a5949))
+* Support for setting up methods with `ref`/`in`/`out` parameters ([32b955b](https://github.com/DrBarnabus/Mimic/commit/32b955be94b0438eb22000e5b8fe0187abd20d0a))
+
 ### [0.3.2](https://github.com/DrBarnabus/Mimic/compare/v0.3.1...v0.3.2) (2023-11-18)
 
 _Pushed again to fix the Icon of the Package_
