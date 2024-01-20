@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using Mimic.Proxy;
+using Mimic.Setup;
 
 namespace Mimic.UnitTests.Fixtures;
 
-public sealed class InvocationFixture : IInvocation
+internal sealed class InvocationFixture : IInvocation
 {
     public Type ProxyType { get; set; } = default!;
 
@@ -13,7 +14,21 @@ public sealed class InvocationFixture : IInvocation
 
     public object?[] Arguments { get; set; } = default!;
 
+    public bool Verified { get; set; }
+
     public void SetReturnValue(object? returnValue) => ReturnValue = returnValue;
 
-    public object? ReturnValue { get; private set; }
+    public void MarkMatchedBy(SetupBase setup) => MatchedSetup = setup;
+
+    public void MarkVerified() => Verified = true;
+
+    public void MarkVerified(Predicate<SetupBase> predicate)
+    {
+        if (MatchedSetup != null && predicate(MatchedSetup))
+            Verified = true;
+    }
+
+    public object? ReturnValue { get; set; }
+
+    public SetupBase? MatchedSetup { get; set; }
 }

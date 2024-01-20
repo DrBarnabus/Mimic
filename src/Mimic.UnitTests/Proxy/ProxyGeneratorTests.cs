@@ -2,6 +2,7 @@
 using AutoFixture;
 using Mimic.Core;
 using Mimic.Proxy;
+using Mimic.Setup;
 
 namespace Mimic.UnitTests.Proxy;
 
@@ -175,6 +176,66 @@ public class ProxyGeneratorTests
 
             _proxyObject.ReturnsString(intValue, stringValue).ShouldBe(returnValue);
 
+            _interceptor.Intercepted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void MarkVerified_WithNoArgument_ShouldSetVerifiedToTrue()
+        {
+            _interceptor.Callback = invocation =>
+            {
+                invocation.MarkVerified();
+                invocation.Verified.ShouldBe(true);
+            };
+
+            _proxyObject.ReturnsVoid();
+            _interceptor.Intercepted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void MarkVerified_WithSetupPredicate_AndMarkMatchedByNotPreviouslyCalled_ShouldNotSetVerifiedToTrue()
+        {
+            _interceptor.Callback = invocation =>
+            {
+                var setup = new AllPropertiesStubSetup(new Mimic<IA>());
+
+                invocation.MarkVerified(s => s == setup);
+                invocation.Verified.ShouldBe(false);
+            };
+
+            _proxyObject.ReturnsVoid();
+            _interceptor.Intercepted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void MarkVerified_WithSetupPredicate_AndMarkMatchedByWasPreviouslyCalledWithNonMatching_ShouldNotSetVerifiedToTrue()
+        {
+            _interceptor.Callback = invocation =>
+            {
+                var setup = new AllPropertiesStubSetup(new Mimic<IA>());
+                invocation.MarkMatchedBy(setup);
+
+                invocation.MarkVerified(s => s != setup);
+                invocation.Verified.ShouldBe(false);
+            };
+
+            _proxyObject.ReturnsVoid();
+            _interceptor.Intercepted.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void MarkVerified_WithSetupPredicate_AndMarkMatchedByWasPreviouslyCalledWithMatching_ShouldSetVerifiedToTrue()
+        {
+            _interceptor.Callback = invocation =>
+            {
+                var setup = new AllPropertiesStubSetup(new Mimic<IA>());
+                invocation.MarkMatchedBy(setup);
+
+                invocation.MarkVerified(s => s == setup);
+                invocation.Verified.ShouldBe(true);
+            };
+
+            _proxyObject.ReturnsVoid();
             _interceptor.Intercepted.ShouldBeTrue();
         }
 

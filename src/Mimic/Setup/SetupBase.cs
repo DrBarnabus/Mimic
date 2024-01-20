@@ -33,6 +33,8 @@ internal abstract class SetupBase
     {
         _flags |= Flags.Matched;
 
+        invocation.MarkMatchedBy(this);
+
         ExecuteCore(invocation);
     }
 

@@ -1,4 +1,6 @@
-﻿namespace Mimic.Proxy;
+﻿using Mimic.Setup;
+
+namespace Mimic.Proxy;
 
 internal interface IInvocation
 {
@@ -10,5 +12,13 @@ internal interface IInvocation
 
     object?[] Arguments { get; }
 
+    bool Verified { get; }
+
     public void SetReturnValue(object? returnValue);
+
+    public void MarkMatchedBy(SetupBase setup);
+
+    public void MarkVerified();
+
+    public void MarkVerified(Predicate<SetupBase> predicate);
 }

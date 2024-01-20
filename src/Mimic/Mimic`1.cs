@@ -10,6 +10,7 @@ public sealed partial class Mimic<T> : IMimic
     private static int _instanceCounter;
 
     private readonly SetupCollection _setups = new();
+    private readonly List<IInvocation> _invocations = new();
     private T? _object;
 
     public string Name { get; init; }
@@ -17,6 +18,11 @@ public sealed partial class Mimic<T> : IMimic
     public bool Strict { get; init; } = true;
 
     public T Object => GetOrInitializeObject();
+
+    internal IReadOnlyList<IInvocation> Invocations
+    {
+        get { lock (_invocations) return _invocations.ToArray(); }
+    }
 
     public Mimic()
     {
@@ -36,12 +42,6 @@ public sealed partial class Mimic<T> : IMimic
     }
 
     public IConditionalSetup<T> When(Func<bool> condition) => new ConditionalSetup<T>(this, condition);
-
-    public void Verify()
-    {
-        foreach (var setup in _setups.FindAll(s => s.Verifiable))
-            setup.Verify();
-    }
 
     private T GetOrInitializeObject()
     {

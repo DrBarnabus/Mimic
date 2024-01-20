@@ -11,6 +11,9 @@ public partial class Mimic<T>
         if (HandleToString(invocation, this))
             return;
 
+        lock (_invocations)
+            _invocations.Add(invocation);
+
         if (HandleMatchingSetup(invocation, this))
             return;
 

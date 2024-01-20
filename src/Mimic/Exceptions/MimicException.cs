@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Mimic.Expressions;
 using Mimic.Setup;
 
 namespace Mimic.Exceptions;
@@ -139,4 +140,61 @@ public class MimicException : Exception
     }
 
     internal static MimicException OutExpressionMustBeConstantValue() => new("Out expression must evaluate to a constant value");
+
+    internal static Exception NoMatchingInvocations<T>(
+        Mimic<T> mimic,
+        LambdaExpression expression,
+        CallCount expectedCallCount,
+        int actualCallCount,
+        string? failureMessage)
+        where T : class
+    {
+        var stringBuilder = new ValueStringBuilder(stackalloc char[512]);
+
+        stringBuilder.Append(failureMessage ?? "Verification failed with incorrect matching invocations");
+        stringBuilder.Append(Environment.NewLine.AsSpan());
+
+        stringBuilder.Append(expectedCallCount.GetExceptionMessage(actualCallCount).AsSpan());
+
+        var evaluatedExpression = ExpressionEvaluator.PartiallyEvaluate(expression, true);
+        stringBuilder.Append(evaluatedExpression.ToString());
+        stringBuilder.Append(Environment.NewLine.AsSpan());
+
+        stringBuilder.Append($"Actual invocations on {mimic} ({expression.Parameters[0].Name}):".AsSpan());
+        stringBuilder.Append(Environment.NewLine.AsSpan());
+
+        var invocations = mimic.Invocations.ToList();
+        if (invocations.Any())
+        {
+            foreach (var invocation in invocations)
+            {
+                stringBuilder.Append($"    {invocation}");
+                stringBuilder.Append(Environment.NewLine.AsSpan());
+            }
+        }
+        else
+        {
+            stringBuilder.Append($"    There are zero invocations..");
+            stringBuilder.Append(Environment.NewLine.AsSpan());
+        }
+
+        return new MimicException(stringBuilder.ToString());
+    }
+
+    internal static Exception UnverifiedInvocations<T>(Mimic<T> mimic, List<IInvocation> unverifiedInvocations)
+        where T : class
+    {
+        var stringBuilder = new ValueStringBuilder(stackalloc char[512]);
+
+        stringBuilder.Append($"{mimic}: Verification failed due to the following unverified invocations:");
+        stringBuilder.Append(Environment.NewLine.AsSpan());
+
+        foreach (var unverifiedInvocation in unverifiedInvocations)
+        {
+            stringBuilder.Append($"    {unverifiedInvocation}");
+            stringBuilder.Append(Environment.NewLine.AsSpan());
+        }
+
+        return new MimicException(stringBuilder.ToString());
+    }
 }

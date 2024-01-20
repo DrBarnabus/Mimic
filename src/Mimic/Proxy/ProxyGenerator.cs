@@ -1,4 +1,5 @@
 ﻿using Castle.DynamicProxy;
+using Mimic.Setup;
 
 namespace Mimic.Proxy;
 
@@ -51,6 +52,7 @@ internal sealed class ProxyGenerator
         private Castle.DynamicProxy.IInvocation? _underlyingInvocation;
         private object? _returnValue;
         private MethodInfo? _methodImplementation;
+        private SetupBase? _matchedSetup;
 
         public Type ProxyType { get; }
 
@@ -59,6 +61,8 @@ internal sealed class ProxyGenerator
         public MethodInfo MethodImplementation => _methodImplementation ??= Method.GetImplementingMethod(ProxyType);
 
         public object?[] Arguments { get; }
+
+        public bool Verified { get; private set; }
 
         public object? ReturnValue => _returnValue;
 
@@ -75,6 +79,20 @@ internal sealed class ProxyGenerator
         {
             Guard.Assert(_returnValue is null);
             _returnValue = returnValue;
+        }
+
+        public void MarkMatchedBy(SetupBase setup)
+        {
+            Guard.Assert(_matchedSetup is null);
+            _matchedSetup = setup;
+        }
+
+        public void MarkVerified() => Verified = true;
+
+        public void MarkVerified(Predicate<SetupBase> predicate)
+        {
+            if (_matchedSetup != null && predicate(_matchedSetup))
+                Verified = true;
         }
 
         public void Detatch()
