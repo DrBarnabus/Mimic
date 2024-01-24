@@ -6,23 +6,38 @@ internal sealed class ProxyGenerator
 {
     public static readonly ProxyGenerator Instance = new();
 
-    private readonly ProxyGenerationOptions _proxyGenerationOptions = new();
     private readonly Castle.DynamicProxy.ProxyGenerator _proxyGenerator = new();
+    private readonly ProxyGenerationOptions _proxyGenerationOptions = new()
+    {
+        Hook = new AllMethodsIncludingObjectHook(),
+        BaseTypeForInterfaceProxy = typeof(InterfaceProxyBase)
+    };
 
-    public object GenerateProxy(Type mimicType, Type[] additionalInterfacesToProxy, IInterceptor interceptor)
+    public object GenerateProxy(Type mimicType, Type[] additionalInterfaces, IInterceptor interceptor)
     {
         Guard.Assert(mimicType.IsInterface, $"{TypeNameFormatter.GetFormattedName(mimicType)} is not an interface");
 
         return _proxyGenerator.CreateInterfaceProxyWithoutTarget(
             mimicType,
-            additionalInterfacesToProxy,
+            [typeof(IProxy), ..additionalInterfaces],
             _proxyGenerationOptions,
             new DynamicProxyInterceptor(interceptor));
+    }
+
+    private sealed class AllMethodsIncludingObjectHook : AllMethodsHook
+    {
+        public override bool ShouldInterceptMethod(Type type, MethodInfo method) =>
+            base.ShouldInterceptMethod(type, method) || IsDesiredObjectMethod(method);
+
+        private static bool IsDesiredObjectMethod(MethodInfo method) =>
+            method.DeclaringType == typeof(object) && method.Name is nameof(ToString) or nameof(Equals) or nameof(GetHashCode);
     }
 
     private sealed class DynamicProxyInterceptor
         : Castle.DynamicProxy.IInterceptor
     {
+        private static readonly MethodInfo ProxyInterceptorPropertyGetter = typeof(IProxy).GetProperty(nameof(IProxy.Interceptor))!.GetMethod!;
+
         private readonly IInterceptor _interceptor;
 
         public DynamicProxyInterceptor(IInterceptor interceptor)
@@ -32,6 +47,13 @@ internal sealed class ProxyGenerator
 
         public void Intercept(Castle.DynamicProxy.IInvocation underlyingInvocation)
         {
+            // Special case for `IProxy.Interceptor` which all proxied types must implement
+            if (underlyingInvocation.Method == ProxyInterceptorPropertyGetter)
+            {
+                underlyingInvocation.ReturnValue = _interceptor;
+                return;
+            }
+
             var invocation = new Invocation(underlyingInvocation);
 
             try
