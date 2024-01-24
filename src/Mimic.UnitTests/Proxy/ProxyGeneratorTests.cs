@@ -171,7 +171,7 @@ public class ProxyGeneratorTests
                 invocation.SetReturnValue(returnValue);
 
                 var ex = Should.Throw<Guard.AssertionException>(() => invocation.SetReturnValue(returnValue));
-                ex.Expression.ShouldBe("_returnValue is null");
+                ex.Expression.ShouldBe("_result is null");
             };
 
             _proxyObject.ReturnsString(intValue, stringValue).ShouldBe(returnValue);
