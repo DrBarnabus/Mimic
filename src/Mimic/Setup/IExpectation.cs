@@ -4,5 +4,5 @@ internal interface IExpectation
 {
     LambdaExpression Expression { get; }
 
-    bool MatchesInvocation(IInvocation invocation);
+    bool MatchesInvocation(Invocation invocation);
 }

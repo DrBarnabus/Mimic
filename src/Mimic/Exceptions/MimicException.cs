@@ -33,7 +33,7 @@ public class MimicException : Exception
         return new MimicException($"ArgumentMatcher for argument '{argumentExpression}' is unmatchable. Due to an implicit conversion of the argument from type '{formattedFromType}' to type '{formattedToType}' which is an incompatible assignment");
     }
 
-    internal static MimicException NotMatchingSetup(IInvocation invocation)
+    internal static MimicException NotMatchingSetup(Invocation invocation)
     {
         return new MimicException($"Invocation of '{invocation}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown");
     }
@@ -48,7 +48,7 @@ public class MimicException : Exception
         return new MimicException($"Setup '{setup}' with sequence which was marked as verifiable has not been matched ({remaining} {(remaining == 1 ? "seqeuence" : "seqeuences")} result has not been used).");
     }
 
-    internal static MimicException ReturnRequired(IInvocation invocation)
+    internal static MimicException ReturnRequired(Invocation invocation)
     {
         return new MimicException($"Invocation of '{invocation}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");
     }
@@ -181,7 +181,7 @@ public class MimicException : Exception
         return new MimicException(stringBuilder.ToString());
     }
 
-    internal static Exception UnverifiedInvocations<T>(Mimic<T> mimic, List<IInvocation> unverifiedInvocations)
+    internal static Exception UnverifiedInvocations<T>(Mimic<T> mimic, List<Invocation> unverifiedInvocations)
         where T : class
     {
         var stringBuilder = new ValueStringBuilder(stackalloc char[512]);

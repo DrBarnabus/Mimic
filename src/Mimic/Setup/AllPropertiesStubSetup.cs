@@ -12,7 +12,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
     {
     }
 
-    protected override void ExecuteCore(IInvocation invocation)
+    protected override void ExecuteCore(Invocation invocation)
     {
         string propertyName = invocation.Method.Name[4..];
 
@@ -53,7 +53,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
             Expression = Expr.Lambda(Expr.Call(Expr.Call(fromObjectMethod, parameter), setupAllPropertiesMethod), parameter);
         }
 
-        public bool MatchesInvocation(IInvocation invocation)
+        public bool MatchesInvocation(Invocation invocation)
         {
             var method = invocation.Method;
             int parameterCount = method.GetParameters().Length;

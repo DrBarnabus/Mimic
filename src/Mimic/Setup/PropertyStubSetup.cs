@@ -10,7 +10,7 @@ internal sealed class PropertyStubSetup : SetupBase
         _currentValue = initialValue;
     }
 
-    protected override void ExecuteCore(IInvocation invocation)
+    protected override void ExecuteCore(Invocation invocation)
     {
         if (invocation.Method.ReturnType == typeof(void))
         {
@@ -46,7 +46,7 @@ internal sealed class PropertyStubSetup : SetupBase
             _setter = setter;
         }
 
-        public bool MatchesInvocation(IInvocation invocation)
+        public bool MatchesInvocation(Invocation invocation)
             => invocation.Method.Name == _getter.Name || invocation.Method.Name == _setter.Name;
     }
 }

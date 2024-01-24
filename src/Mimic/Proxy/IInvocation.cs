@@ -1,24 +1,14 @@
-﻿using Mimic.Setup;
+﻿namespace Mimic.Proxy;
 
-namespace Mimic.Proxy;
-
-internal interface IInvocation
+public interface IInvocation
 {
-    public Type ProxyType { get; }
-
     MethodInfo Method { get; }
 
-    MethodInfo MethodImplementation { get; }
-
-    object?[] Arguments { get; }
+    IReadOnlyList<object?> Arguments { get; }
 
     bool Verified { get; }
 
-    public void SetReturnValue(object? returnValue);
+    object? ReturnValue { get; }
 
-    public void MarkMatchedBy(SetupBase setup);
-
-    public void MarkVerified();
-
-    public void MarkVerified(Predicate<SetupBase> predicate);
+    Exception? Exception { get; }
 }

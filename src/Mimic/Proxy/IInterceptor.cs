@@ -2,5 +2,5 @@
 
 internal interface IInterceptor
 {
-    void Intercept(IInvocation invocation);
+    void Intercept(Invocation invocation);
 }

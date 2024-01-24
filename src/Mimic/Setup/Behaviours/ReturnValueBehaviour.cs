@@ -6,5 +6,5 @@ internal sealed class ReturnValueBehaviour : Behaviour
 
     public ReturnValueBehaviour(object? value) => _value = value;
 
-    internal override void Execute(IInvocation invocation) => invocation.SetReturnValue(_value);
+    internal override void Execute(Invocation invocation) => invocation.SetReturnValue(_value);
 }

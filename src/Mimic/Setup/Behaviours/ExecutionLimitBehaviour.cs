@@ -8,7 +8,7 @@ internal sealed class ExecutionLimitBehaviour : Behaviour
 
     public ExecutionLimitBehaviour(MethodCallSetup setup, int executionLimit) => (_setup, _executionLimit) = (setup, executionLimit);
 
-    internal override void Execute(IInvocation invocation)
+    internal override void Execute(Invocation invocation)
     {
         _executionCount++;
         if (_executionCount > _executionLimit)

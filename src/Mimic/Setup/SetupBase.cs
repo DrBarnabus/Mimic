@@ -27,9 +27,9 @@ internal abstract class SetupBase
         Expectation = expectation;
     }
 
-    public virtual bool MatchesInvocation(IInvocation invocation) => Expectation.MatchesInvocation(invocation);
+    public virtual bool MatchesInvocation(Invocation invocation) => Expectation.MatchesInvocation(invocation);
 
-    public void Execute(IInvocation invocation)
+    public void Execute(Invocation invocation)
     {
         _flags |= Flags.Matched;
 
@@ -38,7 +38,7 @@ internal abstract class SetupBase
         ExecuteCore(invocation);
     }
 
-    protected abstract void ExecuteCore(IInvocation invocation);
+    protected abstract void ExecuteCore(Invocation invocation);
 
     public void Override()
     {

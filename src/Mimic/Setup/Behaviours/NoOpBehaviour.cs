@@ -4,7 +4,7 @@ internal sealed class NoOpBehaviour : Behaviour
 {
     public static readonly NoOpBehaviour Instance = new();
 
-    internal override void Execute(IInvocation invocation)
+    internal override void Execute(Invocation invocation)
     {
         // intentionally empty
     }

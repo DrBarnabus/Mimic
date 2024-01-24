@@ -36,7 +36,7 @@ public class SequenceBehaviourTests
     [Fact]
     public void Execute_WithNoQueuedBehaviour_AndMethodHasReturnTypeOfVoid_ShouldReturnWithoutCallingSetupThrowOrReturnDefault()
     {
-        var invocation = new InvocationFixture { Method = typeof(SequenceBehaviour).GetMethod(nameof(SequenceBehaviour.AddBehaviour))! };
+        var invocation = new InvocationFixture(typeof(SequenceBehaviour).GetMethod(nameof(SequenceBehaviour.AddBehaviour)));
         var behaviour = new SequenceBehaviour(null!);
 
         Should.NotThrow(() => behaviour.Execute(invocation));

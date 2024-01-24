@@ -11,7 +11,7 @@ internal sealed class SequenceBehaviour : Behaviour
 
     public void AddBehaviour(Behaviour behaviour) => _behaviours.Enqueue(behaviour);
 
-    internal override void Execute(IInvocation invocation)
+    internal override void Execute(Invocation invocation)
     {
         if (_behaviours.TryDequeue(out var behaviour))
         {

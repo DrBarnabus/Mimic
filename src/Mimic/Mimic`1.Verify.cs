@@ -164,7 +164,7 @@ public partial class Mimic<T>
         Verify(mimic, expression, callCount, failureMessage);
     }
 
-    private static List<IInvocation> FindMatchingInvocations(Mimic<T> mimic, LambdaExpression expression)
+    private static List<Invocation> FindMatchingInvocations(Mimic<T> mimic, LambdaExpression expression)
     {
         Guard.NotNull(mimic);
         Guard.NotNull(expression);

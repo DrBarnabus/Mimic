@@ -16,7 +16,7 @@ public class ReturnComputedValueBehaviourTests
 
         invocation.ReturnValue.ShouldBe(value);
 
-        object? ValueFactory(IInvocation i)
+        object? ValueFactory(Invocation i)
         {
             i.ShouldBe(invocation);
             return value;

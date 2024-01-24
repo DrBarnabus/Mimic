@@ -6,18 +6,18 @@ internal sealed class InterceptorFixture : IInterceptor
 {
     private int _interceptCount;
 
-    public Action<IInvocation>? Callback { get; set; }
+    public Action<Invocation>? Callback { get; set; }
 
     public int InterceptCount => _interceptCount;
 
     public bool Intercepted => InterceptCount > 0;
 
-    public InterceptorFixture(Action<IInvocation>? callback = null)
+    public InterceptorFixture(Action<Invocation>? callback = null)
     {
         Callback = callback;
     }
 
-    public void Intercept(IInvocation invocation)
+    public void Intercept(Invocation invocation)
     {
         Interlocked.Increment(ref _interceptCount);
 

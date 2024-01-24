@@ -10,7 +10,7 @@ public sealed partial class Mimic<T> : IMimic
     private static int _instanceCounter;
 
     private readonly SetupCollection _setups = new();
-    private readonly List<IInvocation> _invocations = new();
+    private readonly List<Invocation> _invocations = new();
     private T? _object;
 
     public string Name { get; init; }
@@ -19,7 +19,7 @@ public sealed partial class Mimic<T> : IMimic
 
     public T Object => GetOrInitializeObject();
 
-    internal IReadOnlyList<IInvocation> Invocations
+    internal IReadOnlyList<Invocation> Invocations
     {
         get { lock (_invocations) return _invocations.ToArray(); }
     }

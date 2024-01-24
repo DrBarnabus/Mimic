@@ -25,10 +25,10 @@ internal sealed class MethodCallSetup : SetupBase
         _outValues = FindAndEvaluateOutValues(expectation.Arguments, expectation.MethodInfo.GetParameters());
     }
 
-    public override bool MatchesInvocation(IInvocation invocation) =>
+    public override bool MatchesInvocation(Invocation invocation) =>
         base.MatchesInvocation(invocation) && (_condition == null || _condition.Invoke());
 
-    protected override void ExecuteCore(IInvocation invocation)
+    protected override void ExecuteCore(Invocation invocation)
     {
         SetOutParameters(invocation);
 
@@ -169,7 +169,7 @@ internal sealed class MethodCallSetup : SetupBase
             throw MimicException.SequenceSetupNotMatched(this, sequenceBehaviour.Remaining);
     }
 
-    internal void StrictThrowOrReturnDefault(IInvocation invocation)
+    internal void StrictThrowOrReturnDefault(Invocation invocation)
     {
         if (Mimic.Strict)
             throw MimicException.ReturnRequired(invocation);
@@ -202,7 +202,7 @@ internal sealed class MethodCallSetup : SetupBase
             : new ThrowComputedExceptionBehaviour(invocation => exceptionFactory.Invoke(invocation.Arguments) as Exception);
     }
 
-    private void SetOutParameters(IInvocation invocation)
+    private void SetOutParameters(Invocation invocation)
     {
         foreach ((int position, object? value) in _outValues)
             invocation.Arguments[position] = value;

@@ -44,7 +44,7 @@ internal static class SetterExpressionConstructor
         return (T)ProxyGenerator.Instance.GenerateProxy(typeof(T), Type.EmptyTypes, interceptor);
     }
 
-    private static Expression[] GetArgumentExpressions(Expression body, IInvocation invocation, IReadOnlyList<ArgumentMatcher> argumentMatchers)
+    private static Expression[] GetArgumentExpressions(Expression body, Invocation invocation, IReadOnlyList<ArgumentMatcher> argumentMatchers)
     {
         var parameterTypes = invocation.Method.GetParameters().Select(p => p.ParameterType).ToArray();
 
@@ -133,7 +133,7 @@ internal static class SetterExpressionConstructor
         private readonly int _startCounter;
         private int? _invocationCounter;
 
-        public IInvocation? Invocation { get; private set; }
+        public Invocation? Invocation { get; private set; }
 
         public IEnumerable<ArgumentMatcher> ArgumentMatchers => _observer.GetArgumentMatchersBetween(_startCounter, _invocationCounter!.Value);
 
@@ -143,7 +143,7 @@ internal static class SetterExpressionConstructor
             _startCounter = observer.GetCounter();
         }
 
-        public void Intercept(IInvocation invocation)
+        public void Intercept(Invocation invocation)
         {
             Invocation = invocation;
             _invocationCounter = _observer.GetCounter();

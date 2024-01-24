@@ -37,7 +37,7 @@ internal sealed class MethodExpectation : IExpectation
         }
     }
 
-    public bool MatchesInvocation(IInvocation invocation)
+    public bool MatchesInvocation(Invocation invocation)
     {
         if (invocation.Method != MethodInfo && !IsMatchedGenericMethod(invocation))
             return false;
@@ -52,7 +52,7 @@ internal sealed class MethodExpectation : IExpectation
         return true;
     }
 
-    private bool IsMatchedGenericMethod(IInvocation invocation)
+    private bool IsMatchedGenericMethod(Invocation invocation)
     {
         Guard.Assert(invocation.Method != MethodInfo);
 
