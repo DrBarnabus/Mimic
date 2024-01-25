@@ -5,7 +5,6 @@ namespace Mimic.Proxy;
 internal abstract class Invocation : IInvocation
 {
     private MethodInfo? _methodImplementation;
-    private SetupBase? _matchedSetup;
     private object? _result;
 
     public Type ProxyType { get; }
@@ -13,6 +12,8 @@ internal abstract class Invocation : IInvocation
     public MethodInfo Method { get; }
 
     public object?[] Arguments { get; }
+
+    public SetupBase? MatchedSetup { get; private set; }
 
     public bool Verified { get; private set; }
 
@@ -35,15 +36,15 @@ internal abstract class Invocation : IInvocation
 
     public void MarkMatchedBy(SetupBase setup)
     {
-        Guard.Assert(_matchedSetup is null);
-        _matchedSetup = setup;
+        Guard.Assert(MatchedSetup is null);
+        MatchedSetup = setup;
     }
 
     public void MarkVerified() => Verified = true;
 
     public void MarkVerified(Predicate<SetupBase> predicate)
     {
-        if (_matchedSetup != null && predicate(_matchedSetup))
+        if (MatchedSetup != null && predicate(MatchedSetup))
             Verified = true;
     }
 

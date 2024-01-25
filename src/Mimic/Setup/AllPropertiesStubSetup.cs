@@ -10,6 +10,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
     public AllPropertiesStubSetup(IMimic mimic)
         : base(null, mimic, new AllPropertiesStubExpectation(mimic))
     {
+        FlagAsVerifiable();
     }
 
     protected override void ExecuteCore(Invocation invocation)
@@ -27,7 +28,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
         {
             Guard.Assert(invocation.Method.IsGetter());
 
-            object? currentValue = _currentValues.GetOrAdd(propertyName, () => invocation.Method.ReturnType.GetDefaultValue());
+            object? currentValue = _currentValues.GetOrAdd(propertyName, invocation.Method.ReturnType.GetDefaultValue());
             invocation.SetReturnValue(currentValue);
         }
     }

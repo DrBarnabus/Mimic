@@ -11,4 +11,14 @@ internal sealed class InvocationFixture : Invocation
         : base(typeof(InvocationFixture), method ?? DefaultMethod, Array.Empty<object?>())
     {
     }
+
+    public InvocationFixture(Type proxyType, MethodInfo? method)
+        : base(proxyType, method ?? DefaultMethod, Array.Empty<object?>())
+    {
+    }
+
+    public InvocationFixture(Type proxyType, MethodInfo? method, object?[] arguments)
+        : base(proxyType, method ?? DefaultMethod, arguments)
+    {
+    }
 }
