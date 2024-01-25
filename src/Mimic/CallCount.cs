@@ -1,5 +1,6 @@
 ﻿namespace Mimic;
 
+[PublicAPI]
 public readonly struct CallCount : IEquatable<CallCount>
 {
     private readonly Type _type;

@@ -57,12 +57,12 @@ internal static class PropertyInfoExtensions
             var getter = property.GetGetMethod(true);
             Guard.NotNull(getter);
 
-            var baseSetter = getter.GetBaseDefinition();
-            if (baseSetter != getter)
+            var baseGetter = getter.GetBaseDefinition();
+            if (baseGetter != getter)
             {
-                var baseProperty = baseSetter.DeclaringType!.GetMember(property.Name, MemberTypes.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                var baseProperty = baseGetter.DeclaringType!.GetMember(property.Name, MemberTypes.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                     .Cast<PropertyInfo>()
-                    .First(p => p.GetSetMethod(true) == baseSetter);
+                    .First(p => p.GetGetMethod(true) == baseGetter);
 
                 property = baseProperty;
                 continue;
