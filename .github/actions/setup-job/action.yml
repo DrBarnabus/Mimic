@@ -18,18 +18,18 @@ runs:
 
     # Caches
     - name: Cache Cake Frosting
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-cake
       with:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     - name: Cache Cake Tools
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: tools
         key: tools-${{ runner.os }}-${{ hashFiles('./build/**') }}
     - name: Cache .nuget
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
