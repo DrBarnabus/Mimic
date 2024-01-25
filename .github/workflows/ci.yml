@@ -76,7 +76,7 @@ jobs:
 
       # Upload Packages
       - name: 'Upload Packages'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: matrix.os == 'ubuntu-latest'
         with:
           name: packages
@@ -142,7 +142,7 @@ jobs:
           dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
 
       # Download Packages
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         name: Download Packages
         with:
           name: packages

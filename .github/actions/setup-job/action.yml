@@ -39,7 +39,7 @@ runs:
 
     # Required SDKs
     - name: Install .NET SDK ${{ inputs.dotnet_sdk_version }}
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       if: inputs.ignore_dotnet_on_cake_cache_hit == 'false' || steps.cache-cake.outputs.cache-hit != 'true'
       with:
         dotnet-version: ${{ inputs.dotnet_sdk_version }}
