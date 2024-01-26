@@ -1,4 +1,6 @@
-﻿namespace Mimic.UnitTests;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mimic.UnitTests;
 
 public class CallCountTests
 {
@@ -111,5 +113,46 @@ public class CallCountTests
 
         subject.Validate(count).ShouldBe(expectedResult);
         subject.GetExceptionMessage(count).ShouldBe(expectedMessage);
+    }
+
+    [Fact]
+    [SuppressMessage("ReSharper", "EqualExpressionComparison", Justification = "Method is testing equality so this is expected")]
+    public void Equals_WhenObjectsAreSame_ShouldReturnTrue()
+    {
+        (CallCount.Once() == CallCount.Once()).ShouldBeTrue();
+        (CallCount.Once() == CallCount.Exactly(1)).ShouldBeTrue();
+
+        CallCount.Once().Equals(CallCount.Once()).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Equals_WhenObjectsAreNotSame_ShouldReturnFalse()
+    {
+        (CallCount.Once() == CallCount.AtMostOnce()).ShouldBeFalse();
+        (CallCount.Once() == CallCount.ExclusiveBetween(5, 9)).ShouldBeFalse();
+
+        CallCount.Once().Equals(CallCount.Never()).ShouldBeFalse();
+        CallCount.Once().Equals(new object()).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void NotEqual_WhenObjectsAreDifferent_ShouldReturnTrue()
+    {
+        (CallCount.Once() != CallCount.Never()).ShouldBeTrue();
+        (CallCount.Once() != CallCount.AtLeast(1)).ShouldBeTrue();
+    }
+
+    [Fact]
+    [SuppressMessage("ReSharper", "EqualExpressionComparison", Justification = "Method is testing equality so this is expected")]
+    public void NotEqual_WhenObjectsAreSame_ShouldReturnFalse()
+    {
+        (CallCount.Once() != CallCount.Once()).ShouldBeFalse();
+        (CallCount.InclusiveBetween(10, 30) != CallCount.InclusiveBetween(10, 30)).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void GetHashCode_ShouldReturnSameHashCodeForEquivelentObjects()
+    {
+        CallCount.Once().GetHashCode().ShouldBe(CallCount.Once().GetHashCode());
     }
 }
