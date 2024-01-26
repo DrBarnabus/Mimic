@@ -30,7 +30,7 @@ public class AllPropertiesStubSetupTests
     }
 
     [Fact]
-    public void MatchesInvocation_WhenCalledWithInvocationOfPropertyGetterOnSameType_ShouldReturnTrue()
+    public void MatchesInvocation_WhenCalledWithInvocationOfPropertyGetter_ShouldReturnTrue()
     {
         var method = typeof(ISubject).GetProperty(nameof(ISubject.StringProperty))!.GetGetMethod(true)!;
         var invocation = new InvocationFixture(typeof(ISubject), method);
@@ -40,10 +40,10 @@ public class AllPropertiesStubSetupTests
     }
 
     [Fact]
-    public void MatchesInvocation_WhenCalledWithInvocationOfPropertySetterOnSameType_ShouldReturnTrue()
+    public void MatchesInvocation_WhenCalledWithInvocationOfPropertySetter_ShouldReturnTrue()
     {
         var method = typeof(ISubject).GetProperty(nameof(ISubject.StringProperty))!.GetSetMethod(true)!;
-        var invocation = new InvocationFixture(typeof(ISubject), method);
+        var invocation = new InvocationFixture(typeof(ISubject), method, [string.Empty]);
 
         var setup = new AllPropertiesStubSetup(_mimic);
         setup.MatchesInvocation(invocation).ShouldBeTrue();

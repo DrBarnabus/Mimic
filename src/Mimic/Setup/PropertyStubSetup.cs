@@ -8,6 +8,8 @@ internal sealed class PropertyStubSetup : SetupBase
         : base(null, mimic, new PropertyStubExpectation(expression, getter, setter))
     {
         _currentValue = initialValue;
+
+        FlagAsVerifiable();
     }
 
     protected override void ExecuteCore(Invocation invocation)
