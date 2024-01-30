@@ -8,7 +8,7 @@ internal sealed class ArgumentMatcher<TValue> : ArgumentMatcher
 
     internal ArgumentMatcher(Predicate<TValue?> condition) => _condition = condition;
 
-    protected override bool Matches(object? argument)
+    protected override bool Matches(object? argument, Type parameterType)
     {
         return CanCast(argument) && _condition((TValue?)argument);
     }

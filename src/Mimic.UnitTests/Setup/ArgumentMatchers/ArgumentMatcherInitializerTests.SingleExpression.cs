@@ -27,7 +27,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(null).ShouldBeTrue();
+            argumentMatcher.Matches(null, typeof(object)).ShouldBeTrue();
         }
 
         [Theory]
@@ -38,7 +38,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(object)).ShouldBeTrue();
         }
 
         [Theory]
@@ -49,7 +49,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(IEnumerable<char>)).ShouldBeTrue();
         }
 
         [Theory]
@@ -60,7 +60,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
         }
 
         #endregion
@@ -85,7 +85,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(object)).ShouldBeTrue();
         }
 
         [Theory]
@@ -96,7 +96,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(IEnumerable<char>)).ShouldBeTrue();
         }
 
         [Theory]
@@ -107,7 +107,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
         }
 
         [Fact]
@@ -117,7 +117,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(null).ShouldBeFalse();
+            argumentMatcher.Matches(null, typeof(object)).ShouldBeFalse();
         }
 
         #endregion
@@ -145,7 +145,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -158,7 +158,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -182,7 +182,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -195,7 +195,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -219,7 +219,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -232,7 +232,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         #endregion
@@ -261,7 +261,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -275,7 +275,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -300,7 +300,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -314,7 +314,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -337,7 +337,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -350,7 +350,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         #endregion
@@ -379,7 +379,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -393,7 +393,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -418,7 +418,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -432,7 +432,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -455,7 +455,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeTrue();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         [Theory]
@@ -468,7 +468,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(value).ShouldBeFalse();
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
         }
 
         #endregion
@@ -493,7 +493,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches("value").ShouldBeTrue();
+            argumentMatcher.Matches("value", typeof(string)).ShouldBeTrue();
         }
 
         [Fact]
@@ -503,7 +503,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches("wrong").ShouldBeFalse();
+            argumentMatcher.Matches("wrong", typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -523,7 +523,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches("value").ShouldBeTrue();
+            argumentMatcher.Matches("value", typeof(string)).ShouldBeTrue();
         }
 
         [Fact]
@@ -533,7 +533,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches("wrong").ShouldBeFalse();
+            argumentMatcher.Matches("wrong", typeof(string)).ShouldBeFalse();
         }
 
         [Fact]
@@ -553,7 +553,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(123).ShouldBeTrue();
+            argumentMatcher.Matches(123, typeof(int)).ShouldBeTrue();
         }
 
         [Fact]
@@ -563,7 +563,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(321).ShouldBeFalse();
+            argumentMatcher.Matches(321, typeof(int)).ShouldBeFalse();
         }
 
         [Fact]
@@ -583,7 +583,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(123).ShouldBeTrue();
+            argumentMatcher.Matches(123, typeof(int)).ShouldBeTrue();
         }
 
         [Fact]
@@ -593,7 +593,7 @@ public static partial class ArgumentMatcherInitializerTests
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
-            argumentMatcher.Matches(321).ShouldBeFalse();
+            argumentMatcher.Matches(321, typeof(int)).ShouldBeFalse();
         }
 
         [Fact]

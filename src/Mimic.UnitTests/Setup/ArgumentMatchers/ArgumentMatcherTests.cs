@@ -18,7 +18,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<string>(s => s == value) as IArgumentMatcher;
 
-        argumentMatcher.Matches(value);
+        argumentMatcher.Matches(value, typeof(string));
     }
 
     [Theory]
@@ -27,7 +27,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<string>(s => s != value) as IArgumentMatcher;
 
-        argumentMatcher.Matches(value);
+        argumentMatcher.Matches(value, typeof(string));
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<string?>(s => s == null) as IArgumentMatcher;
 
-        argumentMatcher.Matches(null).ShouldBeTrue();
+        argumentMatcher.Matches(null, typeof(string)).ShouldBeTrue();
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<string?>(s => s != null) as IArgumentMatcher;
 
-        argumentMatcher.Matches(null).ShouldBeFalse();
+        argumentMatcher.Matches(null, typeof(string)).ShouldBeFalse();
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<int?>(i => i == null) as IArgumentMatcher;
 
-        argumentMatcher.Matches(null).ShouldBeTrue();
+        argumentMatcher.Matches(null, typeof(int?)).ShouldBeTrue();
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<int?>(i => i != null) as IArgumentMatcher;
 
-        argumentMatcher.Matches(null).ShouldBeFalse();
+        argumentMatcher.Matches(null, typeof(int?)).ShouldBeFalse();
     }
 
     [Fact]
@@ -67,6 +67,6 @@ public class ArgumentMatcherTests
     {
         var argumentMatcher = new ArgumentMatcher<int>(_ => true) as IArgumentMatcher;
 
-        argumentMatcher.Matches(null).ShouldBeFalse();
+        argumentMatcher.Matches(null, typeof(int)).ShouldBeFalse();
     }
 }

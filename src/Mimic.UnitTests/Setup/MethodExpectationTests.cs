@@ -162,7 +162,7 @@ public class MethodExpectationTests
         expectation.MatchesInvocation(invocation).ShouldBeTrue();
     }
 
-    [Theory(Skip = "This currently is not working, needs a fix in the argument matchers to properly support `Generic.AnyType`")]
+    [Theory]
     [AutoData]
     public void MatchesInvocation_WhenCalledWithMatchingGenericMethod_WithAnyTypeAndMatchingParameters_ShouldReturnTrue(
         int intValue, double doubleValue)
@@ -205,12 +205,12 @@ public class MethodExpectationTests
 
     private class Subject : ISubject
     {
-        public void MethodWithNoArguments() => throw new NotImplementedException();
+        public void MethodWithNoArguments() => throw new NotSupportedException();
 
-        public void MethodWithArguments(int intValue, string stringValue) => throw new NotImplementedException();
+        public void MethodWithArguments(int intValue, string stringValue) => throw new NotSupportedException();
 
-        public void GenericWithNoArguments<T>() => throw new NotImplementedException();
+        public void GenericWithNoArguments<T>() => throw new NotSupportedException();
 
-        public void GenericWithArguments<T>(T value, double doubleValue) => throw new NotImplementedException();
+        public void GenericWithArguments<T>(T value, double doubleValue) => throw new NotSupportedException();
     }
 }

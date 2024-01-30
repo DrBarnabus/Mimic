@@ -15,6 +15,6 @@ public class AnyArgumentMatcherTests
     [AutoData]
     public void Matches_ShouldAlwaysReturnTrue(string argument)
     {
-        AnyArgumentMatcher.Instance.Matches(argument).ShouldBeTrue();
+        AnyArgumentMatcher.Instance.Matches(argument, typeof(string)).ShouldBeTrue();
     }
 }

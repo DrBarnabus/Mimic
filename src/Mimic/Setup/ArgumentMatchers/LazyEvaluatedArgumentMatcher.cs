@@ -8,13 +8,13 @@ internal sealed class LazyEvaluatedArgumentMatcher : IArgumentMatcher
 
     public LazyEvaluatedArgumentMatcher(Expression expression) => _expression = expression;
 
-    public bool Matches(object? argument)
+    public bool Matches(object? argument, Type parameterType)
     {
         var evaluatedExpression = ExpressionEvaluator.PartiallyEvaluate(_expression);
         if (evaluatedExpression is not ConstantExpression constantExpression)
             return false;
 
         var constantArgumentMatcher = new ConstantArgumentMatcher(constantExpression.Value);
-        return constantArgumentMatcher.Matches(argument);
+        return constantArgumentMatcher.Matches(argument, parameterType);
     }
 }

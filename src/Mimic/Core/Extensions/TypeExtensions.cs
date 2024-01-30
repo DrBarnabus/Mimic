@@ -24,6 +24,17 @@ internal static class TypeExtensions
         return true;
     }
 
+    internal static bool IsOrContainsGenericMatcher(this Type type)
+    {
+        if (type.IsGenericMatcher())
+            return true;
+
+        if (type.HasElementType)
+            return IsOrContainsGenericMatcher(type.GetElementType()!);
+
+        return type.IsGenericType && type.GetGenericArguments().Any(IsOrContainsGenericMatcher);
+    }
+
     private static bool IsGenericMatcher(this Type type) => typeof(IGenericMatcher).IsAssignableFrom(type);
 
     private static bool IsGenericMatcher(this Type type, [NotNullWhen(true)] out Type? genericMatcherType)
@@ -36,17 +47,6 @@ internal static class TypeExtensions
 
         genericMatcherType = type;
         return type.IsValueType || type.GetConstructor(Type.EmptyTypes) != null;
-    }
-
-    private static bool IsOrContainsGenericMatcher(this Type type)
-    {
-        if (type.IsGenericMatcher())
-            return true;
-
-        if (type.HasElementType)
-            return IsOrContainsGenericMatcher(type.GetElementType()!);
-
-        return type.IsGenericType && type.GetGenericArguments().Any(IsOrContainsGenericMatcher);
     }
 
     private static Type SubstituteGenericMatchers(this Type type, Type otherType)

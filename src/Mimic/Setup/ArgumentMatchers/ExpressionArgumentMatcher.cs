@@ -8,7 +8,7 @@ internal sealed class ExpressionArgumentMatcher : IArgumentMatcher
 
     public ExpressionArgumentMatcher(Expression expression) => _expression = expression;
 
-    public bool Matches(object? argument)
+    public bool Matches(object? argument, Type parameterType)
     {
         return argument is Expression argumentExpression
                && ExpressionEqualityComparer.Default.Equals(_expression, argumentExpression);
