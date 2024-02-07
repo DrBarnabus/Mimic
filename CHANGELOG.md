@@ -3,6 +3,19 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+## [0.5.0](https://github.com/DrBarnabus/Mimic/compare/v0.4.0...v0.5.0) (2024-02-07)
+
+
+### Features
+
+* Add `Verify` methods for verifying non-setup invocations ([2fb2566](https://github.com/DrBarnabus/Mimic/commit/2fb2566c0cb7ff12636ba09b7fba5cc2d40574a1))
+
+
+### Bug Fixes
+
+* Correctly override `ToString`, `Equals` and `GetHashCode` on mimicked objects ([1c2432e](https://github.com/DrBarnabus/Mimic/commit/1c2432e6b980be734727d5440079a85af7369bb9))
+* Enable use of `IGenericMatcher` types when using Arg matchers ([f20d9f5](https://github.com/DrBarnabus/Mimic/commit/f20d9f5036382310b80bb9d8b547fbbac8463575))
+
 ## [0.4.0](https://github.com/DrBarnabus/Mimic/compare/v0.3.2...v0.4.0) (2023-12-14)
 
 
