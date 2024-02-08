@@ -2,6 +2,6 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IReturnsResult : ICallback, ILimitable, IVerifiable, IFluent
+public interface IReturnsResult : ICallback, ILimitable, IExpected, IFluent
 {
 }

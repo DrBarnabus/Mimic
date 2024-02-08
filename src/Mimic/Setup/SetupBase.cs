@@ -18,7 +18,7 @@ internal abstract class SetupBase
 
     public bool Overriden => (_flags & Flags.Overriden) != 0;
 
-    public bool Verifiable => (_flags & Flags.Verifiable) != 0;
+    public bool Expected => (_flags & Flags.Expected) != 0;
 
     protected SetupBase(Expression? originalExpression, IMimic mimic, IExpectation expectation)
     {
@@ -46,17 +46,12 @@ internal abstract class SetupBase
         _flags |= Flags.Overriden;
     }
 
-    public void FlagAsVerifiable()
-    {
-        _flags |= Flags.Verifiable;
-    }
+    public void FlagAsExpected() => _flags |= Flags.Expected;
 
-    internal virtual void Verify()
+    internal virtual void VerifyMatched()
     {
         if (!Matched)
-        {
-            throw MimicException.SetupNotMatched(this);
-        }
+            throw MimicException.ExpectedSetupNotMatched(this);
     }
 
     public override string ToString()
@@ -80,6 +75,6 @@ internal abstract class SetupBase
         None = 0,
         Matched = 1 << 0,
         Overriden = 1 << 1,
-        Verifiable = 1 << 2
+        Expected = 1 << 2
     }
 }

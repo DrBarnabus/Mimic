@@ -2,7 +2,7 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IVerifiable : IFluent
+public interface IExpected : IFluent
 {
-    void Verifiable();
+    void Expected();
 }

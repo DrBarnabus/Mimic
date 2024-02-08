@@ -161,12 +161,12 @@ internal sealed class MethodCallSetup : SetupBase
 
     #endregion
 
-    internal override void Verify()
+    internal override void VerifyMatched()
     {
-        base.Verify();
+        base.VerifyMatched();
 
         if (_returnOrThrow is SequenceBehaviour { Remaining: >0 } sequenceBehaviour)
-            throw MimicException.SequenceSetupNotMatched(this, sequenceBehaviour.Remaining);
+            throw MimicException.ExpectedSequenceSetupNotMatched(this, sequenceBehaviour.Remaining);
     }
 
     internal void StrictThrowOrReturnDefault(Invocation invocation)

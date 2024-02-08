@@ -18,10 +18,10 @@ mimic
     .When(() => !shouldThrow)
     .Setup(m => m.ThrowsException(Arg.Any<string>()))
     .Callback(() => Console.WriteLine("Shouldn't have thrown?"))
-    .Verifiable();
+    .Expected();
 
 mimic.Setup(m => m.VoidMethod())
-    .Verifiable();
+    .Expected();
 
 var reference = mimic.Setup(m => m.Sequence()).AsSequence()
     .Next()
@@ -32,7 +32,7 @@ reference.Throws(new Exception("Test Exception from void?"));
 mimic.SetupAllProperties();
 
 mimic.Setup(m => m.Generic<Generic.AnyType>())
-    .Verifiable();
+    .Expected();
 
 SetupRef(mimic);
 
@@ -79,7 +79,7 @@ int refInt = 10;
 mimickedObject.Ref(ref refInt, out string outResult);
 Console.WriteLine(outResult);
 
-mimic.Verify();
+mimic.VerifyExpectedReceived();
 
 static void SetupRef(Mimic<ITypeToMimic> mimic1)
 {

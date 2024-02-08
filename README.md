@@ -18,7 +18,7 @@ to change without warning between versions until the v1 release.
 
 **Mimic** is a friendly and familiar mocking library built for modern .NET built on top of the [Castle Project][castle]'s
 dynamic proxy generator. It's simple, intuitive and type-safe API for configuring mimic's of interfaces allows for both;
-Setup of return values for methods/properties and verifying if methods have been called after the fact.
+Setup of return values for methods/properties and verifying if method calls have been received after the fact.
 
 ```csharp
 var mimic = new Mimic<ITypeToMimic>();
@@ -32,7 +32,7 @@ ITypeToMimic mimickedObject = mimic.Object;
 bool whatDoYouThink = mimickedObject.IsMimicEasyToUse("it's so intuitive");
 
 // Verify that the specified method has been called at least once on the `Object`
-mimic.Verify(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtLeastOnce);
+mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtLeastOnce);
 ```
 
 ## Features
@@ -44,7 +44,8 @@ mimic.Verify(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtLeastOnce
   disable the default behaviour by setting `Strict = false` on construction
 - Quick and easy stubbing of properties to store and retrieve values
 - Comprehensive set of behaviours for method setups such as; `Returns`, `Throws`, `Callback`, `When`, `Limit`,
-  `Verifiable` and `AsSequence`
+  `Expected` and `AsSequence`
+- Verification of expected, setup and received calls including asserting no additional calls
 
 ## Roadmap
 

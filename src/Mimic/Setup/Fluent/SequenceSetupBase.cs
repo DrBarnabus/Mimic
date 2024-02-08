@@ -1,6 +1,6 @@
 ﻿namespace Mimic.Setup.Fluent;
 
-internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IVerifiable
+internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IExpected
     where TNext : IFluent
 {
     protected MethodCallSetup Setup { get; }
@@ -150,7 +150,7 @@ internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IVerifiable
         return This;
     }
 
-    public void Verifiable() => Setup.FlagAsVerifiable();
+    public void Expected() => Setup.FlagAsExpected();
 
     public override string ToString() => Setup.Expression.ToString();
 }

@@ -38,14 +38,14 @@ public class MimicException : Exception
         return new MimicException($"Invocation of '{invocation}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown");
     }
 
-    internal static MimicException SetupNotMatched(SetupBase setup)
+    internal static MimicException ExpectedSetupNotMatched(SetupBase setup)
     {
-        return new MimicException($"Setup '{setup}' which was marked as verifiable has not been matched");
+        return new MimicException($"Setup '{setup}' which was marked as expected has not been matched");
     }
 
-    internal static MimicException SequenceSetupNotMatched(SetupBase setup, int remaining)
+    internal static MimicException ExpectedSequenceSetupNotMatched(SetupBase setup, int remaining)
     {
-        return new MimicException($"Setup '{setup}' with sequence which was marked as verifiable has not been matched ({remaining} {(remaining == 1 ? "seqeuence" : "seqeuences")} result has not been used).");
+        return new MimicException($"Setup '{setup}' with sequence which was marked as expected has not been matched ({remaining} {(remaining == 1 ? "seqeuence" : "seqeuences")} result has not been used).");
     }
 
     internal static MimicException ReturnRequired(Invocation invocation)

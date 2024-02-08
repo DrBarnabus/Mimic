@@ -2,6 +2,6 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IThrowsResult : ILimitable, IVerifiable, IFluent
+public interface IThrowsResult : ILimitable, IExpected, IFluent
 {
 }

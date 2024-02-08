@@ -4,5 +4,5 @@
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface ILimitable : IFluent
 {
-    IVerifiable Limit(int executionLimit = 1);
+    IExpected Limit(int executionLimit = 1);
 }

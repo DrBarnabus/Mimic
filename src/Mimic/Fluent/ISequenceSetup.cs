@@ -2,7 +2,7 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface ISequenceSetup : IThrows<ISequenceSetup>, IVerifiable, IFluent
+public interface ISequenceSetup : IThrows<ISequenceSetup>, IExpected, IFluent
 {
     ISequenceSetup Next();
 }

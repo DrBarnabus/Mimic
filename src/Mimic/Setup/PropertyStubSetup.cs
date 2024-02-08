@@ -8,8 +8,6 @@ internal sealed class PropertyStubSetup : SetupBase
         : base(null, mimic, new PropertyStubExpectation(expression, getter, setter))
     {
         _currentValue = initialValue;
-
-        FlagAsVerifiable();
     }
 
     protected override void ExecuteCore(Invocation invocation)
@@ -29,7 +27,7 @@ internal sealed class PropertyStubSetup : SetupBase
         }
     }
 
-    internal override void Verify()
+    internal override void VerifyMatched()
     {
         // intentionally empty
     }

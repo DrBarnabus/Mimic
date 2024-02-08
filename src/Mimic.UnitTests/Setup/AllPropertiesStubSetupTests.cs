@@ -17,7 +17,7 @@ public class AllPropertiesStubSetupTests
         setup.Expression.ShouldNotBeNull();
         setup.Matched.ShouldBeFalse();
         setup.Overriden.ShouldBeFalse();
-        setup.Verifiable.ShouldBeTrue();
+        setup.Expected.ShouldBeFalse();
     }
 
     [Fact]
@@ -116,10 +116,10 @@ public class AllPropertiesStubSetupTests
     }
 
     [Fact]
-    public void Verify_ShouldNotThrow()
+    public void VerifyMatched_ShouldNotThrow()
     {
         var setup = new AllPropertiesStubSetup(_mimic);
-        Should.NotThrow(() => setup.Verify());
+        Should.NotThrow(() => setup.VerifyMatched());
     }
 
     [Fact]

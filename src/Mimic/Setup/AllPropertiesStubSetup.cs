@@ -10,7 +10,6 @@ internal sealed class AllPropertiesStubSetup : SetupBase
     public AllPropertiesStubSetup(IMimic mimic)
         : base(null, mimic, new AllPropertiesStubExpectation(mimic))
     {
-        FlagAsVerifiable();
     }
 
     protected override void ExecuteCore(Invocation invocation)
@@ -33,7 +32,7 @@ internal sealed class AllPropertiesStubSetup : SetupBase
         }
     }
 
-    internal override void Verify()
+    internal override void VerifyMatched()
     {
         // intentionally empty
     }

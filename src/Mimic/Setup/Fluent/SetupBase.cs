@@ -265,19 +265,13 @@ internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
 
     #endregion
 
-    public IVerifiable Limit(int executionLimit = 1)
+    public IExpected Limit(int executionLimit = 1)
     {
         Setup.SetExecutionLimitBehaviour(executionLimit);
         return this;
     }
 
-    public void Verifiable()
-    {
-        Setup.FlagAsVerifiable();
-    }
+    public void Expected() => Setup.FlagAsExpected();
 
-    public override string ToString()
-    {
-        return Setup.Expression.ToString();
-    }
+    public override string ToString() => Setup.Expression.ToString();
 }

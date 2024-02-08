@@ -24,7 +24,7 @@ public class PropertyStubSetupTests
         setup.Expression.ShouldBeSameAs(expression);
         setup.Matched.ShouldBeFalse();
         setup.Overriden.ShouldBeFalse();
-        setup.Verifiable.ShouldBeTrue();
+        setup.Expected.ShouldBeFalse();
     }
 
     [Fact]
@@ -152,7 +152,7 @@ public class PropertyStubSetupTests
     }
 
     [Fact]
-    public void Verify_ShouldNotThrow()
+    public void VerifyMatched_ShouldNotThrow()
     {
         LambdaExpression expression = (ISubject subject) => subject.StringProperty;
         var property = typeof(ISubject).GetProperty(nameof(ISubject.StringProperty))!;
@@ -160,7 +160,7 @@ public class PropertyStubSetupTests
         property.CanWriteProperty(out var setter, out _);
 
         var setup = new PropertyStubSetup(_mimic, expression, getter!, setter!, null);
-        Should.NotThrow(() => setup.Verify());
+        Should.NotThrow(() => setup.VerifyMatched());
     }
 
     [Fact]
