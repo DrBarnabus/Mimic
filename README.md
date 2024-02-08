@@ -7,36 +7,57 @@
 [![Build Status][gh-actions-badge]][gh-actions]
 [![Codecov][codecov-badge]][codecov]
 
-#### [Planned Features](#planned-features) | [Changelog][changelog]
+#### [What is Mimic](#what-is-mimic) | [Features](#features) | [Roadmap](#roadmap) | [Changelog][changelog]
 
 ---
 
-**Mimic** is still very early in it's development and the functionality and/or interfaces that it provides are subject to change without warning between versions until the v1 release.
+**Mimic** is still very early in it's development and the functionality and/or interfaces that it provides are subject
+to change without warning between versions until the v1 release.
 
-## Planned Features
+## What is Mimic
+
+**Mimic** is a friendly and familiar mocking library built for modern .NET built on top of the [Castle Project][castle]'s
+dynamic proxy generator. It's simple, intuitive and type-safe API for configuring mimic's of interfaces allows for both;
+Setup of return values for methods/properties and verifying if methods have been called after the fact.
+
+```csharp
+var mimic = new Mimic<ITypeToMimic>();
+
+// Easily setup methods
+mimic.Setup(m => m.IsMimicEasyToUse(Arg.Any<string>()))
+    .Returns(true);
+
+// Access the `Object` property to generate an implementation of `ITypeToMimic` and call our setup method
+ITypeToMimic mimickedObject = mimic.Object;
+bool whatDoYouThink = mimickedObject.IsMimicEasyToUse("it's so intuitive");
+
+// Verify that the specified method has been called at least once on the `Object`
+mimic.Verify(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtLeastOnce);
+```
+
+## Features
+
+- A friendly interface designed to ease adoption by users of other popular .NET mocking libraries
+- Support for generating mock objects of interfaces (**_Coming Soon_**: and overridable members in classes)
+- Intuitive and type-safe expression based API for setups and verification of methods
+- Mimic is **strict by default**, meaning it throws for methods without a corresponding setup, but it's possible to
+  disable the default behaviour by setting `Strict = false` on construction
+- Quick and easy stubbing of properties to store and retrieve values
+- Comprehensive set of behaviours for method setups such as; `Returns`, `Throws`, `Callback`, `When`, `Limit`,
+  `Verifiable` and `AsSequence`
+
+## Roadmap
 
 ```
-Considering = ❓
-Planned     = 📅
-In-Progress = 🚧
-Completed   = ✔
+Considering = ❓ | Planned = 📅 | In-Progress = 🚧
 ```
 
--   Mocking of:
-    -   [✔] Interfaces
-    -   [❓] Classes (inc support for arguments and calling the base implementation of mocked methods)
--   [✔] Setup of Methods
--   [✔] Setup of Getters & Setters
--   [✔] Setup of Property Stubbing
--   [✔] "Strict" Setup mode (Calls throw if not setup)
--   [✔] Verifiable Setup's
--   [✔] Execution Limits (Calls throw after n expected calls)
--   [✔] Conditional Setup of Methods
--   [✔] Sequential Returns (Calls return next sequential result on each call ~`.Returns(value1, value2, value3)`~)
--   [✔] Support for `ref`/`out` arguments
--   [❓] Setup of Event Handlers
-
-Mimic makes use of [Castle.Core](https://www.castleproject.org/projects/dynamicproxy)'s `DynamicProxy` internally for generating proxies of types to mock.
+- [📅] Mimic of classes, specifically overridable members within classes, with support for calling base implementations
+- [📅] Delay behaviour (or Extension to `Returns`/`Throws`) for setups that allows for specific or random delays in
+  execution time
+- [❓] Setup and Verification of Event's
+- [❓] Configurable default return values instead of just `null` for reference and `default` for value types when
+  `Strict = false`
 
 <!-- Badges -->
 [gh-release-badge]: https://img.shields.io/github/v/release/DrBarnabus/Mimic?color=g&style=for-the-badge
@@ -50,3 +71,4 @@ Mimic makes use of [Castle.Core](https://www.castleproject.org/projects/dynamicp
 
 <!-- Links -->
 [changelog]: https://github.com/DrBarnabus/Mimic/blob/main/CHANGELOG.md
+[castle]: https://www.castleproject.org/projects/dynamicproxy
