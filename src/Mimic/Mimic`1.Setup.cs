@@ -10,13 +10,13 @@ public partial class Mimic<T>
     public ISetup<T> Setup(Expression<Action<T>> expression)
     {
         var setup = Setup(this, expression);
-        return new VoidSetup<T>(setup);
+        return new Setup<T>(setup);
     }
 
     public ISetup<T, TResult> Setup<TResult>(Expression<Func<T, TResult>> expression)
     {
         var setup = Setup(this, expression);
-        return new NonVoidSetup<T, TResult>(setup);
+        return new Setup<T, TResult>(setup);
     }
 
     public IGetterSetup<T, TProperty> SetupGet<TProperty>(Expression<Func<T, TProperty>> expression)
@@ -33,7 +33,7 @@ public partial class Mimic<T>
         }
 
         var setup = Setup(this, expression);
-        return new NonVoidSetup<T, TProperty>(setup);
+        return new Setup<T, TProperty>(setup);
     }
 
     public ISetup<T> SetupSet(Action<T> setterExpression)
@@ -44,7 +44,7 @@ public partial class Mimic<T>
         ValidateSetterExpression(expression);
 
         var setup = Setup(this, expression);
-        return new VoidSetup<T>(setup);
+        return new Setup<T>(setup);
     }
 
     public ISetterSetup<T, TProperty> SetupSet<TProperty>(Action<T> setterExpression)

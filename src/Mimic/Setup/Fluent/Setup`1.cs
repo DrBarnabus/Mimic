@@ -1,9 +1,9 @@
 namespace Mimic.Setup.Fluent;
 
-internal class VoidSetup<TMimic> : SetupBase, ISetup<TMimic>
+internal class Setup<TMimic> : SetupBase, ISetup<TMimic>
     where TMimic : class
 {
-    public VoidSetup(MethodCallSetup setup) : base(setup)
+    public Setup(MethodCallSetup setup) : base(setup)
     {
     }
 

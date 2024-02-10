@@ -1,9 +1,9 @@
 ﻿namespace Mimic.Setup.Fluent;
 
-internal sealed class NonVoidSetup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult>, IGetterSetup<TMimic, TResult>, ICallbackResult<TResult>, IGetterCallbackResult<TResult>, IReturnsResult
+internal sealed class Setup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult>, IGetterSetup<TMimic, TResult>, ICallbackResult<TResult>, IGetterCallbackResult<TResult>, IReturnsResult
     where TMimic : class
 {
-    public NonVoidSetup(MethodCallSetup setup)
+    public Setup(MethodCallSetup setup)
         : base(setup)
     {
     }
