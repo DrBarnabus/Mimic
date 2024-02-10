@@ -89,7 +89,7 @@ internal sealed class MethodCallSetup : SetupBase
         }
         else
         {
-            ValidateDelegateArgumentCount(callbackFunction);
+            callbackFunction.ValidateDelegateParameterCount(MethodInfo.GetParameters().Length);
 
             var expectedArguments = MethodInfo.GetParameters();
             if (!callbackFunction.CompareParameterTypesTo(expectedArguments.Select(p => p.ParameterType).ToArray()))
@@ -184,8 +184,8 @@ internal sealed class MethodCallSetup : SetupBase
         if (expectedReturnType == typeof(Delegate))
             return new ReturnValueBehaviour(valueFactory);
 
-        ValidateDelegateArgumentCount(valueFactory);
-        ValidateReturnDelegateReturnType(valueFactory, expectedReturnType);
+        valueFactory.ValidateDelegateParameterCount(MethodInfo.GetParameters().Length);
+        valueFactory.ValidateDelegateReturnType(expectedReturnType);
 
         return valueFactory.CompareParameterTypesTo(Type.EmptyTypes)
             ? new ReturnComputedValueBehaviour(_ => valueFactory.Invoke())
@@ -194,8 +194,8 @@ internal sealed class MethodCallSetup : SetupBase
 
     private ThrowComputedExceptionBehaviour ThrowExceptionBehaviourFromExecptionFactory(Delegate exceptionFactory)
     {
-        ValidateDelegateArgumentCount(exceptionFactory);
-        ValidateReturnDelegateReturnType(exceptionFactory, typeof(Exception));
+        exceptionFactory.ValidateDelegateParameterCount(MethodInfo.GetParameters().Length);
+        exceptionFactory.ValidateDelegateReturnType(typeof(Exception));
 
         return exceptionFactory.CompareParameterTypesTo(Type.EmptyTypes)
             ? new ThrowComputedExceptionBehaviour(_ => exceptionFactory.Invoke() as Exception)
@@ -206,37 +206,6 @@ internal sealed class MethodCallSetup : SetupBase
     {
         foreach ((int position, object? value) in _outValues)
             invocation.Arguments[position] = value;
-    }
-
-    // TODO: Move this out into `DelegateExtensions`
-    private void ValidateDelegateArgumentCount(Delegate delegateFunction)
-    {
-        var methodInfo = delegateFunction.GetMethodInfo();
-
-        int actualNumberOfArguments = methodInfo.GetParameters().Length;
-        if (methodInfo.IsStatic && (methodInfo.IsDefined(typeof(ExtensionAttribute)) || delegateFunction.Target != null))
-            actualNumberOfArguments--;
-
-        if (actualNumberOfArguments > 0)
-        {
-            int expectedNumberOfArguments = MethodInfo.GetParameters().Length;
-            if (actualNumberOfArguments != expectedNumberOfArguments)
-            {
-                throw MimicException.WrongCallbackArgumentCount(expectedNumberOfArguments, actualNumberOfArguments);
-            }
-        }
-    }
-
-    // TODO: Move this out into `DelegateExtensions`
-    private static void ValidateReturnDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
-    {
-        var actualReturnType = delegateFunction.GetMethodInfo().ReturnType;
-
-        if (actualReturnType == typeof(void))
-            throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, null);
-
-        if (!expectedReturnType.IsAssignableFrom(actualReturnType))
-            throw MimicException.WrongReturnCallbackReturnType(expectedReturnType, actualReturnType);
     }
 
     private static List<OutValue> FindAndEvaluateOutValues(IReadOnlyList<Expression> arguments, IReadOnlyList<ParameterInfo> parameters)

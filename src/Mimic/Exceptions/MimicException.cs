@@ -75,9 +75,9 @@ public class MimicException : Exception
         return new MimicException($"Expression ({expression}) is not a property setter");
     }
 
-    internal static MimicException WrongCallbackArgumentCount(int expectedCount, int actualCount)
+    internal static MimicException WrongCallbackParameterCount(int expectedCount, int actualCount)
     {
-        return new MimicException($"Setup on method with {expectedCount} expected argument(s) cannot invoke a callback method with {actualCount} argument(s)");
+        return new MimicException($"Setup on method with {expectedCount} expected parameter(s) cannot invoke a callback method with {actualCount} parameter(s)");
     }
 
     internal static MimicException WrongCallbackArgumentTypes(ParameterInfo[] expectedArgumentTypes, ParameterInfo[] actualArgumentTypes)
@@ -121,12 +121,11 @@ public class MimicException : Exception
         }
     }
 
-    internal static MimicException WrongReturnCallbackReturnType(Type expectedType, Type? actualType)
+    internal static MimicException WrongCallbackReturnType(Type expectedType, Type? actualType)
     {
-        string formattedExpectedType = TypeNameFormatter.GetFormattedName(expectedType);
-
-        string error = actualType is null ? "a void return type" : $"return type '{TypeNameFormatter.GetFormattedName(actualType)}'";
-        return new MimicException($"Setup on method with return type '{formattedExpectedType}' cannot invoke a callback method with {error}");
+        string expectedTypeName = TypeNameFormatter.GetFormattedName(expectedType);
+        string actualTypeMessage = actualType is null ? "a void return type" : $"return type '{TypeNameFormatter.GetFormattedName(actualType)}'";
+        return new MimicException($"Setup on method with return type '{expectedTypeName}' cannot invoke a callback method with {actualTypeMessage}");
     }
 
     internal static MimicException WrongCallbackReturnType()

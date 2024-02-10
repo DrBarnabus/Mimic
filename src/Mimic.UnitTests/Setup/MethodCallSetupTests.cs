@@ -369,14 +369,14 @@ public class MethodCallSetupTests
 
     [Theory]
     [AutoData]
-    public void SetReturnComputedValueBehaviour_WithIncorrectDelegateArgumentCount_ShouldThrow(
+    public void SetReturnComputedValueBehaviour_WithIncorrectDelegateParameterCount_ShouldThrow(
         int iValue, string sValue, double dValue, List<bool> bValues, string returnValue)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicNonVoidMethod(iValue, sValue, dValue, bValues));
 
         var ex = Should.Throw<MimicException>(() => setup.SetReturnComputedValueBehaviour((int _, string _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected argument(s) cannot invoke a callback method with 2 argument(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s)");
     }
 
     [Theory]
@@ -460,7 +460,7 @@ public class MethodCallSetupTests
 
     [Theory]
     [AutoData]
-    public void SetThrowComputedExceptionBehaviour_WithIncorrectDelegateArgumentCount_ShouldThrow(
+    public void SetThrowComputedExceptionBehaviour_WithIncorrectDelegateParameterCount_ShouldThrow(
         int iValue, string sValue, double dValue, List<bool> bValues, string message)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicNonVoidMethod(iValue, sValue, dValue, bValues));
@@ -468,7 +468,7 @@ public class MethodCallSetupTests
         var exception = new Exception(message);
         var ex = Should.Throw<MimicException>(() => setup.SetThrowComputedExceptionBehaviour((int _, string _, double _) => exception));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected argument(s) cannot invoke a callback method with 3 argument(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s)");
     }
 
     [Theory]
@@ -530,14 +530,14 @@ public class MethodCallSetupTests
 
     [Theory]
     [AutoData]
-    public void SetCallbackBehaviour_WithIncorrectDelegateArgumentCount_ShouldThrow(
+    public void SetCallbackBehaviour_WithIncorrectDelegateParameterCount_ShouldThrow(
         int iValue, string sValue, double dValue, List<bool> bValues)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicNonVoidMethod(iValue, sValue, dValue, bValues));
 
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _) => {}));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected argument(s) cannot invoke a callback method with 1 argument(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 1 parameter(s)");
     }
 
     [Theory]
@@ -655,14 +655,14 @@ public class MethodCallSetupTests
 
     [Theory]
     [AutoData]
-    public void AddReturnComputedValueBehaviour_WithIncorrectDelegateArgumentCount_ShouldThrow(
+    public void AddReturnComputedValueBehaviour_WithIncorrectDelegateParameterCount_ShouldThrow(
         int iValue, string sValue, double dValue, List<bool> bValues, string returnValue)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicNonVoidMethod(iValue, sValue, dValue, bValues));
 
         var ex = Should.Throw<MimicException>(() => setup.AddReturnComputedValueBehaviour((int _, string _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected argument(s) cannot invoke a callback method with 2 argument(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s)");
     }
 
     [Theory]
@@ -769,7 +769,7 @@ public class MethodCallSetupTests
 
     [Theory]
     [AutoData]
-    public void AddThrowComputedExceptionBehaviour_WithIncorrectDelegateArgumentCount_ShouldThrow(
+    public void AddThrowComputedExceptionBehaviour_WithIncorrectDelegateParameterCount_ShouldThrow(
         int iValue, string sValue, double dValue, List<bool> bValues, string message)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicNonVoidMethod(iValue, sValue, dValue, bValues));
@@ -777,7 +777,7 @@ public class MethodCallSetupTests
         var exception = new Exception(message);
         var ex = Should.Throw<MimicException>(() => setup.AddThrowComputedExceptionBehaviour((int _, string _, double _) => exception));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected argument(s) cannot invoke a callback method with 3 argument(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s)");
     }
 
     [Theory]
