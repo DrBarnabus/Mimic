@@ -208,6 +208,7 @@ internal sealed class MethodCallSetup : SetupBase
             invocation.Arguments[position] = value;
     }
 
+    // TODO: Move this out into `DelegateExtensions`
     private void ValidateDelegateArgumentCount(Delegate delegateFunction)
     {
         var methodInfo = delegateFunction.GetMethodInfo();
@@ -226,6 +227,7 @@ internal sealed class MethodCallSetup : SetupBase
         }
     }
 
+    // TODO: Move this out into `DelegateExtensions`
     private static void ValidateReturnDelegateReturnType(Delegate delegateFunction, Type expectedReturnType)
     {
         var actualReturnType = delegateFunction.GetMethodInfo().ReturnType;

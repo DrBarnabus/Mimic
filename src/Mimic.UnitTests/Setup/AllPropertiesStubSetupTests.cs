@@ -16,7 +16,7 @@ public class AllPropertiesStubSetupTests
         setup.Expectation.ShouldNotBeNull();
         setup.Expression.ShouldNotBeNull();
         setup.Matched.ShouldBeFalse();
-        setup.Overriden.ShouldBeFalse();
+        setup.Overridden.ShouldBeFalse();
         setup.Expected.ShouldBeFalse();
     }
 
@@ -107,12 +107,12 @@ public class AllPropertiesStubSetupTests
     }
 
     [Fact]
-    public void Override_ShouldSetOverridenToTrue()
+    public void Override_ShouldSetOverriddenToTrue()
     {
         var setup = new AllPropertiesStubSetup(_mimic);
         setup.Override();
 
-        setup.Overriden.ShouldBeTrue();
+        setup.Overridden.ShouldBeTrue();
     }
 
     [Fact]

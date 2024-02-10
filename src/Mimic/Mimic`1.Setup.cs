@@ -134,7 +134,7 @@ public partial class Mimic<T>
         public List<SetupBase> FindAll(Predicate<SetupBase> predicate)
         {
             lock (_setups)
-                return _setups.Where(setup => !setup.Overriden && predicate(setup)).ToList();
+                return _setups.Where(setup => !setup.Overridden && predicate(setup)).ToList();
         }
 
         public SetupBase? FindLast(Predicate<SetupBase> predicate)
@@ -147,7 +147,7 @@ public partial class Mimic<T>
                 for (int i = _setups.Count - 1; i >= 0 ; i--)
                 {
                     var setup = _setups[i];
-                    if (setup.Overriden)
+                    if (setup.Overridden)
                         continue;
 
                     if (predicate(setup))
@@ -195,7 +195,7 @@ public partial class Mimic<T>
             for (int i = _setups.Count - 1; i >= 0 ; i--)
             {
                 var setup = _setups[i];
-                if (setup.Overriden)
+                if (setup.Overridden)
                     continue;
 
                 if (!visitedExpectations.Add(setup.Expectation))

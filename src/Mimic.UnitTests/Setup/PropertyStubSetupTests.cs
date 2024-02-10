@@ -23,7 +23,7 @@ public class PropertyStubSetupTests
         setup.Expectation.ShouldNotBeNull();
         setup.Expression.ShouldBeSameAs(expression);
         setup.Matched.ShouldBeFalse();
-        setup.Overriden.ShouldBeFalse();
+        setup.Overridden.ShouldBeFalse();
         setup.Expected.ShouldBeFalse();
     }
 
@@ -138,7 +138,7 @@ public class PropertyStubSetupTests
     }
 
     [Fact]
-    public void Override_ShouldSetOverridenToTrue()
+    public void Override_ShouldSetOverriddenToTrue()
     {
         LambdaExpression expression = (ISubject subject) => subject.StringProperty;
         var property = typeof(ISubject).GetProperty(nameof(ISubject.StringProperty))!;
@@ -148,7 +148,7 @@ public class PropertyStubSetupTests
         var setup = new PropertyStubSetup(_mimic, expression, getter!, setter!, null);
         setup.Override();
 
-        setup.Overriden.ShouldBeTrue();
+        setup.Overridden.ShouldBeTrue();
     }
 
     [Fact]

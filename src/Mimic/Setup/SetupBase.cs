@@ -16,7 +16,7 @@ internal abstract class SetupBase
 
     public bool Matched => (_flags & Flags.Matched) != 0;
 
-    public bool Overriden => (_flags & Flags.Overriden) != 0;
+    public bool Overridden => (_flags & Flags.Overriden) != 0;
 
     public bool Expected => (_flags & Flags.Expected) != 0;
 
@@ -42,7 +42,7 @@ internal abstract class SetupBase
 
     public void Override()
     {
-        Guard.Assert(!Overriden);
+        Guard.Assert(!Overridden);
         _flags |= Flags.Overriden;
     }
 

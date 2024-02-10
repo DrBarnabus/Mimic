@@ -93,7 +93,7 @@ public class MimicException : Exception
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                if (i == 0)
+                if (i != 0)
                     stringBuilder.Append(", ".AsSpan());
 
                 var parameter = parameters[i];

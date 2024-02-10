@@ -21,4 +21,10 @@ internal sealed class InvocationFixture : Invocation
         : base(proxyType, method ?? DefaultMethod, arguments)
     {
     }
+
+    public static InvocationFixture ForMethod<T>(string name, object?[]? arguments = null)
+    {
+        var method = typeof(T).GetMethod(name);
+        return new InvocationFixture(typeof(T), method, arguments ?? Array.Empty<object?>());
+    }
 }
