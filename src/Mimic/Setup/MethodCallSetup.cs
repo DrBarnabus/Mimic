@@ -91,9 +91,9 @@ internal sealed class MethodCallSetup : SetupBase
         {
             callbackFunction.ValidateDelegateParameterCount(MethodInfo.GetParameters().Length);
 
-            var expectedArguments = MethodInfo.GetParameters();
-            if (!callbackFunction.CompareParameterTypesTo(expectedArguments.Select(p => p.ParameterType).ToArray()))
-                throw MimicException.WrongCallbackArgumentTypes(expectedArguments, callbackFunction.GetMethodInfo().GetParameters());
+            var expectedParameters = MethodInfo.GetParameters();
+            if (!callbackFunction.CompareParameterTypesTo(expectedParameters.Select(p => p.ParameterType).ToArray()))
+                throw MimicException.WrongCallbackParameterTypes(expectedParameters, callbackFunction.GetMethodInfo().GetParameters());
 
             var callbackReturnType = callbackFunction.GetMethodInfo().ReturnType;
             if (callbackReturnType != typeof(void))

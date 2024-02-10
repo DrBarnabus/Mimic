@@ -25,12 +25,12 @@ internal static class DelegateExtensions
     {
         var methodInfo = delegateFunction.GetMethodInfo();
 
-        int actualNumberOfArguments = methodInfo.GetParameters().Length;
+        int actualNumberOfParameters = methodInfo.GetParameters().Length;
         if (methodInfo.IsStatic && (methodInfo.IsDefined(typeof(ExtensionAttribute)) || delegateFunction.Target != null))
-            actualNumberOfArguments--;
+            actualNumberOfParameters--;
 
-        if (actualNumberOfArguments > 0 && actualNumberOfArguments != expectedNumberOfParameters)
-            throw MimicException.WrongCallbackParameterCount(expectedNumberOfParameters, actualNumberOfArguments);
+        if (actualNumberOfParameters > 0 && actualNumberOfParameters != expectedNumberOfParameters)
+            throw MimicException.WrongCallbackParameterCount(expectedNumberOfParameters, actualNumberOfParameters);
     }
 
     internal static void ValidateDelegateReturnType(this Delegate delegateFunction, Type expectedReturnType)

@@ -80,14 +80,14 @@ public class MimicException : Exception
         return new MimicException($"Setup on method with {expectedCount} expected parameter(s) cannot invoke a callback method with {actualCount} parameter(s)");
     }
 
-    internal static MimicException WrongCallbackArgumentTypes(ParameterInfo[] expectedArgumentTypes, ParameterInfo[] actualArgumentTypes)
+    internal static MimicException WrongCallbackParameterTypes(ParameterInfo[] expectedParameters, ParameterInfo[] actualParameters)
     {
-        string expectedArgumentTypeList = GetArgumentTypeList(expectedArgumentTypes);
-        string actualArgumentTypesList = GetArgumentTypeList(actualArgumentTypes);
+        string expectedParameterTypeList = GetParameterTypeList(expectedParameters);
+        string actualParameterTypeList = GetParameterTypeList(actualParameters);
 
-        return new MimicException($"Setup on method with arguments ({expectedArgumentTypeList}) cannot invoke a callback method with the wrong argument types ({actualArgumentTypesList})");
+        return new MimicException($"Setup on method with parameter(s) ({expectedParameterTypeList}) cannot invoke a callback method with the wrong parameter type(s) ({actualParameterTypeList})");
 
-        static string GetArgumentTypeList(ParameterInfo[] parameters)
+        static string GetParameterTypeList(ParameterInfo[] parameters)
         {
             var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
 
