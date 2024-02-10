@@ -549,7 +549,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _, /* should be string*/ byte _, double  _, List<bool> _) => {}));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with arguments (int, string, double, List<bool>) cannot invoke a callback method with the wrong argument types (int, byte, double, List<bool>)");
+        ex.Message.ShouldBe("Setup on method with parameter(s) (int, string, double, List<bool>) cannot invoke a callback method with the wrong parameter type(s) (int, byte, double, List<bool>)");
     }
 
     [Theory]

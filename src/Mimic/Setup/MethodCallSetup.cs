@@ -4,6 +4,11 @@ using Mimic.Setup.Behaviours;
 namespace Mimic.Setup;
 
 using OutValue = (int Position, object? Value);
+using ConfiguredBehaviours = (
+    Behaviour? ReturnOrThrow,
+    CallbackBehaviour? PreReturnCallback,
+    CallbackBehaviour? PostReturnCallback,
+    ExecutionLimitBehaviour? ExecutionLimit);
 
 internal sealed class MethodCallSetup : SetupBase
 {
@@ -16,6 +21,8 @@ internal sealed class MethodCallSetup : SetupBase
     private ExecutionLimitBehaviour? _executionLimit;
 
     public MethodInfo MethodInfo => ((MethodExpectation)Expectation).MethodInfo;
+
+    internal ConfiguredBehaviours ConfiguredBehaviours => (_returnOrThrow, _preReturnCallback, _postReturnCallback, _executionLimit);
 
     public MethodCallSetup(Expression originalExpression, IMimic mimic, MethodExpectation expectation, Func<bool>? condition)
         : base(originalExpression, mimic, expectation)
