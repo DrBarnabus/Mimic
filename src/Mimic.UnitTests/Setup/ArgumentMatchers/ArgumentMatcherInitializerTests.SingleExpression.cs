@@ -139,7 +139,7 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null)]
         [InlineData("mimic")]
         [InlineData("bar")]
-        public void WhenCalledWithArgIsMatcherWithVariable_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string value)
+        public void WhenCalledWithArgIsMatcherWithVariable_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string? value)
         {
             var expression = ((LambdaExpression)(() => Arg.Is(value))).Body;
 
@@ -152,7 +152,7 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null, "non-null")]
         [InlineData("not-null", null)]
         [InlineData("foo", "bar")]
-        public void WhenCalledWithArgIsMatcherWithVariable_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string expectedValue, string value)
+        public void WhenCalledWithArgIsMatcherWithVariable_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string? expectedValue, string? value)
         {
             var expression = ((LambdaExpression)(() => Arg.Is(expectedValue))).Body;
 
@@ -176,9 +176,9 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null)]
         [InlineData("mimic")]
         [InlineData("bar")]
-        public void WhenCalledWithArgIsMatcherWithVariableAndComparer_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string value)
+        public void WhenCalledWithArgIsMatcherWithVariableAndComparer_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string? value)
         {
-            var expression = ((LambdaExpression)(() => Arg.Is(value, EqualityComparer<string>.Default))).Body;
+            var expression = ((LambdaExpression)(() => Arg.Is(value, EqualityComparer<string?>.Default))).Body;
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
@@ -189,9 +189,9 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null, "non-null")]
         [InlineData("not-null", null)]
         [InlineData("foo", "bar")]
-        public void WhenCalledWithArgIsMatcherWithVariableAndComparer_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string expectedValue, string value)
+        public void WhenCalledWithArgIsMatcherWithVariableAndComparer_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string? expectedValue, string? value)
         {
-            var expression = ((LambdaExpression)(() => Arg.Is(expectedValue, EqualityComparer<string>.Default))).Body;
+            var expression = ((LambdaExpression)(() => Arg.Is(expectedValue, EqualityComparer<string?>.Default))).Body;
 
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
@@ -213,7 +213,7 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null)]
         [InlineData("mimic")]
         [InlineData("bar")]
-        public void WhenCalledWithArgIsMatcherWithExpression_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string value)
+        public void WhenCalledWithArgIsMatcherWithExpression_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string? value)
         {
             var expression = ((LambdaExpression)(() => Arg.Is<string>(v => v == value))).Body;
 
@@ -226,7 +226,7 @@ public static partial class ArgumentMatcherInitializerTests
         [InlineData(null, "non-null")]
         [InlineData("not-null", null)]
         [InlineData("foo", "bar")]
-        public void WhenCalledWithArgIsMatcherWithExpression_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string expectedValue, string value)
+        public void WhenCalledWithArgIsMatcherWithExpression_AndWhenMatcherCalledWithNonMatchingValue_ShouldReturnFalse(string? expectedValue, string? value)
         {
             var expression = ((LambdaExpression)(() => Arg.Is<string>(v => v == expectedValue))).Body;
 
