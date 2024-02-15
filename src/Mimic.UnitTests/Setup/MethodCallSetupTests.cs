@@ -352,6 +352,20 @@ public class MethodCallSetupTests
         invocation.ReturnValue.ShouldBe(returnValue);
     }
 
+    [Fact]
+    public void SetReturnComputedValueBehaviour_WithReturnTypeOfDelegate_ShouldCorrectlySetReturnValueOnInvocationAfterExecution()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.DelegateReturningMethod());
+
+        Delegate returnValue = () => {};
+        setup.SetReturnComputedValueBehaviour(returnValue);
+
+        var invocation = InvocationFixture.ForMethod<ISubject>(nameof(ISubject.DelegateReturningMethod));
+        setup.Execute(invocation);
+
+        invocation.ReturnValue.ShouldBeSameAs(returnValue);
+    }
+
     [Theory]
     [AutoData]
     public void SetReturnComputedValueBehaviour_WithArguments_ShouldCorrectlySetReturnValueOnInvocationAfterExecution(
@@ -913,6 +927,24 @@ public class MethodCallSetupTests
         Should.NotThrow(() => setup.VerifyMatched());
     }
 
+    [Theory]
+    [AutoData]
+    public void VerifyMatched_WhenMatched_ButSequenceBehaviourIsNotExhausted_ShouldThrow(
+        int iValue, string sValue, double dValue, List<bool> bValues)
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicVoidMethod(iValue, sValue, dValue, Arg.Any<List<bool>>()));
+
+        setup.AddNoOpBehaviour();
+        setup.AddNoOpBehaviour();
+
+        setup.Execute(InvocationFixture.ForMethod<ISubject>(nameof(ISubject.BasicVoidMethod), [iValue, sValue, dValue, bValues]));
+
+        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched());
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' with sequence which was marked as expected has not been matched (1 seqeuence result has not been used).""");
+    }
+
     #endregion
 
     private static (MethodCallSetup Setup, Mimic<ISubject> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup(
@@ -937,5 +969,7 @@ public class MethodCallSetupTests
         public string ParameterlessMethod();
 
         public void ParameterlessVoidMethod();
+
+        public Delegate DelegateReturningMethod();
     }
 }
