@@ -9,6 +9,8 @@ internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IExpected
 
     protected SequenceSetupBase(MethodCallSetup setup)
     {
+        Guard.NotNull(setup);
+
         Setup = setup;
     }
 
