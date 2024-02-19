@@ -53,7 +53,8 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 Considering = ❓ | Planned = 📅 | In-Progress = 🚧
 ```
 
-- [📅] Mimic of classes, specifically overridable members within classes, with support for calling base implementations
+- [🚧] Mimic of classes, specifically overridable members within classes, with support for calling base implementations
+- [📅] Implicit mimicking of nested setups (e.g. `m => m.MethodThatReturnsInterface().MethodOnThatInterface()`)
 - [📅] Delay behaviour (or Extension to `Returns`/`Throws`) for setups that allows for specific or random delays in
   execution time
 - [❓] Setup and Verification of Event's
