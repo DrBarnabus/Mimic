@@ -147,7 +147,7 @@ public partial class Mimic<T>
     {
         Guard.NotNull(setterExpression);
 
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, ConstructorArguments);
         if (expression.Body is not BinaryExpression { NodeType: ExpressionType.Assign, Left: MemberExpression or IndexExpression })
         {
             if (expression.Body.NodeType is not ExpressionType.Call)

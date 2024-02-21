@@ -5,6 +5,16 @@ namespace Mimic.UnitTests.Core.Extensions;
 public class TypeExtensionsTests
 {
     [Theory]
+    [InlineData(typeof(IInterface), true)]
+    [InlineData(typeof(AbstractClass), true)]
+    [InlineData(typeof(RegularClass), true)]
+    [InlineData(typeof(SealedClass), false)]
+    public void CanBeMimicked_ReturnsExpectedResultForType(Type type, bool expectedResult)
+    {
+        type.CanBeMimicked().ShouldBe(expectedResult);
+    }
+
+    [Theory]
     [InlineData(typeof(bool), default(bool))]
     [InlineData(typeof(byte), default(byte))]
     [InlineData(typeof(sbyte), default(sbyte))]
@@ -154,4 +164,9 @@ public class TypeExtensionsTests
     private class A;
     private class B : A;
     private class C;
+
+    private interface IInterface;
+    private abstract class AbstractClass;
+    private class RegularClass;
+    private sealed class SealedClass;
 }

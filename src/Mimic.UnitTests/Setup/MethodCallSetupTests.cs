@@ -958,7 +958,8 @@ public class MethodCallSetupTests
         return (setup, mimic, methodCallExpression, methodExpectation);
     }
 
-    private interface ISubject
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal interface ISubject
     {
         public void BasicVoidMethod(int iValue, string sValue, double dValue, List<bool> bValues);
 

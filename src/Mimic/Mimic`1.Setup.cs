@@ -40,7 +40,7 @@ public partial class Mimic<T>
     {
         Guard.NotNull(setterExpression);
 
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, ConstructorArguments);
         ValidateSetterExpression(expression);
 
         var setup = Setup(this, expression);
@@ -51,7 +51,7 @@ public partial class Mimic<T>
     {
         Guard.NotNull(setterExpression);
 
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, ConstructorArguments);
         ValidateSetterExpression(expression);
 
         var setup = Setup(this, expression);

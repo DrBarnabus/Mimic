@@ -11,11 +11,25 @@ public sealed partial class Mimic<T> : IMimic
 
     private readonly SetupCollection _setups = new();
     private readonly List<Invocation> _invocations = new();
+
+    private object[]? _constructorArguments;
     private T? _object;
 
     public string Name { get; init; }
 
     public bool Strict { get; init; } = true;
+
+    public object[]? ConstructorArguments
+    {
+        get => _constructorArguments;
+        init
+        {
+            if (typeof(T).IsInterface && value is { Length: >0 })
+                throw new ArgumentException($"{nameof(ConstructorArguments)} should not be set when mimicking an interface.");
+
+            _constructorArguments = value;
+        }
+    }
 
     public T Object => GetOrInitializeObject();
 
@@ -26,8 +40,8 @@ public sealed partial class Mimic<T> : IMimic
 
     public Mimic()
     {
-        if (!typeof(T).IsInterface)
-            throw new NotSupportedException($"Type to mimic {TypeNameFormatter.GetFormattedName(typeof(T))} must be an interface");
+        if (!typeof(T).CanBeMimicked())
+            throw MimicException.TypeCannotBeMimicked(typeof(T));
 
         int instanceNumber = Interlocked.Increment(ref _instanceCounter);
         Name = $"Mimic<{TypeNameFormatter.GetFormattedName(typeof(T))}>:{instanceNumber}";
@@ -47,7 +61,8 @@ public sealed partial class Mimic<T> : IMimic
     {
         return _object ??= (T)ProxyGenerator.Instance.GenerateProxy(
             typeof(T),
-            new[] { typeof(IMimicked<T>) },
+            [typeof(IMimicked<T>)],
+            _constructorArguments ?? Array.Empty<object>(),
             this);
     }
 

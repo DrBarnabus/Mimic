@@ -15,12 +15,14 @@ public sealed class UnsupportedExpressionException : MimicException
         : base($"Expression ({expression}) is currently unsupported. Reason: {reason}")
     {
         Expression = expression;
+        Reason = reason;
     }
 
     public UnsupportedExpressionException(Expression expression, string expressionRepresentation, UnsupportedReason reason = UnsupportedReason.Unknown)
         : base($"Expression ({expressionRepresentation}) is unsupported. Reason: {reason}")
     {
         Expression = expression;
+        Reason = reason;
     }
 
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -35,6 +37,9 @@ public sealed class UnsupportedExpressionException : MimicException
         Unknown,
         MemberNotInterceptable,
         ExpressionThrewAnException,
-        UnableToDetermineArgumentMatchers
+        UnableToDetermineArgumentMatchers,
+        MemberIsStatic,
+        MemberIsExtension,
+        MemberIsNotOverridable
     }
 }

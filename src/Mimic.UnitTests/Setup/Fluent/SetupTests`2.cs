@@ -801,7 +801,8 @@ public static partial class SetupTests
             return new MethodCallSetup(methodCallExpression, mimic, methodExpectation, null);
         }
 
-        private interface ISubject
+        // ReSharper disable once MemberCanBePrivate.Global
+        internal interface ISubject
         {
             public string MethodWithNoParameters();
             public string MethodWithParameters(int v1);

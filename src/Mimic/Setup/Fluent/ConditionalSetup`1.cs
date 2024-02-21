@@ -47,7 +47,7 @@ internal sealed class ConditionalSetup<TMimic> : IConditionalSetup<TMimic>
     {
         Guard.NotNull(setterExpression);
 
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, _mimic.ConstructorArguments);
         Mimic<TMimic>.ValidateSetterExpression(expression);
 
         var setup = Mimic<TMimic>.Setup(_mimic, expression, _condition);
@@ -58,7 +58,7 @@ internal sealed class ConditionalSetup<TMimic> : IConditionalSetup<TMimic>
     {
         Guard.NotNull(setterExpression);
 
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, _mimic.ConstructorArguments);
         Mimic<TMimic>.ValidateSetterExpression(expression);
 
         var setup = Mimic<TMimic>.Setup(_mimic, expression, _condition);
