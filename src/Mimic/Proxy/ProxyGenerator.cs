@@ -13,15 +13,38 @@ internal sealed class ProxyGenerator
         BaseTypeForInterfaceProxy = typeof(InterfaceProxyBase)
     };
 
-    public object GenerateProxy(Type mimicType, Type[] additionalInterfaces, IInterceptor interceptor)
+    public object GenerateProxy(Type mimicType, Type[] additionalInterfaces, object[] constructorArguments, IInterceptor interceptor)
     {
-        Guard.Assert(mimicType.IsInterface, $"{TypeNameFormatter.GetFormattedName(mimicType)} is not an interface");
+        if (mimicType.IsInterface)
+            return _proxyGenerator.CreateInterfaceProxyWithoutTarget(
+                mimicType,
+                [typeof(IProxy), ..additionalInterfaces],
+                _proxyGenerationOptions,
+                new DynamicProxyInterceptor(interceptor));
 
-        return _proxyGenerator.CreateInterfaceProxyWithoutTarget(
-            mimicType,
-            [typeof(IProxy), ..additionalInterfaces],
-            _proxyGenerationOptions,
-            new DynamicProxyInterceptor(interceptor));
+        try
+        {
+            return _proxyGenerator.CreateClassProxy(
+                mimicType,
+                [typeof(IProxy), ..additionalInterfaces],
+                _proxyGenerationOptions,
+                constructorArguments,
+                new DynamicProxyInterceptor(interceptor));
+        }
+        catch (ArgumentException ex) when (ex.InnerException is MissingMethodException)
+        {
+            throw MimicException.NoConstructorWithMatchingArguments(mimicType, ex);
+        }
+        catch (Exception ex)
+        {
+            throw MimicException.TypeCannotBeMimicked(mimicType, ex);
+        }
+    }
+
+    public static void ThrowIfMethodIsInaccessible(MethodInfo method)
+    {
+        if (!ProxyUtil.IsAccessible(method, out string message))
+            throw MimicException.MethodNotAccessibleByProxyGenerator(method, message);
     }
 
     private sealed class AllMethodsIncludingObjectHook : AllMethodsHook

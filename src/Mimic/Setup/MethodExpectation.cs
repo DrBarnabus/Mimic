@@ -23,18 +23,15 @@ internal sealed class MethodExpectation : IExpectation
         Guard.NotNull(expression);
         Guard.NotNull(methodInfo);
 
+        ValidateMethodIsOverridable(methodInfo, expression);
+
         Expression = expression;
         MethodInfo = methodInfo;
 
         if (arguments is not null && !skipMatchers)
-        {
             (_argumentMatchers, Arguments) = ArgumentMatcherInitializer.Initialize(arguments.ToArray(), MethodInfo.GetParameters());
-        }
         else
-        {
-            Arguments = arguments?.ToArray() ?? Array.Empty<Expression>();
-            _argumentMatchers = Array.Empty<IArgumentMatcher>();
-        }
+            (_argumentMatchers, Arguments) = (Array.Empty<IArgumentMatcher>(), arguments?.ToArray() ?? Array.Empty<Expression>());
     }
 
     public bool MatchesInvocation(Invocation invocation)
@@ -65,5 +62,19 @@ internal sealed class MethodExpectation : IExpectation
             return true;
 
         return MethodInfo.GetGenericArguments().CompareWith(invocation.Method.GetGenericArguments());
+    }
+
+    private static void ValidateMethodIsOverridable(MethodInfo method, Expression expression)
+    {
+        if (method.IsStatic)
+            throw new UnsupportedExpressionException(expression,
+                method.IsDefined(typeof(ExtensionAttribute))
+                    ? UnsupportedExpressionException.UnsupportedReason.MemberIsExtension
+                    : UnsupportedExpressionException.UnsupportedReason.MemberIsStatic);
+
+        if (method is not { IsVirtual: true, IsFinal: false, IsPrivate: false })
+            throw new UnsupportedExpressionException(expression, UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+
+        ProxyGenerator.ThrowIfMethodIsInaccessible(method);
     }
 }

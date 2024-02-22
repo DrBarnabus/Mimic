@@ -39,7 +39,7 @@ public class SetterSetupTests
 
     private static MethodCallSetup ToMethodCallSetup(Action<ISubject> setterExpression)
     {
-        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression);
+        var expression = SetterExpressionConstructor.ConstructFromAction(setterExpression, null);
 
         var mimic = new Mimic<ISubject>();
         var methodCallExpression = (MethodCallExpression)expression.Body;

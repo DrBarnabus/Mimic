@@ -4,11 +4,11 @@ namespace Mimic.Expressions;
 
 internal static class SetterExpressionConstructor
 {
-    internal static Expression<Action<T>> ConstructFromAction<T>(Action<T> action)
+    internal static Expression<Action<T>> ConstructFromAction<T>(Action<T> action, object[]? constructorArguments)
     {
         using var observer = ArgumentMatcherObserver.ActivateObserver();
 
-        var proxy = CreateProxy<T>(observer, out var interceptor);
+        var proxy = CreateProxy<T>(observer, constructorArguments, out var interceptor);
 
         Exception? exception = null;
         try
@@ -38,10 +38,10 @@ internal static class SetterExpressionConstructor
         throw new UnsupportedExpressionException(body, $"{actionParameterName} => {body}...", UnsupportedExpressionException.UnsupportedReason.ExpressionThrewAnException);
     }
 
-    private static T CreateProxy<T>(ArgumentMatcherObserver observer, out Interceptor interceptor)
+    private static T CreateProxy<T>(ArgumentMatcherObserver observer, object[]? constructorArguments, out Interceptor interceptor)
     {
         interceptor = new Interceptor(observer);
-        return (T)ProxyGenerator.Instance.GenerateProxy(typeof(T), Type.EmptyTypes, interceptor);
+        return (T)ProxyGenerator.Instance.GenerateProxy(typeof(T), Type.EmptyTypes, constructorArguments ?? Array.Empty<object>(), interceptor);
     }
 
     private static Expression[] GetArgumentExpressions(Expression body, Invocation invocation, IReadOnlyList<ArgumentMatcher> argumentMatchers)

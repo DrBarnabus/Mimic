@@ -25,6 +25,15 @@ public class MimicException : Exception
         info.AddValue(nameof(Identifier), Identifier);
     }
 
+    internal static MimicException TypeCannotBeMimicked(Type type, Exception? innerException = null) =>
+        new($"Type {TypeNameFormatter.GetFormattedName(type)} cannot be mimicked. It must be an interface or a non-sealed/non-static class.", innerException);
+
+    internal static MimicException NoConstructorWithMatchingArguments(Type type, Exception? innerException = null) =>
+        new ($"Unable to find a constructor in type {TypeNameFormatter.GetFormattedName(type)} matching given constructor arguments.", innerException);
+
+    internal static MimicException MethodNotAccessibleByProxyGenerator(MethodInfo method, string messageFromProxyGenerator) =>
+        new($"Method {method.Name} in type {TypeNameFormatter.GetFormattedName(method.DeclaringType!)} cannot be setup because it is not accessible by our proxy generator (Castle.DynamicProxy). Message returned from proxy generator: {messageFromProxyGenerator}");
+
     internal static MimicException UnmatchableArgumentMatcher(Expression argumentExpression, Type expectedType)
     {
         string formattedFromType = TypeNameFormatter.GetFormattedName(argumentExpression.Type);

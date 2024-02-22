@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Mimic.Exceptions;
 using Mimic.Setup;
 
 namespace Mimic.UnitTests.Setup;
@@ -18,6 +19,61 @@ public class MethodExpectationTests
         expectation.MethodInfo.ShouldBeSameAs(method);
         expectation.Arguments.ShouldNotBeNull();
         expectation.Arguments.Length.ShouldBe(0);
+    }
+
+    [Fact]
+    public void Constructor_WithNonOverridableStaticMethod_ShouldThrowUnsupportedExpressionException()
+    {
+        var method = typeof(Subject).GetMethod(nameof(Subject.StaticMethod))!;
+        LambdaExpression expression = (Subject _) => Subject.StaticMethod();
+        var arguments = ((MethodCallExpression)expression.Body).Arguments;
+
+        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsStatic);
+    }
+
+    [Fact]
+    public void Constructor_WithNonOverridableExtensionMethod_ShouldThrowUnsupportedExpressionException()
+    {
+        var method = typeof(SubjectExtensions).GetMethod(nameof(SubjectExtensions.ExtensionMethod))!;
+        LambdaExpression expression = (ISubject subject) => subject.ExtensionMethod();
+        var arguments = ((MethodCallExpression)expression.Body).Arguments;
+
+        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsExtension);
+    }
+
+    [Fact]
+    public void Constructor_WithNonVirtualMethod_ShouldThrowUnsupportedExpressionException()
+    {
+        var method = typeof(AbstractSubject).GetMethod(nameof(AbstractSubject.RegularMethod))!;
+        LambdaExpression expression = (AbstractSubject subject) => subject.RegularMethod();
+        var arguments = ((MethodCallExpression)expression.Body).Arguments;
+
+        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+    }
+
+    [Fact]
+    public void Constructor_WithSealedVirtualMethod_ShouldThrowUnsupportedExpressionException()
+    {
+        var method = typeof(ConcreteSubject).GetMethod(nameof(ConcreteSubject.VirtualMethod))!;
+        LambdaExpression expression = (ConcreteSubject subject) => subject.VirtualMethod();
+        var arguments = ((MethodCallExpression)expression.Body).Arguments;
+
+        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+    }
+
+    [Fact]
+    public void Constructor_WithInaccessibleMethod_ShouldThrowMimicException()
+    {
+        var method = typeof(NonAccessibleSubject).GetMethod(nameof(NonAccessibleSubject.NonAccessibleMethod))!;
+        LambdaExpression expression = (NonAccessibleSubject subject) => subject.NonAccessibleMethod();
+        var arguments = ((MethodCallExpression)expression.Body).Arguments;
+
+        var ex = Should.Throw<MimicException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Message.ShouldStartWith("Method NonAccessibleMethod in type MethodExpectationTests.NonAccessibleSubject cannot be setup because it is not accessible by our proxy generator (Castle.DynamicProxy). Message returned from proxy generator: ");
     }
 
     [Fact]
@@ -192,7 +248,8 @@ public class MethodExpectationTests
         return new MethodExpectation(expression, methodCallExpression.Method, methodCallExpression.Arguments);
     }
 
-    private interface ISubject
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal interface ISubject
     {
         public void MethodWithNoArguments();
 
@@ -203,8 +260,11 @@ public class MethodExpectationTests
         public void GenericWithArguments<T>(T value, double doubleValue);
     }
 
-    private class Subject : ISubject
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal class Subject : ISubject
     {
+        public static void StaticMethod() => throw new NotSupportedException();
+
         public void MethodWithNoArguments() => throw new NotSupportedException();
 
         public void MethodWithArguments(int intValue, string stringValue) => throw new NotSupportedException();
@@ -213,4 +273,42 @@ public class MethodExpectationTests
 
         public void GenericWithArguments<T>(T value, double doubleValue) => throw new NotSupportedException();
     }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal abstract class AbstractSubject
+    {
+        public abstract void AbstractMethod();
+
+        public virtual void VirtualMethod()
+        {
+        }
+
+        public void RegularMethod()
+        {
+        }
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal class ConcreteSubject : AbstractSubject
+    {
+        public override void AbstractMethod()
+        {
+        }
+
+        public sealed override void VirtualMethod()
+        {
+        }
+    }
+
+    private abstract class NonAccessibleSubject
+    {
+        public virtual void NonAccessibleMethod()
+        {
+        }
+    }
+}
+
+file static class SubjectExtensions
+{
+    public static void ExtensionMethod(this MethodExpectationTests.ISubject subject) => subject.MethodWithNoArguments();
 }

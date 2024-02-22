@@ -2,6 +2,8 @@
 
 internal static class TypeExtensions
 {
+    internal static bool CanBeMimicked(this Type type) => type is { IsInterface: true } or { IsClass: true, IsSealed: false };
+
     internal static object? GetDefaultValue(this Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
 
     internal static bool CompareWith(this Type[] types, Type[] otherTypes)

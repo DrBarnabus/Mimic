@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AutoFixture;
 using Mimic.Core;
+using Mimic.Exceptions;
 using Mimic.Proxy;
 using Mimic.Setup;
 
@@ -16,25 +17,88 @@ public class ProxyGeneratorTests
     }
 
     [Fact]
-    public void GenerateProxy_WhenCalledWithNonInterfaceType_ShouldThrowAnAssertionException()
-    {
-        var interceptor = new InterceptorFixture();
-
-        var ex = Should.Throw<Guard.AssertionException>(() =>
-            ProxyGenerator.Instance.GenerateProxy(typeof(string), Type.EmptyTypes, interceptor));
-
-        ex.Expression.ShouldBe("mimicType.IsInterface");
-    }
-
-    [Fact]
     public void GenerateProxy_WhenCalledWithInterfaceType_ShouldReturnNonNullTypeThatInheritsInterface()
     {
         var interceptor = new InterceptorFixture();
 
-        object result = ProxyGenerator.Instance.GenerateProxy(typeof(IA), Type.EmptyTypes, interceptor);
+        object result = ProxyGenerator.Instance.GenerateProxy(typeof(IA), Type.EmptyTypes, Array.Empty<object>(), interceptor);
 
         result.ShouldNotBeNull();
         result.ShouldBeAssignableTo<IA>();
+    }
+
+    [Fact]
+    public void GenerateProxy_WhenCalledWithSealedClassType_ShouldThrowMimicException()
+    {
+        var interceptor = new InterceptorFixture();
+
+        var ex = Should.Throw<MimicException>(() =>
+            ProxyGenerator.Instance.GenerateProxy(typeof(string), Type.EmptyTypes, Array.Empty<object>(), interceptor));
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe("Type string cannot be mimicked. It must be an interface or a non-sealed/non-static class.");
+        ex.InnerException.ShouldNotBeNull();
+        ex.InnerException.ShouldBeOfType<TypeLoadException>();
+    }
+
+    [Fact]
+    public void GenerateProxy_WhenCalledWithStaticClassType_ShouldThrowMimicException()
+    {
+        var interceptor = new InterceptorFixture();
+
+        // Note: This exception comes from Castle.Core so we're just verifying it is indeed thrown and it get's wrapped
+        var ex = Should.Throw<MimicException>(() =>
+            ProxyGenerator.Instance.GenerateProxy(typeof(TypeExtensions), Type.EmptyTypes, Array.Empty<object>(), interceptor));
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe("Type TypeExtensions cannot be mimicked. It must be an interface or a non-sealed/non-static class.");
+        ex.InnerException.ShouldNotBeNull();
+        ex.InnerException.Message.ShouldBe("Parent does not have a default constructor. The default constructor must be explicitly defined.");
+    }
+
+    [Fact]
+    public void GenerateProxy_WhenCalledWithAbstractClassType_ButCallingParameterlessConstructorThatDoesNotExist_ShouldThrowMimicException()
+    {
+        var interceptor = new InterceptorFixture();
+
+        // Note: This exception comes from Castle.Core so we're just verifying it is indeed thrown and it get's wrapped
+        var ex = Should.Throw<MimicException>(() =>
+            ProxyGenerator.Instance.GenerateProxy(typeof(C), Type.EmptyTypes, Array.Empty<object>(), interceptor));
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe("Unable to find a constructor in type ProxyGeneratorTests.C matching given constructor arguments.");
+        ex.InnerException.ShouldNotBeNull();
+        ex.InnerException.Message.ShouldContain("Could not find a parameterless constructor.");
+    }
+
+    [Theory]
+    [AutoData]
+    public void GenerateProxy_WhenCalledWithAbstractClassType_ButCallingConstructorThatDoesNotExist_ShouldThrowMimicException(
+        string sValue)
+    {
+        var interceptor = new InterceptorFixture();
+
+        // Note: This exception comes from Castle.Core so we're just verifying it is indeed thrown and it get's wrapped
+        var ex = Should.Throw<MimicException>(() =>
+            ProxyGenerator.Instance.GenerateProxy(typeof(C), Type.EmptyTypes, [sValue], interceptor));
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe("Unable to find a constructor in type ProxyGeneratorTests.C matching given constructor arguments.");
+        ex.InnerException.ShouldNotBeNull();
+        ex.InnerException.Message.ShouldContain("Could not find a constructor that would match given arguments:");
+    }
+
+    [Theory]
+    [AutoData]
+    public void GenerateProxy_WhenCalledWithAbstractClassType_ShouldReturnNonNullTypeThatInheritsParentClass(
+        string sValue, int iValue)
+    {
+        var interceptor = new InterceptorFixture();
+
+        object result = ProxyGenerator.Instance.GenerateProxy(typeof(C), Type.EmptyTypes, [sValue, iValue], interceptor);
+
+        result.ShouldNotBeNull();
+        result.ShouldBeAssignableTo<C>();
     }
 
     public class InvocationTests
@@ -45,7 +109,7 @@ public class ProxyGeneratorTests
         public InvocationTests()
         {
             _interceptor = new InterceptorFixture();
-            _proxyObject = (IA)ProxyGenerator.Instance.GenerateProxy(typeof(IA), Type.EmptyTypes, _interceptor);
+            _proxyObject = (IA)ProxyGenerator.Instance.GenerateProxy(typeof(IA), Type.EmptyTypes, Array.Empty<object>(), _interceptor);
         }
 
         [Fact]
@@ -321,5 +385,12 @@ public class ProxyGeneratorTests
         public void GenericMethod<T1, T2, T3>();
 
         public enum E { None = 0, One = 1, Two = 2 }
+    }
+
+    public abstract class C
+    {
+        public C(string sValue, int iValue)
+        {
+        }
     }
 }
