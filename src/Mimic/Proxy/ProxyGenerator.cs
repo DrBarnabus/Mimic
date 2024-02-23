@@ -106,6 +106,14 @@ internal sealed class ProxyGenerator
             _underlyingInvocation = underlyingInvocation;
         }
 
+        public override object? Proceed()
+        {
+            Guard.NotNull(_underlyingInvocation);
+
+            _underlyingInvocation.Proceed();
+            return _underlyingInvocation.ReturnValue;
+        }
+
         public void Detatch()
         {
             _underlyingInvocation = null;

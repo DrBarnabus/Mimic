@@ -81,10 +81,33 @@ Console.WriteLine(outResult);
 
 mimic.VerifyExpectedReceived();
 
+ExampleUsingAnAbstractClass();
+
 static void SetupRef(Mimic<ITypeToMimic> mimic1)
 {
     string outValue = "OutValue?";
     mimic1.Setup(m => m.Ref(ref Arg.Ref<int>.Any, out outValue));
+}
+
+static void ExampleUsingAnAbstractClass()
+{
+    var mimic = new Mimic<AbstractClass>();
+
+    mimic.Setup(m => m.VirtualVoidMethod()).AsSequence()
+        .Next()
+        .Proceed()
+        .Next();
+
+    mimic.Setup(m => m.VirtualStringMethod())
+        .Proceed();
+
+    var mimickedObject = mimic.Object;
+
+    mimickedObject.VirtualVoidMethod();
+    mimickedObject.VirtualVoidMethod();
+    mimickedObject.VirtualVoidMethod();
+
+    Console.WriteLine($"Result from {nameof(AbstractClass.VirtualStringMethod)}: {mimickedObject.VirtualStringMethod()}");
 }
 
 public interface ITypeToMimic
@@ -102,4 +125,11 @@ public interface ITypeToMimic
     void Generic<T>();
 
     void Ref(ref int reference, out string outValue);
+}
+
+public abstract class AbstractClass
+{
+    public virtual void VirtualVoidMethod() => Console.WriteLine($"Hello from {nameof(VirtualVoidMethod)}");
+
+    public virtual string VirtualStringMethod() => "ValueFromBase";
 }

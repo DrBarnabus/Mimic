@@ -31,5 +31,8 @@ internal abstract class InterfaceProxyBase
     }
 
     private sealed class Invocation(Type proxyType, MethodInfo method, object?[] arguments)
-        : Mimic.Proxy.Invocation(proxyType, method, arguments);
+        : Mimic.Proxy.Invocation(proxyType, method, arguments)
+    {
+        public override object Proceed() => throw new NotSupportedException();
+    }
 }

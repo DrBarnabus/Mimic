@@ -152,6 +152,12 @@ internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IExpected
         return This;
     }
 
+    public TNext Proceed()
+    {
+        Setup.AddProceedBehaviour();
+        return This;
+    }
+
     public void Expected() => Setup.FlagAsExpected();
 
     public override string ToString() => Setup.Expression.ToString();

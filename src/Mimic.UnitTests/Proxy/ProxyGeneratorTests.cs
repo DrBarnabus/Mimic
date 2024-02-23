@@ -304,6 +304,40 @@ public class ProxyGeneratorTests
         }
 
         [Fact]
+        public void Proceed_WhenUnderlyingInvocationHasBeenDetached_ShouldThrowAssertionException()
+        {
+            Invocation? savedInvocation = null;
+            _interceptor.Callback = invocation =>
+            {
+                savedInvocation = invocation;
+            };
+
+            _proxyObject.ReturnsVoid();
+            _interceptor.Intercepted.ShouldBeTrue();
+
+            savedInvocation.ShouldNotBeNull();
+
+            var ex = Should.Throw<Guard.AssertionException>(() => savedInvocation.Proceed());
+            ex.Message.ShouldContain("_underlyingInvocation must not be null");
+        }
+
+        [Theory]
+        [AutoData]
+        public void Proceed_ShouldReturnValueReturnedByBaseImplementation(string sValue, int iValue)
+        {
+            var interceptor = new InterceptorFixture();
+            var result = (C)ProxyGenerator.Instance.GenerateProxy(typeof(C), Type.EmptyTypes, [sValue, iValue], interceptor);
+
+            interceptor.Callback = invocation =>
+            {
+                invocation.Proceed().ShouldBe($"Result from base: {sValue}");
+            };
+
+            result.VirtualMethod();
+            interceptor.Intercepted.ShouldBeTrue();
+        }
+
+        [Fact]
         public void ToString_WithGetter_ShouldReturnOnlyPropertyName()
         {
             _interceptor.Callback = invocation =>
@@ -389,8 +423,13 @@ public class ProxyGeneratorTests
 
     public abstract class C
     {
+        private readonly string _sValue;
+
         public C(string sValue, int iValue)
         {
+            _sValue = sValue;
         }
+
+        public virtual string VirtualMethod() => $"Result from base: {_sValue}";
     }
 }

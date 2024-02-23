@@ -84,6 +84,14 @@ internal sealed class MethodCallSetup : SetupBase
         _returnOrThrow = ThrowExceptionBehaviourFromExecptionFactory(exceptionFactory);
     }
 
+    public void SetProceedBehaviour()
+    {
+        Guard.Assert(MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract, "Method must be non-abstract and declared in a class");
+        Guard.Assert(_returnOrThrow is null);
+
+        _returnOrThrow = ProceedBehaviour.Instance;
+    }
+
     public void SetCallbackBehaviour(Delegate callbackFunction)
     {
         Guard.NotNull(callbackFunction);
@@ -148,6 +156,13 @@ internal sealed class MethodCallSetup : SetupBase
         Guard.NotNull(exceptionFactory);
 
         AddBehaviour(ThrowExceptionBehaviourFromExecptionFactory(exceptionFactory));
+    }
+
+    public void AddProceedBehaviour()
+    {
+        Guard.Assert(MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract, "Method must be non-abstract and declared in a class");
+
+        AddBehaviour(ProceedBehaviour.Instance);
     }
 
     public void AddNoOpBehaviour()

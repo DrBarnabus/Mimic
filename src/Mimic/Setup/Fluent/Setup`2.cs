@@ -242,5 +242,11 @@ internal sealed class Setup<TMimic, TResult> : SetupBase, ISetup<TMimic, TResult
 
     #endregion
 
+    public IReturnsResult Proceed()
+    {
+        Setup.SetProceedBehaviour();
+        return this;
+    }
+
     public ISequenceSetup<TResult> AsSequence() => new SequenceSetup<TResult>(Setup);
 }
