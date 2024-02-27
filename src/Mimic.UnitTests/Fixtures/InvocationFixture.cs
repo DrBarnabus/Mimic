@@ -7,6 +7,8 @@ internal sealed class InvocationFixture : Invocation
 {
     private static readonly MethodInfo DefaultMethod = typeof(InvocationFixture).GetMethod("ToString")!;
 
+    public bool ProceededToBase { get; private set; }
+
     public InvocationFixture(MethodInfo? method = null)
         : base(typeof(InvocationFixture), method ?? DefaultMethod, Array.Empty<object?>())
     {
@@ -21,6 +23,8 @@ internal sealed class InvocationFixture : Invocation
         : base(proxyType, method ?? DefaultMethod, arguments)
     {
     }
+
+    public override object Proceed() => ProceededToBase = true;
 
     public static InvocationFixture ForMethod<T>(string name, object?[]? arguments = null)
     {

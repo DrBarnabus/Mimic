@@ -34,6 +34,8 @@ internal abstract class Invocation : IInvocation
         Arguments = arguments;
     }
 
+    public abstract object? Proceed();
+
     public void MarkMatchedBy(SetupBase setup)
     {
         Guard.Assert(MatchedSetup is null);

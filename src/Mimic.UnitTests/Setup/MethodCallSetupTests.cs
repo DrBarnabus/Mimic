@@ -530,6 +530,55 @@ public class MethodCallSetupTests
 
     #endregion
 
+    #region SetProceedBehaviour
+
+    [Fact]
+    public void SetProceedBehaviour_WhenMethodIsFromAnInterface_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessVoidMethod());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.SetProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldContain("Method must be non-abstract and declared in a class");
+        ex.Expression.ShouldBe("MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract");
+    }
+
+    [Fact]
+    public void SetProceedBehaviour_WhenMethodIsAbstract_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.AbstractMethod());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.SetProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldContain("Method must be non-abstract and declared in a class");
+        ex.Expression.ShouldBe("MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract");
+    }
+
+    [Fact]
+    public void SetProceedBehaviour_WhenReturnValueIsAlreadySet_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.VirtualMethod());
+        setup.SetThrowExceptionBehaviour(new Exception());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.SetProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Expression.ShouldBe("_returnOrThrow is null");
+    }
+
+    [Fact]
+    public void SetProceedBehaviour_ShouldCorrectlyCallProceedOnInvocationAfterExecution()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.VirtualMethod());
+        setup.SetProceedBehaviour();
+
+        var invocation = InvocationFixture.ForMethod<ISubject>(nameof(ISubject.ParameterlessMethod));
+        setup.Execute(invocation);
+
+        invocation.ProceededToBase.ShouldBeTrue();
+    }
+
+    #endregion
+
     #region SetCallbackBehaviour
 
     [Fact]
@@ -828,6 +877,62 @@ public class MethodCallSetupTests
 
     #endregion
 
+    #region AddProceedBehaviour
+
+    [Fact]
+    public void AddProceedBehaviour_WhenMethodIsFromAnInterface_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessVoidMethod());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.AddProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldContain("Method must be non-abstract and declared in a class");
+        ex.Expression.ShouldBe("MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract");
+    }
+
+    [Fact]
+    public void AddProceedBehaviour_WhenMethodIsAbstract_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.AbstractMethod());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.AddProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldContain("Method must be non-abstract and declared in a class");
+        ex.Expression.ShouldBe("MethodInfo.DeclaringType!.IsClass && !MethodInfo.IsAbstract");
+    }
+
+    [Fact]
+    public void AddProceedBehaviour_WhenReturnValueIsAlreadySetAndIsNotSequenceBehaviour_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.VirtualMethod());
+        setup.SetThrowExceptionBehaviour(new Exception());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.AddProceedBehaviour());
+        ex.ShouldNotBeNull();
+        ex.Expression.ShouldBe("_returnOrThrow is null or SequenceBehaviour");
+    }
+
+    [Fact]
+    public void AddProceedBehaviour_ShouldCorrectlyPerformNoOpOnExecution()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup<AbstractSubject>(m => m.VirtualMethod());
+
+        setup.AddProceedBehaviour();
+        setup.AddThrowExceptionBehaviour(new Exception());
+        setup.AddProceedBehaviour();
+
+        var firstInvocation = InvocationFixture.ForMethod<AbstractSubject>(nameof(AbstractSubject.VirtualMethod));
+        Should.NotThrow(() => setup.Execute(firstInvocation));
+
+        var secondInvocation = InvocationFixture.ForMethod<AbstractSubject>(nameof(AbstractSubject.VirtualMethod));
+        Should.Throw<Exception>(() => setup.Execute(secondInvocation));
+
+        var thirdInvocation = InvocationFixture.ForMethod<AbstractSubject>(nameof(AbstractSubject.VirtualMethod));
+        Should.NotThrow(() => setup.Execute(thirdInvocation));
+    }
+
+    #endregion
+
     #region AddNoOpBehaviour
 
     [Fact]
@@ -948,9 +1053,13 @@ public class MethodCallSetupTests
     #endregion
 
     private static (MethodCallSetup Setup, Mimic<ISubject> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup(
-        Expression<Action<ISubject>> expression, Func<bool>? condition = null, bool strict = true)
+        Expression<Action<ISubject>> expression, Func<bool>? condition = null, bool strict = true) => ConstructMethodCallSetup<ISubject>(expression, condition, strict);
+
+    private static (MethodCallSetup Setup, Mimic<T> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup<T>(
+        Expression<Action<T>> expression, Func<bool>? condition = null, bool strict = true)
+        where T : class
     {
-        var mimic = new Mimic<ISubject> { Strict = strict };
+        var mimic = new Mimic<T> { Strict = strict };
         var methodCallExpression = (MethodCallExpression)expression.Body;
         var methodExpectation = new MethodExpectation(expression, methodCallExpression.Method, methodCallExpression.Arguments);
         var setup = new MethodCallSetup(methodCallExpression, mimic, methodExpectation, condition);
@@ -972,5 +1081,13 @@ public class MethodCallSetupTests
         public void ParameterlessVoidMethod();
 
         public Delegate DelegateReturningMethod();
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal abstract class AbstractSubject
+    {
+        public abstract string AbstractMethod();
+
+        public virtual string VirtualMethod() => default!;
     }
 }

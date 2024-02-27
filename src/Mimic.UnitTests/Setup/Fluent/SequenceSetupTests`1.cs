@@ -562,9 +562,24 @@ public class SequenceSetupOfTResultTests
 
     #endregion
 
-    private static MethodCallSetup ToMethodCallSetup(Expression<Action<ISubject>> expression)
+    [Fact]
+    public void Proceed_ShouldCorrectlySetProceedBehaviour()
     {
-        var mimic = new Mimic<ISubject>();
+        var methodCallSetup = ToMethodCallSetup<AbstractSubject>(m => m.VirtualMethod());
+        var setup = new SequenceSetup<string>(methodCallSetup);
+
+        setup.Proceed().ShouldBeSameAs(setup);
+
+        (methodCallSetup.ConfiguredBehaviours.ReturnOrThrow as SequenceBehaviour).ShouldNotBeNull();
+        (methodCallSetup.ConfiguredBehaviours.ReturnOrThrow as SequenceBehaviour)!.Remaining.ShouldBe(1);
+    }
+
+    private static MethodCallSetup ToMethodCallSetup(Expression<Action<ISubject>> expression) => ToMethodCallSetup<ISubject>(expression);
+
+    private static MethodCallSetup ToMethodCallSetup<T>(Expression<Action<T>> expression)
+        where T : class
+    {
+        var mimic = new Mimic<T>();
         var methodCallExpression = (MethodCallExpression)expression.Body;
         var methodExpectation = new MethodExpectation(expression, methodCallExpression.Method, methodCallExpression.Arguments);
 
@@ -591,5 +606,11 @@ public class SequenceSetupOfTResultTests
         public string MethodWithParameters(int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8, int v9, int v10, int v11, int v12, int v13, int v14);
         public string MethodWithParameters(int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8, int v9, int v10, int v11, int v12, int v13, int v14, int v15);
         public string MethodWithParameters(int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8, int v9, int v10, int v11, int v12, int v13, int v14, int v15, int v16);
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal abstract class AbstractSubject
+    {
+        public virtual string VirtualMethod() => default!;
     }
 }

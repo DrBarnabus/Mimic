@@ -17,8 +17,8 @@ to change without warning between versions until the v1 release.
 ## What is Mimic
 
 **Mimic** is a friendly and familiar mocking library built for modern .NET built on top of the [Castle Project][castle]'s
-dynamic proxy generator. It's simple, intuitive and type-safe API for configuring mimic's of interfaces allows for both;
-Setup of return values for methods/properties and verifying if method calls have been received after the fact.
+dynamic proxy generator. It's simple, intuitive and type-safe API for configuring mimic's of interfaces/classes allows
+for both; Setup of return values for methods/properties and verifying if method calls have been received after the fact.
 
 ```csharp
 var mimic = new Mimic<ITypeToMimic>();
@@ -38,13 +38,13 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 ## Features
 
 - A friendly interface designed to ease adoption by users of other popular .NET mocking libraries
-- Support for generating mock objects of interfaces (**_Coming Soon_**: and overridable members in classes)
+- Support for generating mock objects of interfaces and overridable members in classes
 - Intuitive and type-safe expression based API for setups and verification of methods
 - Mimic is **strict by default**, meaning it throws for methods without a corresponding setup, but it's possible to
   disable the default behaviour by setting `Strict = false` on construction
 - Quick and easy stubbing of properties to store and retrieve values
 - Comprehensive set of behaviours for method setups such as; `Returns`, `Throws`, `Callback`, `When`, `Limit`,
-  `Expected` and `AsSequence`
+  `Expected`, `AsSequence` and `Proceed`
 - Verification of expected, setup and received calls including asserting no additional calls
 
 ## Roadmap
@@ -53,7 +53,6 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 Considering = ❓ | Planned = 📅 | In-Progress = 🚧
 ```
 
-- [🚧] Mimic of classes, specifically overridable members within classes, with support for calling base implementations
 - [📅] Implicit mimicking of nested setups (e.g. `m => m.MethodThatReturnsInterface().MethodOnThatInterface()`)
 - [📅] Delay behaviour (or Extension to `Returns`/`Throws`) for setups that allows for specific or random delays in
   execution time
