@@ -63,6 +63,28 @@ public static partial class ArgumentMatcherInitializerTests
             argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
         }
 
+        [Theory]
+        [AutoData]
+        public void WhenCalledWithArgAnyMatcher_AndWhenCalledWithMatchingGenericMatcherType_ShouldReturnTrue(string value)
+        {
+            var expression = ((LambdaExpression)(() => Arg.Any<Generic.AnyType>())).Body;
+
+            var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
+
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
+        }
+
+        [Theory]
+        [AutoData]
+        public void WhenCalledWithArgAnyMatcher_AndWhenCalledWithNonMatchingGenericMatcherType_ShouldReturnFalse(string value)
+        {
+            var expression = ((LambdaExpression)(() => Arg.Any<Generic.AnyValueType>())).Body;
+
+            var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
+
+            argumentMatcher.Matches(value, typeof(int)).ShouldBeFalse();
+        }
+
         #endregion
 
         #region Arg.AnyNotNull<TValue>
@@ -118,6 +140,17 @@ public static partial class ArgumentMatcherInitializerTests
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
             argumentMatcher.Matches(null, typeof(object)).ShouldBeFalse();
+        }
+
+        [Theory]
+        [AutoData]
+        public void WhenCalledWithArgAnyNotNullMatcher_AndWhenCalledWithMatchingGenericMatcherType_ShouldReturnTrue(string value)
+        {
+            var expression = ((LambdaExpression)(() => Arg.AnyNotNull<Generic.AnyReferenceType>())).Body;
+
+            var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
+
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         #endregion
@@ -233,6 +266,19 @@ public static partial class ArgumentMatcherInitializerTests
             var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
 
             argumentMatcher.Matches(value, typeof(string)).ShouldBeFalse();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("mimic")]
+        [InlineData("bar")]
+        public void WhenCalledWithArgIsMatcherWithTypeExpression_AndWhenMatcherCalledWithMatchingValue_ShouldReturnTrue(string? value)
+        {
+            var expression = ((LambdaExpression)(() => Arg.Is<string>((v, t) => t == typeof(string) && (string)v == value))).Body;
+
+            var (argumentMatcher, _) = ArgumentMatcherInitializer.Initialize(expression);
+
+            argumentMatcher.Matches(value, typeof(string)).ShouldBeTrue();
         }
 
         #endregion
