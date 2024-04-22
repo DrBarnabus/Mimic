@@ -21,7 +21,7 @@ public sealed class PublishCoverage : FrostingTask<BuildContext>
 
     public override void Run(BuildContext context)
     {
-        string[] coverageFiles = context.GetFiles($"{Paths.TestResults}/*.UnitTests.*.coverage.xml")
+        string[] coverageFiles = context.GetFiles($"{Paths.TestResults}/*.coverage.xml")
             .Select(f => context.MakeRelative(f).ToString())
             .ToArray();
 
@@ -32,8 +32,7 @@ public sealed class PublishCoverage : FrostingTask<BuildContext>
         context.Codecov(new CodecovSettings
         {
             Files = coverageFiles,
-            Token = token,
-            Flags = "unit-tests"
+            Token = token
         });
     }
 }

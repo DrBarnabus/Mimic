@@ -43,7 +43,8 @@ public sealed class UnitTest : FrostingTask<BuildContext>
     private static void TestProjectForTarget(BuildContext context, FilePath project, string targetFramework)
     {
         string projectName = $"{project.GetFilenameWithoutExtension()}.{targetFramework}";
-        var testResultsPath = context.MakeAbsolute(Paths.TestResults.CombineWithFilePath($"{projectName}.results.xml"));
+        var testResultsPath = context.MakeAbsolute(Paths.TestResults.CombineWithFilePath(
+            $"{projectName}.results.xml"));
 
         var settings = new DotNetTestSettings
         {

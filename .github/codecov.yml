@@ -3,22 +3,6 @@ coverage:
     project:
       default:
         informational: true
-      unit-tests:
-        informational: true
-        target: auto
-        threshold: 5%
-        flags:
-          - unit-tests
-
     patch:
       default:
         informational: true
-      unit-tests:
-        informational: true
-        target: 90%
-        flags:
-          - unit-tests
-
-flags:
-  unit-tests:
-    carryforward: false
