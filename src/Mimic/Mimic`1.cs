@@ -50,7 +50,7 @@ public sealed partial class Mimic<T> : IMimic
     public static Mimic<T> FromObject(T objectInstance)
     {
         if (objectInstance is not IMimicked<T> mimicked)
-            throw new ArgumentException($"Object was not created by Mimic, it does not implement {nameof(IMimicked<T>)}", nameof(objectInstance));
+            throw MimicException.ObjectNotCreatedByMimic();
 
         return mimicked.Mimic;
     }

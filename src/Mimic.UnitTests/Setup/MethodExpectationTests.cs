@@ -28,8 +28,8 @@ public class MethodExpectationTests
         LambdaExpression expression = (Subject _) => Subject.StaticMethod();
         var arguments = ((MethodCallExpression)expression.Body).Arguments;
 
-        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
-        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsStatic);
+        var ex = Should.Throw<MimicException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Message.ShouldContain("is unsupported as a static method is not overridable");
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public class MethodExpectationTests
         LambdaExpression expression = (ISubject subject) => subject.ExtensionMethod();
         var arguments = ((MethodCallExpression)expression.Body).Arguments;
 
-        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
-        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsExtension);
+        var ex = Should.Throw<MimicException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Message.ShouldContain("is unsupported as an extension method is not overridable");
     }
 
     [Fact]
@@ -50,8 +50,8 @@ public class MethodExpectationTests
         LambdaExpression expression = (AbstractSubject subject) => subject.RegularMethod();
         var arguments = ((MethodCallExpression)expression.Body).Arguments;
 
-        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
-        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+        var ex = Should.Throw<MimicException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Message.ShouldContain("is unsupported as the specified method is not overridable");
     }
 
     [Fact]
@@ -61,8 +61,8 @@ public class MethodExpectationTests
         LambdaExpression expression = (ConcreteSubject subject) => subject.VirtualMethod();
         var arguments = ((MethodCallExpression)expression.Body).Arguments;
 
-        var ex = Should.Throw<UnsupportedExpressionException>(() => new MethodExpectation(expression, method, arguments, true));
-        ex.Reason.ShouldBe(UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+        var ex = Should.Throw<MimicException>(() => new MethodExpectation(expression, method, arguments, true));
+        ex.Message.ShouldContain("is unsupported as the specified method is not overridable");
     }
 
     [Fact]

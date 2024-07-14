@@ -138,7 +138,7 @@ public class MethodCallSetupTests
     }
 
     [Fact]
-    public void Execute_WhenSetupHasExeuctionLimit_AndExecutionLimitIsNotExceeded_ShouldNotThrow()
+    public void Execute_WhenSetupHasExecutionLimit_AndExecutionLimitIsNotExceeded_ShouldNotThrow()
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
 
@@ -149,9 +149,9 @@ public class MethodCallSetupTests
     }
 
     [Theory]
-    [InlineData(1, "execution")]
-    [InlineData(3, "executions")]
-    public void Execute_WhenSetupHasExeuctionLimit_AndExecutionLimitIsExceeded_ShouldThrow(int executionLimit, string expectedPlural)
+    [InlineData(1)]
+    [InlineData(3)]
+    public void Execute_WhenSetupHasExecutionLimit_AndExecutionLimitIsExceeded_ShouldThrow(int executionLimit)
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
 
@@ -165,7 +165,7 @@ public class MethodCallSetupTests
         var ex = Should.Throw<MimicException>(() => setup.Execute(invocation));
 
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe($"Setup 'MethodCallSetupTests.ISubject m => m.ParameterlessMethod()' has been limited to {executionLimit} {expectedPlural} but was actually executed {executionLimit + 1} times");
+        ex.Message.ShouldBe($"Setup 'MethodCallSetupTests.ISubject m => m.ParameterlessMethod()' has been limited to {executionLimit} execution(s) but was actually executed {executionLimit + 1} times.");
     }
 
     [Fact]
@@ -244,7 +244,7 @@ public class MethodCallSetupTests
         var ex = Should.Throw<MimicException>(() => setup.Execute(invocation));
 
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Invocation of 'MethodCallSetupTests.ISubject.ParameterlessMethod()' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");
+        ex.Message.ShouldBe("Invocation of 'MethodCallSetupTests.ISubject.ParameterlessMethod()' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one.");
     }
 
     [Fact]
@@ -390,7 +390,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetReturnComputedValueBehaviour((int _, string _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s).");
     }
 
     [Theory]
@@ -402,7 +402,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetReturnComputedValueBehaviour((int _, string _, double _, List<bool> _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'byte'");
+        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'byte'.");
     }
 
     #endregion
@@ -482,7 +482,7 @@ public class MethodCallSetupTests
         var exception = new Exception(message);
         var ex = Should.Throw<MimicException>(() => setup.SetThrowComputedExceptionBehaviour((int _, string _, double _) => exception));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s).");
     }
 
     [Theory]
@@ -494,7 +494,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetThrowComputedExceptionBehaviour((int _, string _, double _, List<bool> _) => message));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'Exception' cannot invoke a callback method with return type 'string'");
+        ex.Message.ShouldBe("Setup on method with return type 'Exception' cannot invoke a callback method with return type 'string'.");
     }
 
     [Theory]
@@ -600,7 +600,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _) => {}));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 1 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 1 parameter(s).");
     }
 
     [Theory]
@@ -612,7 +612,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _, /* should be string*/ byte _, double  _, List<bool> _) => {}));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with parameter(s) (int, string, double, List<bool>) cannot invoke a callback method with the wrong parameter type(s) (int, byte, double, List<bool>)");
+        ex.Message.ShouldBe("Setup on method with parameter(s) 'int, string, double, List<bool>' cannot invoke a callback method with the wrong parameter type(s) 'int, byte, double, List<bool>'.");
     }
 
     [Theory]
@@ -624,7 +624,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _, string _, double _, List<bool> _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method cannot invoke a callback method with a non-void return type");
+        ex.Message.ShouldBe("Setup on method cannot invoke a callback method with a non-void return type.");
     }
 
     #endregion
@@ -725,7 +725,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.AddReturnComputedValueBehaviour((int _, string _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 2 parameter(s).");
     }
 
     [Theory]
@@ -737,7 +737,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.AddReturnComputedValueBehaviour((int _, string _, double _, List<bool> _) => returnValue));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'byte'");
+        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'byte'.");
     }
 
     [Theory]
@@ -840,7 +840,7 @@ public class MethodCallSetupTests
         var exception = new Exception(message);
         var ex = Should.Throw<MimicException>(() => setup.AddThrowComputedExceptionBehaviour((int _, string _, double _) => exception));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 4 expected parameter(s) cannot invoke a callback method with 3 parameter(s).");
     }
 
     [Theory]
@@ -852,7 +852,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.AddThrowComputedExceptionBehaviour((int _, string _, double _, List<bool> _) => message));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'Exception' cannot invoke a callback method with return type 'string'");
+        ex.Message.ShouldBe("Setup on method with return type 'Exception' cannot invoke a callback method with return type 'string'.");
     }
 
     [Theory]
@@ -1016,7 +1016,7 @@ public class MethodCallSetupTests
 
         var ex = Should.Throw<MimicException>(() => setup.VerifyMatched());
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' which was marked as expected has not been matched""");
+        ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' which was marked as expected has not been matched.""");
     }
 
     [Theory]
@@ -1047,7 +1047,7 @@ public class MethodCallSetupTests
         var ex = Should.Throw<MimicException>(() => setup.VerifyMatched());
 
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' with sequence which was marked as expected has not been matched (1 seqeuence result has not been used).""");
+        ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' with sequence which was marked as expected has not been matched, 1 setup result has not been used.""");
     }
 
     #endregion

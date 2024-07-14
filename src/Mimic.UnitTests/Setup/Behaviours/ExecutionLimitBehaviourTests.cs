@@ -29,6 +29,6 @@ public class ExecutionLimitBehaviourTests
         behaviour.Execute(invocation);
 
         var ex = Should.Throw<MimicException>(() => behaviour.Execute(invocation));
-        ex.Message.ShouldBe("Setup '' has been limited to 3 executions but was actually executed 4 times");
+        ex.Message.ShouldBe("Setup '' has been limited to 3 execution(s) but was actually executed 4 times.");
     }
 }

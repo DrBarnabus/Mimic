@@ -59,7 +59,7 @@ public class ConditionalSetupTests
 
         var ex = Should.Throw<MimicException>(() => conditionalSetup.SetupGet(m => m.ParameterlessStringMethod()));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Expression (m => m.ParameterlessStringMethod()) is not a property accessor");
+        ex.Message.ShouldBe("Expression (m => m.ParameterlessStringMethod()) is not a property accessor.");
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class ConditionalSetupTests
 
         var ex = Should.Throw<MimicException>(() => conditionalSetup.SetupSet(m => m.ParameterlessVoidMethod()));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Expression (m => m.ParameterlessVoidMethod()) is not a property setter");
+        ex.Message.ShouldBe("Expression (m => m.ParameterlessVoidMethod()) is not a property setter.");
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class ConditionalSetupTests
 
         var ex = Should.Throw<MimicException>(() => conditionalSetup.SetupSet(m => m.ParameterlessVoidMethod()));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Expression (m => m.ParameterlessVoidMethod()) is not a property setter");
+        ex.Message.ShouldBe("Expression (m => m.ParameterlessVoidMethod()) is not a property setter.");
     }
 
     // ReSharper disable once MemberCanBePrivate.Global

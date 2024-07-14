@@ -102,7 +102,7 @@ internal static class ArgumentMatcherInitializer
         {
             ExpressionType.Constant => new InitializedMatcher(new ConstantArgumentMatcher(((ConstantExpression)evaluatedExpression).Value), evaluatedExpression),
             ExpressionType.Quote => new InitializedMatcher(new ExpressionArgumentMatcher(((UnaryExpression)expression).Operand), evaluatedExpression),
-            _ => throw new UnsupportedExpressionException(originalExpression)
+            _ => throw MimicException.UnsupportedArgumentExpressionType(originalExpression)
         };
     }
 

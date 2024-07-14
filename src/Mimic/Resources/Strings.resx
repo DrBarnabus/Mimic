@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="UnmatchableArgumentMatcher" xml:space="preserve">
+        <value>ArgumentMatcher for argument '{0}' is unmatchable. This is due to an implicit conversion of the argument from type '{1}' to type '{2}' which is an incompatible assignment.</value>
+    </data>
+    <data name="WrongCallbackParameterCount" xml:space="preserve">
+        <value>Setup on method with {0} expected parameter(s) cannot invoke a callback method with {1} parameter(s).</value>
+    </data>
+    <data name="WrongCallbackParameterTypes" xml:space="preserve">
+        <value>Setup on method with parameter(s) '{0}' cannot invoke a callback method with the wrong parameter type(s) '{1}'.</value>
+    </data>
+    <data name="WrongCallbackReturnType" xml:space="preserve">
+        <value>Setup on method with return type '{0}' cannot invoke a callback method with {1}.</value>
+    </data>
+    <data name="ObjectNotCreatedByMimic" xml:space="preserve">
+        <value>Object was not created by Mimic, it does not implement IMimicked&lt;T&gt;.</value>
+    </data>
+    <data name="WrongCallbackReturnTypeNonVoid" xml:space="preserve">
+        <value>Setup on method cannot invoke a callback method with a non-void return type.</value>
+    </data>
+    <data name="TypeCannotBeMimicked" xml:space="preserve">
+        <value>Type {0} cannot be mimicked. It must be an interface or a non-sealed/non-static class.</value>
+    </data>
+    <data name="NoConstructorWithMatchingArguments" xml:space="preserve">
+        <value>Unable to find a constructor in type {0} matching given constructor arguments.</value>
+    </data>
+    <data name="MethodNotAccessibleByProxyGenerator" xml:space="preserve">
+        <value>Method {0} in type {1} cannot be setup because it is not accessible by our proxy generator (Castle.DynamicProxy). Message returned from proxy generator: {2}.</value>
+    </data>
+    <data name="ExpressionNotProperty" xml:space="preserve">
+        <value>Expression ({0}) is not a property accessor.</value>
+    </data>
+    <data name="ExpressionNotPropertyGetter" xml:space="preserve">
+        <value>Property ({0}.{1}) does not have a getter.</value>
+    </data>
+    <data name="ExpressionNotPropertySetter" xml:space="preserve">
+        <value>Property ({0}.{1}) does not have a setter.</value>
+    </data>
+    <data name="ExpressionNotPropertySetterLamba" xml:space="preserve">
+        <value>Expression ({0}) is not a property setter.</value>
+    </data>
+    <data name="OutExpressionMustBeConstantValue" xml:space="preserve">
+        <value>Out expression must evaluate to a constant value.</value>
+    </data>
+    <data name="ExtensionMethodIsNotOverridable" xml:space="preserve">
+        <value>Expression ({0}) is unsupported as an extension method is not overridable and cannot be mimicked.</value>
+    </data>
+    <data name="StaticMethodIsNotOverridable" xml:space="preserve">
+        <value>Expression ({0}) is unsupported as a static method is not overridable and cannot be mimicked.</value>
+    </data>
+    <data name="MethodIsNotOverridable" xml:space="preserve">
+        <value>Expression ({0}) is unsupported as the specified method is not overridable. This could be due to it being; non-virtual, final or private.</value>
+    </data>
+    <data name="NestedMethodCallIsNotAllowed" xml:space="preserve">
+        <value>Expression ({0}) is unsupported as it contains a nested method call (e.g. MethodOne().MethodTwo()) which is not currently supported.</value>
+    </data>
+    <data name="UnsupportedExpressionType" xml:space="preserve">
+        <value>Expression ({0}) contains an unsupported/unexpected expression type.</value>
+    </data>
+    <data name="UnsupportedArgumentExpressionType" xml:space="preserve">
+        <value>Expression ({0}) is unsupported as an argument expression.</value>
+    </data>
+    <data name="UnableToDetermineArgumentMatchers" xml:space="preserve">
+        <value>Expression ({0}) is unsupported, Mimic was unable to determine the correct argument matchers in the expression.</value>
+    </data>
+    <data name="MemberNotInterceptable" xml:space="preserve">
+        <value>Expression ({0}) is unsupported, Mimic was unable to intercept the invocation of the member.</value>
+    </data>
+    <data name="ExpressionThrewAnException" xml:space="preserve">
+        <value>Expression ({0}) is unsupported, the expression threw an exception while Mimic tried to resolve the method to intercept.</value>
+    </data>
+    <data name="NoMatchingSetup" xml:space="preserve">
+        <value>Invocation of '{0}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown.</value>
+    </data>
+    <data name="ExpectedSetupNotMatched" xml:space="preserve">
+        <value>Setup '{0}' which was marked as expected has not been matched.</value>
+    </data>
+    <data name="ExpectedSequenceSetupNotMatched" xml:space="preserve">
+        <value>Setup '{0}' with sequence which was marked as expected has not been matched, {1} setup result has not been used.</value>
+    </data>
+    <data name="ReturnRequired" xml:space="preserve">
+        <value>Invocation of '{0}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one.</value>
+    </data>
+    <data name="ExecutionLimitExceeded" xml:space="preserve">
+        <value>Setup '{0}' has been limited to {1} execution(s) but was actually executed {2} times.</value>
+    </data>
+    <data name="NoMatchingInvocationsDefaultFailureMessage" xml:space="preserve">
+        <value>Verification failed with incorrect matching invocations</value>
+    </data>
+    <data name="NoMatchingInvocationsActualInvocations" xml:space="preserve">
+        <value>Actual invocations on {0} ({1}):</value>
+    </data>
+    <data name="NoMatchingInvocationsThereAreZeroInvocations" xml:space="preserve">
+        <value>There are zero invocations...</value>
+    </data>
+    <data name="UnverifiedInvocations" xml:space="preserve">
+        <value>{0}: Verification failed due to the following unverified invocations:</value>
+    </data>
+</root>

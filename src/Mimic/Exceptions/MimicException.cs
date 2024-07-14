@@ -1,5 +1,5 @@
-﻿using System.Runtime.Serialization;
-using Mimic.Expressions;
+﻿using Mimic.Expressions;
+using Mimic.Resources;
 using Mimic.Setup;
 
 namespace Mimic.Exceptions;
@@ -7,96 +7,38 @@ namespace Mimic.Exceptions;
 [PublicAPI]
 public class MimicException : Exception
 {
-    public virtual string Identifier => "mimic_generic";
+    public Reason Reason { get; }
 
-    public MimicException(string? message)
+    public MimicException(Reason reason, string? message)
         : base(message)
     {
+        Reason = reason;
     }
 
-    public MimicException(string? message, Exception? innerException)
+    public MimicException(Reason reason, string? message, Exception? innerException)
         : base(message, innerException)
     {
+        Reason = reason;
     }
 
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-        info.AddValue(nameof(Identifier), Identifier);
-    }
+    #region UsageError
 
-    internal static MimicException TypeCannotBeMimicked(Type type, Exception? innerException = null) =>
-        new($"Type {TypeNameFormatter.GetFormattedName(type)} cannot be mimicked. It must be an interface or a non-sealed/non-static class.", innerException);
+    internal static MimicException UnmatchableArgumentMatcher(Expression argumentExpression, Type expectedType) =>
+        new(Reason.UsageError, Strings.FormatUnmatchableArgumentMatcher(
+            argumentExpression,
+            TypeNameFormatter.GetFormattedName(argumentExpression.Type),
+            TypeNameFormatter.GetFormattedName(expectedType)));
 
-    internal static MimicException NoConstructorWithMatchingArguments(Type type, Exception? innerException = null) =>
-        new ($"Unable to find a constructor in type {TypeNameFormatter.GetFormattedName(type)} matching given constructor arguments.", innerException);
-
-    internal static MimicException MethodNotAccessibleByProxyGenerator(MethodInfo method, string messageFromProxyGenerator) =>
-        new($"Method {method.Name} in type {TypeNameFormatter.GetFormattedName(method.DeclaringType!)} cannot be setup because it is not accessible by our proxy generator (Castle.DynamicProxy). Message returned from proxy generator: {messageFromProxyGenerator}");
-
-    internal static MimicException UnmatchableArgumentMatcher(Expression argumentExpression, Type expectedType)
-    {
-        string formattedFromType = TypeNameFormatter.GetFormattedName(argumentExpression.Type);
-        string formattedToType = TypeNameFormatter.GetFormattedName(expectedType);
-
-        return new MimicException($"ArgumentMatcher for argument '{argumentExpression}' is unmatchable. Due to an implicit conversion of the argument from type '{formattedFromType}' to type '{formattedToType}' which is an incompatible assignment");
-    }
-
-    internal static MimicException NoMatchingSetup(Invocation invocation)
-    {
-        return new MimicException($"Invocation of '{invocation}' failed. Mimic is configured in Strict mode so all invocations must match a setup or this error will be thrown");
-    }
-
-    internal static MimicException ExpectedSetupNotMatched(SetupBase setup)
-    {
-        return new MimicException($"Setup '{setup}' which was marked as expected has not been matched");
-    }
-
-    internal static MimicException ExpectedSequenceSetupNotMatched(SetupBase setup, int remaining)
-    {
-        return new MimicException($"Setup '{setup}' with sequence which was marked as expected has not been matched ({remaining} {(remaining == 1 ? "seqeuence" : "seqeuences")} result has not been used).");
-    }
-
-    internal static MimicException ReturnRequired(Invocation invocation)
-    {
-        return new MimicException($"Invocation of '{invocation}' failed. Invocation needs to return a non-void value but there is no corresponding setup that provides one");
-    }
-
-    internal static MimicException ExpressionNotProperty(Expression expression)
-    {
-        return new MimicException($"Expression ({expression}) is not a property accessor");
-    }
-
-    internal static MimicException ExpressionNotPropertyGetter(PropertyInfo property)
-    {
-        string formattedDeclaringTypeName = TypeNameFormatter.GetFormattedName(property.DeclaringType!);
-        return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a getter");
-    }
-
-    internal static MimicException ExpressionNotPropertySetter(PropertyInfo property)
-    {
-        string formattedDeclaringTypeName = TypeNameFormatter.GetFormattedName(property.DeclaringType!);
-        return new MimicException($"Property ({formattedDeclaringTypeName}.{property.Name}) does not have a setter");
-    }
-
-    internal static MimicException ExpressionNotPropertySetter(LambdaExpression expression)
-    {
-        return new MimicException($"Expression ({expression}) is not a property setter");
-    }
-
-    internal static MimicException WrongCallbackParameterCount(int expectedCount, int actualCount)
-    {
-        return new MimicException($"Setup on method with {expectedCount} expected parameter(s) cannot invoke a callback method with {actualCount} parameter(s)");
-    }
+    internal static MimicException WrongCallbackParameterCount(int expectedCount, int actualCount) =>
+        new(Reason.UsageError, Strings.FormatWrongCallbackParameterCount(expectedCount, actualCount));
 
     internal static MimicException WrongCallbackParameterTypes(ParameterInfo[] expectedParameters, ParameterInfo[] actualParameters)
     {
-        string expectedParameterTypeList = GetParameterTypeList(expectedParameters);
-        string actualParameterTypeList = GetParameterTypeList(actualParameters);
+        return new MimicException(Reason.UsageError, Strings.FormatWrongCallbackParameterTypes(
+            ToParameterTypeList(expectedParameters),
+            ToParameterTypeList(actualParameters)));
 
-        return new MimicException($"Setup on method with parameter(s) ({expectedParameterTypeList}) cannot invoke a callback method with the wrong parameter type(s) ({actualParameterTypeList})");
-
-        static string GetParameterTypeList(ParameterInfo[] parameters)
+        static string ToParameterTypeList(ParameterInfo[] parameters)
         {
             var stringBuilder = new ValueStringBuilder(stackalloc char[256]);
 
@@ -130,36 +72,108 @@ public class MimicException : Exception
         }
     }
 
-    internal static MimicException WrongCallbackReturnType(Type expectedType, Type? actualType)
-    {
-        string expectedTypeName = TypeNameFormatter.GetFormattedName(expectedType);
-        string actualTypeMessage = actualType is null ? "a void return type" : $"return type '{TypeNameFormatter.GetFormattedName(actualType)}'";
-        return new MimicException($"Setup on method with return type '{expectedTypeName}' cannot invoke a callback method with {actualTypeMessage}");
-    }
+    internal static MimicException WrongCallbackReturnType(Type expectedType, Type? actualType) =>
+        new(Reason.UsageError, Strings.FormatWrongCallbackReturnType(
+            TypeNameFormatter.GetFormattedName(expectedType),
+            actualType is null ? "a void return type" : $"return type '{TypeNameFormatter.GetFormattedName(actualType)}'"));
 
-    internal static MimicException WrongCallbackReturnType()
-    {
-        return new MimicException("Setup on method cannot invoke a callback method with a non-void return type");
-    }
+    internal static MimicException WrongCallbackReturnType() => new(Reason.UsageError, Strings.WrongCallbackReturnTypeNonVoid);
 
-    internal static MimicException ExecutionLimitExceeded(MethodCallSetup setup, int limit, int count)
-    {
-        return new MimicException($"Setup '{setup}' has been limited to {limit} {(limit == 1 ? "execution" : "executions")} but was actually executed {count} times");
-    }
+    internal static MimicException ObjectNotCreatedByMimic() => new(Reason.UsageError, Strings.ObjectNotCreatedByMimic);
 
-    internal static MimicException OutExpressionMustBeConstantValue() => new("Out expression must evaluate to a constant value");
+    #endregion
+
+    #region IncompatibleMimicType
+
+    internal static MimicException TypeCannotBeMimicked(Type type, Exception? innerException = null) =>
+        new(Reason.IncompatibleMimicType, Strings.FormatTypeCannotBeMimicked(TypeNameFormatter.GetFormattedName(type)), innerException);
+
+    internal static MimicException NoConstructorWithMatchingArguments(Type type, Exception? innerException = null) =>
+        new (Reason.IncompatibleMimicType,
+            Strings.FormatNoConstructorWithMatchingArguments(TypeNameFormatter.GetFormattedName(type)),
+            innerException);
+
+    internal static MimicException MethodNotAccessibleByProxyGenerator(MethodInfo method, string messageFromProxyGenerator) =>
+        new(Reason.IncompatibleMimicType, Strings.FormatMethodNotAccessibleByProxyGenerator(
+            method.Name,
+            TypeNameFormatter.GetFormattedName(method.DeclaringType!),
+            messageFromProxyGenerator));
+
+    #endregion
+
+    #region UnsupportedExpression
+
+    internal static MimicException ExpressionNotProperty(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExpressionNotProperty(expression));
+
+    internal static MimicException ExpressionNotPropertyGetter(PropertyInfo property) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExpressionNotPropertyGetter(
+            TypeNameFormatter.GetFormattedName(property.DeclaringType!),
+            property.Name));
+
+    internal static MimicException ExpressionNotPropertySetter(PropertyInfo property) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExpressionNotPropertySetter(
+            TypeNameFormatter.GetFormattedName(property.DeclaringType!),
+            property.Name));
+
+    internal static MimicException ExpressionNotPropertySetter(LambdaExpression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExpressionNotPropertySetterLamba(expression));
+
+    internal static MimicException OutExpressionMustBeConstantValue() => new(Reason.UnsupportedExpression, Strings.OutExpressionMustBeConstantValue);
+
+    internal static MimicException ExtensionMethodIsNotOverridable(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExtensionMethodIsNotOverridable(expression));
+
+    internal static MimicException StaticMethodIsNotOverridable(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatStaticMethodIsNotOverridable(expression));
+
+    internal static MimicException MethodIsNotOverridable(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatMethodIsNotOverridable(expression));
+
+    internal static MimicException NestedMethodCallIsNotAllowed(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatNestedMethodCallIsNotAllowed(expression));
+
+    internal static MimicException UnsupportedExpressionType(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatUnsupportedExpressionType(expression));
+
+    internal static MimicException UnsupportedArgumentExpressionType(Expression expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatUnsupportedArgumentExpressionType(expression));
+
+    internal static MimicException UnableToDetermineArgumentMatchers(string expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatUnableToDetermineArgumentMatchers(expression));
+
+    internal static MimicException MemberNotInterceptable(string expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatMemberNotInterceptable(expression));
+
+    internal static MimicException ExpressionThrewAnException(string expression) =>
+        new(Reason.UnsupportedExpression, Strings.FormatExpressionThrewAnException(expression));
+
+    #endregion
+
+    #region ExpectationFailed
+
+    internal static MimicException NoMatchingSetup(Invocation invocation) =>
+        new(Reason.ExpectationFailed, Strings.FormatNoMatchingSetup(invocation));
+
+    internal static MimicException ExpectedSetupNotMatched(SetupBase setup) =>
+        new(Reason.ExpectationFailed, Strings.FormatExpectedSetupNotMatched(setup));
+
+    internal static MimicException ExpectedSequenceSetupNotMatched(SetupBase setup, int remaining) =>
+        new(Reason.ExpectationFailed, Strings.FormatExpectedSequenceSetupNotMatched(setup, remaining));
+
+    internal static MimicException ReturnRequired(Invocation invocation) =>
+        new(Reason.ExpectationFailed, Strings.FormatReturnRequired(invocation));
+
+    internal static MimicException ExecutionLimitExceeded(MethodCallSetup setup, int limit, int count) =>
+        new(Reason.ExpectationFailed, Strings.FormatExecutionLimitExceeded(setup, limit, count));
 
     internal static Exception NoMatchingInvocations<T>(
-        Mimic<T> mimic,
-        LambdaExpression expression,
-        CallCount expectedCallCount,
-        int actualCallCount,
-        string? failureMessage)
+        Mimic<T> mimic, LambdaExpression expression, CallCount expectedCallCount, int actualCallCount, string? failureMessage)
         where T : class
     {
         var stringBuilder = new ValueStringBuilder(stackalloc char[512]);
 
-        stringBuilder.Append(failureMessage ?? "Verification failed with incorrect matching invocations");
+        stringBuilder.Append(failureMessage ?? Strings.NoMatchingInvocationsDefaultFailureMessage);
         stringBuilder.Append(Environment.NewLine.AsSpan());
 
         stringBuilder.Append(expectedCallCount.GetExceptionMessage(actualCallCount).AsSpan());
@@ -168,11 +182,11 @@ public class MimicException : Exception
         stringBuilder.Append(evaluatedExpression.ToString());
         stringBuilder.Append(Environment.NewLine.AsSpan());
 
-        stringBuilder.Append($"Actual invocations on {mimic} ({expression.Parameters[0].Name}):".AsSpan());
+        stringBuilder.Append(Strings.FormatNoMatchingInvocationsActualInvocations(mimic, expression.Parameters[0].Name));
         stringBuilder.Append(Environment.NewLine.AsSpan());
 
         var invocations = mimic.Invocations.ToList();
-        if (invocations.Any())
+        if (invocations.Count > 0)
         {
             foreach (var invocation in invocations)
             {
@@ -182,11 +196,11 @@ public class MimicException : Exception
         }
         else
         {
-            stringBuilder.Append($"    There are zero invocations..");
+            stringBuilder.Append($"    {Strings.NoMatchingInvocationsThereAreZeroInvocations}");
             stringBuilder.Append(Environment.NewLine.AsSpan());
         }
 
-        return new MimicException(stringBuilder.ToString());
+        return new MimicException(Reason.ExpectationFailed, stringBuilder.ToString());
     }
 
     internal static Exception UnverifiedInvocations<T>(Mimic<T> mimic, List<Invocation> unverifiedInvocations)
@@ -194,7 +208,7 @@ public class MimicException : Exception
     {
         var stringBuilder = new ValueStringBuilder(stackalloc char[512]);
 
-        stringBuilder.Append($"{mimic}: Verification failed due to the following unverified invocations:");
+        stringBuilder.Append(Strings.FormatUnverifiedInvocations(mimic));
         stringBuilder.Append(Environment.NewLine.AsSpan());
 
         foreach (var unverifiedInvocation in unverifiedInvocations)
@@ -203,6 +217,8 @@ public class MimicException : Exception
             stringBuilder.Append(Environment.NewLine.AsSpan());
         }
 
-        return new MimicException(stringBuilder.ToString());
+        return new MimicException(Reason.ExpectationFailed, stringBuilder.ToString());
     }
+
+    #endregion
 }

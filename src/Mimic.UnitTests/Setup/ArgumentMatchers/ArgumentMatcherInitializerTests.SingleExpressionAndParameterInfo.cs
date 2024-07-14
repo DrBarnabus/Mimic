@@ -133,7 +133,7 @@ public static partial class ArgumentMatcherInitializerTests
             var expression = Expression.Convert(Expression.Call(typeof(Arg), nameof(Arg.Any), new[] { typeof(A) }), typeof(B));
 
             var ex = Should.Throw<MimicException>(() => ArgumentMatcherInitializer.Initialize(expression, parameter));
-            ex.Message.ShouldBe("ArgumentMatcher for argument 'Any()' is unmatchable. Due to an implicit conversion of the argument from type 'ArgumentMatcherInitializerTests.SingleExpressionAndParameterInfo.A' to type 'ArgumentMatcherInitializerTests.SingleExpressionAndParameterInfo.B' which is an incompatible assignment");
+            ex.Message.ShouldBe("ArgumentMatcher for argument 'Any()' is unmatchable. This is due to an implicit conversion of the argument from type 'ArgumentMatcherInitializerTests.SingleExpressionAndParameterInfo.A' to type 'ArgumentMatcherInitializerTests.SingleExpressionAndParameterInfo.B' which is an incompatible assignment.");
         }
 
         [Fact]

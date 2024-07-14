@@ -28,14 +28,14 @@ internal static class SetterExpressionConstructor
 
         var invocation = interceptor.Invocation;
         if (invocation == null)
-            throw new UnsupportedExpressionException(body, $"{actionParameterName} => {body}...", UnsupportedExpressionException.UnsupportedReason.MemberNotInterceptable);
+            throw MimicException.MemberNotInterceptable($"{actionParameterName} => {body}...");
 
         body = Expression.Call(body, invocation.Method, GetArgumentExpressions(body, invocation, interceptor.ArgumentMatchers.ToArray()));
 
         if (exception == null)
             return Expression.Lambda<Action<T>>(body, expression);
 
-        throw new UnsupportedExpressionException(body, $"{actionParameterName} => {body}...", UnsupportedExpressionException.UnsupportedReason.ExpressionThrewAnException);
+        throw MimicException.ExpressionThrewAnException($"{actionParameterName} => {body}...");
     }
 
     private static T CreateProxy<T>(ArgumentMatcherObserver observer, object[]? constructorArguments, out Interceptor interceptor)
@@ -75,7 +75,7 @@ internal static class SetterExpressionConstructor
             }
 
             if (argumentMatcherIndex < argumentMatchers.Count)
-                throw new UnsupportedExpressionException(body, body.ToString(), UnsupportedExpressionException.UnsupportedReason.UnableToDetermineArgumentMatchers);
+                throw MimicException.UnableToDetermineArgumentMatchers(body.ToString());
         }
 
         for (int i = 0; i < expressions.Length; i++)

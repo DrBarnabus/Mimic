@@ -15,6 +15,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="3.11.0-beta1.24318.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +39,11 @@
     <ItemGroup>
         <InternalsVisibleTo Include="Mimic.UnitTests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+    <!-- Resources/Strings.resx handled by Source Generator -->
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Strings.resx" EmitFormatMethods="true" />
     </ItemGroup>
 
     <!-- Extensions\ReturnsExtensions.tt -->

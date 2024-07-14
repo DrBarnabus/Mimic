@@ -73,7 +73,7 @@ public partial class Mimic<T>
 
         var expectations = ExpressionSplitter.Split(propertyExpression);
         if (expectations.Count != 1)
-            throw new UnsupportedExpressionException(propertyExpression);
+            throw MimicException.NestedMethodCallIsNotAllowed(propertyExpression);
 
         _setups.Add(new PropertyStubSetup(this, propertyExpression, getter, setter, initialValue));
         return this;
@@ -91,7 +91,7 @@ public partial class Mimic<T>
 
         var expectations = ExpressionSplitter.Split(expression);
         if (expectations.Count != 1)
-            throw new UnsupportedExpressionException(expression);
+            throw MimicException.NestedMethodCallIsNotAllowed(expression);
 
         var setup = new MethodCallSetup(expression, mimic, expectations.Pop(), condition);
         mimic._setups.Add(setup);

@@ -165,7 +165,7 @@ public partial class Mimic<T>
     {
         var expectations = ExpressionSplitter.Split(expression);
         if (expectations.Count != 1)
-            throw new UnsupportedExpressionException(expression);
+            throw MimicException.NestedMethodCallIsNotAllowed(expression);
 
         var expectation = expectations.Pop();
 

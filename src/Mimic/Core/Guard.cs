@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Mimic.Core;
+﻿namespace Mimic.Core;
 
 internal static partial class Guard
 {
@@ -84,20 +82,12 @@ internal static partial class Guard
 
     internal sealed class AssertionException : MimicException
     {
-        public override string Identifier => "mimic_assertion";
-
-        public AssertionException(string message, string? expression)
-            : base($"{message} (Expression '{expression}')")
-        {
-            Expression = expression;
-        }
-
         public string? Expression { get; }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        public AssertionException(string message, string? expression)
+            : base(Reason.Unspecified, $"{message} (Expression '{expression}')")
         {
-            base.GetObjectData(info, context);
-            info.AddValue(nameof(Expression), Expression);
+            Expression = expression;
         }
     }
 }

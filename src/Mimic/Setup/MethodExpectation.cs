@@ -66,14 +66,13 @@ internal sealed class MethodExpectation : IExpectation
 
     private static void ValidateMethodIsOverridable(MethodInfo method, Expression expression)
     {
-        if (method.IsStatic)
-            throw new UnsupportedExpressionException(expression,
-                method.IsDefined(typeof(ExtensionAttribute))
-                    ? UnsupportedExpressionException.UnsupportedReason.MemberIsExtension
-                    : UnsupportedExpressionException.UnsupportedReason.MemberIsStatic);
-
-        if (method is not { IsVirtual: true, IsFinal: false, IsPrivate: false })
-            throw new UnsupportedExpressionException(expression, UnsupportedExpressionException.UnsupportedReason.MemberIsNotOverridable);
+        _ = method switch
+        {
+            { IsStatic: true } when method.IsDefined(typeof(ExtensionAttribute)) => throw MimicException.ExtensionMethodIsNotOverridable(expression),
+            { IsStatic: true } => throw MimicException.StaticMethodIsNotOverridable(expression),
+            not { IsVirtual: true, IsFinal: false, IsPrivate: false } => throw MimicException.MethodIsNotOverridable(expression),
+            _ => method
+        };
 
         ProxyGenerator.ThrowIfMethodIsInaccessible(method);
     }

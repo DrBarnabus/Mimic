@@ -68,7 +68,7 @@ public class DelegateExtensionsTests
 
         var ex = Should.Throw<MimicException>(() => @delegate.ValidateDelegateParameterCount(2));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with 2 expected parameter(s) cannot invoke a callback method with 3 parameter(s)");
+        ex.Message.ShouldBe("Setup on method with 2 expected parameter(s) cannot invoke a callback method with 3 parameter(s).");
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class DelegateExtensionsTests
 
         var ex = Should.Throw<MimicException>(() => @delegate.ValidateDelegateReturnType(typeof(string)));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'string' cannot invoke a callback method with a void return type");
+        ex.Message.ShouldBe("Setup on method with return type 'string' cannot invoke a callback method with a void return type.");
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class DelegateExtensionsTests
 
         var ex = Should.Throw<MimicException>(() => @delegate.ValidateDelegateReturnType(typeof(int)));
         ex.ShouldNotBeNull();
-        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'long'");
+        ex.Message.ShouldBe("Setup on method with return type 'int' cannot invoke a callback method with return type 'long'.");
     }
 
     [Fact]
