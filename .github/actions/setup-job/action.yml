@@ -1,9 +1,6 @@
 name: 'Setup Job'
 description: 'Setup Job'
 inputs:
-  dotnet_sdk_version:
-    description: 'Version of .NET SDK to install'
-    required: true
   ignore_dotnet_on_cake_cache_hit:
     description: 'Whether to ignore installing .NET SDK is cache cache is hit'
     default: 'false'
@@ -38,12 +35,18 @@ runs:
           nuget-${{ runner.os }}-
 
     # Required SDKs
-    - name: Install .NET SDK ${{ inputs.dotnet_sdk_version }}
+    - name: Install .NET SDK 6
       uses: actions/setup-dotnet@v4
       if: inputs.ignore_dotnet_on_cake_cache_hit == 'false' || steps.cache-cake.outputs.cache-hit != 'true'
       with:
-        dotnet-version: ${{ inputs.dotnet_sdk_version }}
-
-      # TODO: Investigate using pre-installed .NET SDK
-      # env:
-      #   DOTNET_INSTALL_DIR: /usr/share/dotnet
+        dotnet-version: 6.0.423
+    - name: Install .NET SDK 7
+      uses: actions/setup-dotnet@v4
+      if: inputs.ignore_dotnet_on_cake_cache_hit == 'false' || steps.cache-cake.outputs.cache-hit != 'true'
+      with:
+        dotnet-version: 7.0.410
+    - name: Install .NET SDK 8
+      uses: actions/setup-dotnet@v4
+      if: inputs.ignore_dotnet_on_cake_cache_hit == 'false' || steps.cache-cake.outputs.cache-hit != 'true'
+      with:
+        dotnet-version: 8.0.302

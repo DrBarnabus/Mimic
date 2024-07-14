@@ -40,7 +40,6 @@ jobs:
         id: setup-job
         uses: ./.github/actions/setup-job
         with:
-          dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
           ignore_dotnet_on_cake_cache_hit: true
 
       # Prepare
@@ -67,8 +66,6 @@ jobs:
       # Setup
       - name: Setup Job
         uses: ./.github/actions/setup-job
-        with:
-          dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
 
       # Package
       - name: '[Package]'
@@ -105,8 +102,6 @@ jobs:
       # Setup
       - name: Setup Job
         uses: ./.github/actions/setup-job
-        with:
-          dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
 
       # Test
       - name: '[Test]'
@@ -138,8 +133,6 @@ jobs:
       # Setup
       - name: Setup Job
         uses: ./.github/actions/setup-job
-        with:
-          dotnet_sdk_version: ${{ vars.DOTNET_SDK_VERSION }}
 
       # Download Packages
       - uses: actions/download-artifact@v4
