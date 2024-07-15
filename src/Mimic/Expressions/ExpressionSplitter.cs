@@ -19,10 +19,10 @@ internal static class ExpressionSplitter
             parts.Push(part);
         }
 
-        if (parts.Count is 1 && remainder is ParameterExpression)
+        if (parts.Count > 0 && remainder is ParameterExpression)
             return parts;
 
-        throw MimicException.NestedMethodCallIsNotAllowed(expression);
+        throw MimicException.UnsupportedExpressionType(expression);
     }
 
     private static bool CanSplitExpression(Expression expression)

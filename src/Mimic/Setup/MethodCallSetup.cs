@@ -183,13 +183,16 @@ internal sealed class MethodCallSetup : SetupBase
 
     #endregion
 
-    internal override void VerifyMatched()
+    internal override void VerifyMatched(Predicate<SetupBase> predicate, HashSet<IMimic> verified)
     {
-        base.VerifyMatched();
+        base.VerifyMatched(predicate, verified);
 
         if (_returnOrThrow is SequenceBehaviour { Remaining: >0 } sequenceBehaviour)
             throw MimicException.ExpectedSequenceSetupNotMatched(this, sequenceBehaviour.Remaining);
     }
+
+    internal override IReadOnlyList<IMimic> GetNested() =>
+        ((_returnOrThrow as ReturnValueBehaviour)?.Value as IMimicked)?.Mimic is { } mimic ? [mimic] : [];
 
     internal void StrictThrowOrReturnDefault(Invocation invocation)
     {

@@ -69,9 +69,6 @@
     <data name="MethodIsNotOverridable" xml:space="preserve">
         <value>Expression ({0}) is unsupported as the specified method is not overridable. This could be due to it being; non-virtual, final or private.</value>
     </data>
-    <data name="NestedMethodCallIsNotAllowed" xml:space="preserve">
-        <value>Expression ({0}) is unsupported as it contains a nested method call (e.g. MethodOne().MethodTwo()) which is not currently supported.</value>
-    </data>
     <data name="UnsupportedExpressionType" xml:space="preserve">
         <value>Expression ({0}) contains an unsupported/unexpected expression type.</value>
     </data>

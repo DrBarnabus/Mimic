@@ -5,9 +5,9 @@ namespace Mimic;
 
 public partial class Mimic<T>
 {
-    public void VerifyExpectedReceived() => VerifyReceived(s => s.Expected);
+    public void VerifyExpectedReceived() => VerifyReceived(s => s.Expected, []);
 
-    public void VerifyAllSetupsReceived() => VerifyReceived((SetupBase _) => true);
+    public void VerifyAllSetupsReceived() => VerifyReceived((SetupBase _) => true, []);
 
     public void VerifyNoOtherCallsReceived()
     {
@@ -107,22 +107,26 @@ public partial class Mimic<T>
 
     #endregion
 
-    private void VerifyReceived(Predicate<SetupBase> predicate)
+    private void VerifyReceived(Predicate<SetupBase> predicate, HashSet<IMimic> verified)
     {
+        if (!verified.Add(this))
+            return;
+
         lock (_invocations)
             foreach (var invocation in _invocations)
                 invocation.MarkVerified(predicate);
 
         foreach (var setup in _setups.FindAll(predicate))
-            setup.VerifyMatched();
+            setup.VerifyMatched(predicate, verified);
     }
 
     private void VerifyReceivedInternal(LambdaExpression expression, CallCount callCount, string? failureMessage = null)
     {
         Guard.NotNull(expression);
 
-        var matchingInvocations = FindMatchingInvocations(expression);
-        if (!callCount.Validate(matchingInvocations.Count))
+        FindMatchingInvocations(this, expression, out int matchingInvocationCount, out var matchingInvocations);
+
+        if (!callCount.Validate(matchingInvocationCount))
             throw MimicException.NoMatchingInvocations(this, expression, callCount, matchingInvocations.Count, failureMessage);
 
         foreach (var matchingInvocation in matchingInvocations)
@@ -161,15 +165,54 @@ public partial class Mimic<T>
         VerifyReceivedInternal(expression, callCount, failureMessage);
     }
 
-    private List<Invocation> FindMatchingInvocations(LambdaExpression expression)
+    private static void FindMatchingInvocations(
+        IMimic mimic,
+        LambdaExpression expression,
+        out int matchingInvocationCount,
+        out List<Invocation> matchingInvocations)
     {
-        var expectations = ExpressionSplitter.Split(expression);
-        if (expectations.Count != 1)
-            throw MimicException.NestedMethodCallIsNotAllowed(expression);
+        Guard.NotNull(mimic);
+        Guard.NotNull(expression);
 
-        var expectation = expectations.Pop();
+        var expectations = new ImmutableStack<MethodExpectation>(ExpressionSplitter.Split(expression));
 
-        lock (_invocations)
-            return _invocations.Where(expectation.MatchesInvocation).ToList();
+        matchingInvocations = [];
+        matchingInvocationCount = FindMatchingInvocations(mimic, expectations, [], matchingInvocations);
+    }
+
+    private static int FindMatchingInvocations(
+        IMimic mimic,
+        ImmutableStack<MethodExpectation> expectations,
+        HashSet<IMimic> visitedNestedMimics,
+        List<Invocation> matchingInvocations)
+    {
+        Guard.NotNull(mimic);
+        Guard.Assert(!expectations.IsEmpty);
+        Guard.NotNull(visitedNestedMimics);
+
+        if (!visitedNestedMimics.Add(mimic))
+            return 0;
+
+        var expectation = expectations.Pop(out var remainingExpectations);
+
+        int matchedCount = 0;
+        foreach (var matchingInvocation in mimic.Invocations.Where(expectation.MatchesInvocation))
+        {
+            matchingInvocations.Add(matchingInvocation);
+
+            if (remainingExpectations.IsEmpty)
+            {
+                ++matchedCount;
+                continue;
+            }
+
+            Guard.Assert(matchingInvocation.Method.ReturnType != typeof(void));
+            if (matchingInvocation.ReturnValue is IMimicked mimicked)
+            {
+                matchedCount += FindMatchingInvocations(mimicked.Mimic, remainingExpectations, visitedNestedMimics, matchingInvocations);
+            }
+        }
+
+        return matchedCount;
     }
 }

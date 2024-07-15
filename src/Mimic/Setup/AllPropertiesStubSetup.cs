@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Mimic.Expressions;
 using Expr = System.Linq.Expressions.Expression;
 
 namespace Mimic.Setup;
@@ -32,10 +33,12 @@ internal sealed class AllPropertiesStubSetup : SetupBase
         }
     }
 
-    internal override void VerifyMatched()
+    internal override void VerifyMatched(Predicate<SetupBase> predicate, HashSet<IMimic> verified)
     {
         // intentionally empty
     }
+
+    internal override IReadOnlyList<IMimic> GetNested() => _currentValues.Values.OfType<IMimicked>().Select(m => m.Mimic).ToList();
 
     private sealed class AllPropertiesStubExpectation : IExpectation
     {
@@ -60,5 +63,12 @@ internal sealed class AllPropertiesStubSetup : SetupBase
 
             return (method.IsGetter() && parameterCount == 0) || (method.IsSetter() && parameterCount == 1);
         }
+
+        public override bool Equals(object? obj) => obj is AllPropertiesStubExpectation other &&  Equals(other);
+
+        public bool Equals(IExpectation? obj) =>
+            obj is AllPropertiesStubExpectation other && ExpressionEqualityComparer.Default.Equals(Expression, other.Expression);
+
+        public override int GetHashCode() => typeof(AllPropertiesStubExpectation).GetHashCode();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mimic.Setup.ArgumentMatchers;
+﻿using Mimic.Expressions;
+using Mimic.Setup.ArgumentMatchers;
 
 namespace Mimic.Setup;
 
@@ -76,4 +77,34 @@ internal sealed class MethodExpectation : IExpectation
 
         ProxyGenerator.ThrowIfMethodIsInaccessible(method);
     }
+
+    public override bool Equals(object? obj) => obj is MethodExpectation other && Equals(other);
+
+    public bool Equals(IExpectation? obj)
+    {
+        if (obj is not MethodExpectation other)
+            return false;
+
+        if (MethodInfo != other.MethodInfo)
+            return false;
+
+        if (Arguments.Length != other.Arguments.Length)
+            return false;
+
+        var arguments = PartiallyEvaluateArguments(Arguments);
+        var otherArguments = PartiallyEvaluateArguments(other.Arguments);
+
+        for (int i = 0; i <= arguments.Count - 1; i++)
+        {
+            if (!ExpressionEqualityComparer.Default.Equals(arguments[i], otherArguments[i]))
+                return false;
+        }
+
+        return true;
+
+        static IReadOnlyList<Expression> PartiallyEvaluateArguments(IEnumerable<Expression> arguments) =>
+            arguments.Select(argument => ExpressionEvaluator.PartiallyEvaluate(argument, true)).ToList();
+    }
+
+    public override int GetHashCode() => MethodInfo.GetHashCode();
 }

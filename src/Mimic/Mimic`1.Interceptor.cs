@@ -41,7 +41,8 @@ public partial class Mimic<T>
 
     private static class WellKnownMethods
     {
-        private static readonly MethodInfo MimickedMimicPropertyGetter = typeof(IMimicked<T>).GetProperty(nameof(IMimicked<T>.Mimic))!.GetMethod!;
+        private static readonly MethodInfo MimickedMimicPropertyGetter = typeof(IMimicked).GetProperty(nameof(IMimicked.Mimic))!.GetMethod!;
+        private static readonly MethodInfo MimickedOfTMimicPropertyGetter = typeof(IMimicked<T>).GetProperty(nameof(IMimicked<T>.Mimic))!.GetMethod!;
         private static readonly MethodInfo ObjectToStringMethod = typeof(object).GetMethod(nameof(ToString), BindingFlags.Public | BindingFlags.Instance)!;
         private static readonly MethodInfo ObjectEqualsMethod = typeof(object).GetMethod(nameof(Equals), BindingFlags.Public | BindingFlags.Instance)!;
         private static readonly MethodInfo ObjectGetHashCodeMethod = typeof(object).GetMethod(nameof(GetHashCode), BindingFlags.Public | BindingFlags.Instance)!;
@@ -49,12 +50,22 @@ public partial class Mimic<T>
         public static readonly Dictionary<MethodInfo, Func<Invocation, Mimic<T>, bool>> Handlers = new()
         {
             [MimickedMimicPropertyGetter] = HandleMimickedMimicPropertyGetter,
+            [MimickedOfTMimicPropertyGetter] = HandleMimickedOfTMimicPropertyGetter,
             [ObjectToStringMethod] = HandleObjectToStringMethod,
             [ObjectEqualsMethod] = HandleObjectEqualsMethod,
             [ObjectGetHashCodeMethod] = HandleObjectGetHashCodeMethod
         };
 
         private static bool HandleMimickedMimicPropertyGetter(Invocation invocation, Mimic<T> mimic)
+        {
+            if (!typeof(IMimicked).IsAssignableFrom(invocation.Method.DeclaringType))
+                return false;
+
+            invocation.SetReturnValue(mimic);
+            return true;
+        }
+
+        private static bool HandleMimickedOfTMimicPropertyGetter(Invocation invocation, Mimic<T> mimic)
         {
             if (!typeof(IMimicked<T>).IsAssignableFrom(invocation.Method.DeclaringType))
                 return false;

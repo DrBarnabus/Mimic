@@ -1,3 +1,5 @@
+using Mimic.Expressions;
+
 namespace Mimic.Setup;
 
 internal sealed class PropertyStubSetup : SetupBase
@@ -27,10 +29,12 @@ internal sealed class PropertyStubSetup : SetupBase
         }
     }
 
-    internal override void VerifyMatched()
+    internal override void VerifyMatched(Predicate<SetupBase> predicate, HashSet<IMimic> verified)
     {
         // intentionally empty
     }
+
+    internal override IReadOnlyList<IMimic> GetNested() => (_currentValue as IMimicked)?.Mimic is { } mimic ? [mimic] : [];
 
     private sealed class PropertyStubExpectation : IExpectation
     {
@@ -48,5 +52,12 @@ internal sealed class PropertyStubSetup : SetupBase
 
         public bool MatchesInvocation(Invocation invocation)
             => invocation.Method.Name == _getter.Name || invocation.Method.Name == _setter.Name;
+
+        public override bool Equals(object? obj) => obj is PropertyStubExpectation other &&  Equals(other);
+
+        public bool Equals(IExpectation? obj) =>
+            obj is PropertyStubExpectation other && ExpressionEqualityComparer.Default.Equals(Expression, other.Expression);
+
+        public override int GetHashCode() => typeof(PropertyStubExpectation).GetHashCode();
     }
 }

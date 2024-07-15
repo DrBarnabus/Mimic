@@ -1014,7 +1014,7 @@ public class MethodCallSetupTests
     {
         var (setup, _, _, _) = ConstructMethodCallSetup(m => m.BasicVoidMethod(iValue, sValue, dValue, Arg.Any<List<bool>>()));
 
-        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched());
+        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched(_ => true, []));
         ex.ShouldNotBeNull();
         ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' which was marked as expected has not been matched.""");
     }
@@ -1029,7 +1029,7 @@ public class MethodCallSetupTests
         var invocation = InvocationFixture.ForMethod<ISubject>(nameof(ISubject.BasicVoidMethod), [iValue, sValue, dValue, bValues]);
         setup.Execute(invocation);
 
-        Should.NotThrow(() => setup.VerifyMatched());
+        Should.NotThrow(() => setup.VerifyMatched(_ => true, []));
     }
 
     [Theory]
@@ -1044,15 +1044,90 @@ public class MethodCallSetupTests
 
         setup.Execute(InvocationFixture.ForMethod<ISubject>(nameof(ISubject.BasicVoidMethod), [iValue, sValue, dValue, bValues]));
 
-        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched());
+        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched(_ => true, []));
 
         ex.ShouldNotBeNull();
         ex.Message.ShouldBe($"""Setup 'MethodCallSetupTests.ISubject m => m.BasicVoidMethod({iValue}, "{sValue}", {dValue}, Any())' with sequence which was marked as expected has not been matched, 1 setup result has not been used.""");
     }
 
+    [Theory]
+    [AutoData]
+    public void VerifyMatched_WhenMatched_AndSetupContainsMatchedNestedSetup_ShouldNotThrow(int iValue, string returnValue)
+    {
+        var (nestedSetup, nestedMimic, _, _) = ConstructMethodCallSetup<INestedSubject>(m => m.BasicNonVoidMethod(iValue));
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.NestedMethod());
+
+        nestedSetup.SetReturnValueBehaviour(returnValue);
+        setup.SetReturnValueBehaviour(nestedMimic.Object);
+
+        (nestedMimic as IMimic).Setups.Add(nestedSetup);
+
+        setup.Execute(InvocationFixture.ForMethod<ISubject>(nameof(ISubject.NestedMethod)));
+        nestedSetup.Execute(InvocationFixture.ForMethod<INestedSubject>(nameof(INestedSubject.BasicNonVoidMethod), [iValue]));
+
+        Should.NotThrow(() => setup.VerifyMatched(_ => true, []));
+    }
+
+    [Theory]
+    [AutoData]
+    public void VerifyMatched_WhenMatched_AndSetupContainsUnmatchedNestedSetup_ShouldThrow(int iValue, string returnValue)
+    {
+        var (nestedSetup, nestedMimic, _, _) = ConstructMethodCallSetup<INestedSubject>(m => m.BasicNonVoidMethod(iValue));
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.NestedMethod());
+
+        nestedSetup.SetReturnValueBehaviour(returnValue);
+        setup.SetReturnValueBehaviour(nestedMimic.Object);
+
+        (nestedMimic as IMimic).Setups.Add(nestedSetup);
+
+        setup.Execute(InvocationFixture.ForMethod<ISubject>(nameof(ISubject.NestedMethod)));
+
+        var ex = Should.Throw<MimicException>(() => setup.VerifyMatched(_ => true, []));
+
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldBe($"Setup 'MethodCallSetupTests.INestedSubject m => m.BasicNonVoidMethod({iValue})' which was marked as expected has not been matched.");
+    }
+
+    [Fact]
+    public void GetNested_WhenNoReturnValue_ShouldReturnAnEmptyList()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
+
+        var nestedMimics = setup.GetNested();
+        nestedMimics.ShouldNotBeNull();
+        nestedMimics.ShouldBeEmpty();
+    }
+
+    [Theory]
+    [AutoData]
+    public void GetNested_WhenReturnValueIsNotMimicked_ShouldReturnAnEmptyList(string value)
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
+        setup.SetReturnValueBehaviour(value);
+
+        var nestedMimics = setup.GetNested();
+        nestedMimics.ShouldNotBeNull();
+        nestedMimics.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public void GetNested_WhenReturnValueIsMimicked_ShouldReturnListContainingOnlyTheMimicObject()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.NestedMethod());
+
+        var nestedMimic = new Mimic<INestedSubject>();
+        setup.SetReturnValueBehaviour(nestedMimic.Object);
+
+        var nestedMimics = setup.GetNested();
+        nestedMimics.ShouldNotBeNull();
+        nestedMimics.ShouldNotBeEmpty();
+        nestedMimics.Count.ShouldBe(1);
+        nestedMimics[0].ShouldBeSameAs(nestedMimic);
+    }
+
     #endregion
 
-    private static (MethodCallSetup Setup, Mimic<ISubject> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup(
+    internal static (MethodCallSetup Setup, Mimic<ISubject> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup(
         Expression<Action<ISubject>> expression, Func<bool>? condition = null, bool strict = true) => ConstructMethodCallSetup<ISubject>(expression, condition, strict);
 
     private static (MethodCallSetup Setup, Mimic<T> Mimic, MethodCallExpression OriginalExpression, MethodExpectation Expectation) ConstructMethodCallSetup<T>(
@@ -1081,6 +1156,8 @@ public class MethodCallSetupTests
         public void ParameterlessVoidMethod();
 
         public Delegate DelegateReturningMethod();
+
+        public INestedSubject NestedMethod();
     }
 
     // ReSharper disable once MemberCanBePrivate.Global
@@ -1089,5 +1166,11 @@ public class MethodCallSetupTests
         public abstract string AbstractMethod();
 
         public virtual string VirtualMethod() => default!;
+    }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal interface INestedSubject
+    {
+        public string BasicNonVoidMethod(int iValue);
     }
 }
