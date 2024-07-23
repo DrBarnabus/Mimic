@@ -130,9 +130,6 @@ public class MimicException : Exception
     internal static MimicException MethodIsNotOverridable(Expression expression) =>
         new(Reason.UnsupportedExpression, Strings.FormatMethodIsNotOverridable(expression));
 
-    internal static MimicException NestedMethodCallIsNotAllowed(Expression expression) =>
-        new(Reason.UnsupportedExpression, Strings.FormatNestedMethodCallIsNotAllowed(expression));
-
     internal static MimicException UnsupportedExpressionType(Expression expression) =>
         new(Reason.UnsupportedExpression, Strings.FormatUnsupportedExpressionType(expression));
 

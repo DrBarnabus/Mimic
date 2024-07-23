@@ -242,7 +242,72 @@ public class MethodExpectationTests
         expectation.MatchesInvocation(invocation).ShouldBeFalse();
     }
 
-    private static MethodExpectation ConstructMethodExpectation(Expression<Action<ISubject>> expression)
+    [Theory]
+    [AutoData]
+    public void Equals_WhenCalledWithMatchingObject_ShouldReturnTrue(int iValue)
+    {
+        var expectationOne = ConstructMethodExpectation(s => s.MethodWithArguments(iValue, Arg.Any<string>()));
+        var expectationTwo = ConstructMethodExpectation(s => s.MethodWithArguments(iValue, Arg.Any<string>()));
+
+        expectationOne.Equals(expectationTwo).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Equals_WhenCalledWithWrongObjectType_ShouldReturnFalse()
+    {
+        var expectation = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        expectation.Equals("obviously wrong type").ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenCalledWithWrongExpectationType_ShouldReturnFalse()
+    {
+        var expectation = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+        var allPropertiesStubSetupExpectation = new AllPropertiesStubSetup(new Mimic<ISubject>()).Expectation;
+
+        expectation.Equals(allPropertiesStubSetupExpectation).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenExpectationsHaveDifferentMethods_ShouldReturnFalse()
+    {
+        var expectationOne = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+        var expectationTwo = ConstructMethodExpectation(s => s.MethodWithNoArguments());
+
+        expectationOne.Equals(expectationTwo).ShouldBeFalse();
+    }
+
+    [Theory]
+    [AutoData]
+    public void Equals_WhenExpectationsHaveDifferentArgumentValues_ShouldReturnFalse(int iValue)
+    {
+        var expectationOne = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+        var expectationTwo = ConstructMethodExpectation(s => s.MethodWithArguments(iValue, Arg.Any<string>()));
+
+        expectationOne.Equals(expectationTwo).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void GetHashCode_WhenExpectationsHaveSameMethods_ShouldReturnTrue()
+    {
+        var expectationOne = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+        var expectationTwo = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+
+        expectationOne.GetHashCode().ShouldBe(expectationTwo.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_WhenExpectationsHaveDifferentMethods_ShouldReturnFalse()
+    {
+        var expectationOne = ConstructMethodExpectation(s => s.MethodWithArguments(Arg.Any<int>(), Arg.Any<string>()));
+        var expectationTwo = ConstructMethodExpectation(s => s.MethodWithNoArguments());
+
+        expectationOne.GetHashCode().ShouldNotBe(expectationTwo.GetHashCode());
+    }
+
+    internal static MethodExpectation ConstructMethodExpectation(Expression<Action<ISubject>> expression)
     {
         var methodCallExpression = (MethodCallExpression)expression.Body;
         return new MethodExpectation(expression, methodCallExpression.Method, methodCallExpression.Arguments);

@@ -1,9 +1,6 @@
-﻿namespace Mimic;
+namespace Mimic;
 
-[PublicAPI]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public interface IMimicked<T>
-    where T : class
+internal interface IMimicked
 {
-    Mimic<T> Mimic { get; }
+    IMimic Mimic { get; }
 }

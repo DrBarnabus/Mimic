@@ -1,6 +1,6 @@
 namespace Mimic.Setup;
 
-internal interface IExpectation
+internal interface IExpectation : IEquatable<IExpectation>
 {
     LambdaExpression Expression { get; }
 

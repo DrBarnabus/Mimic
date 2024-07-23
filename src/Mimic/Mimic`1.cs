@@ -1,4 +1,6 @@
-﻿using Mimic.Setup.Fluent;
+﻿using Mimic.Setup;
+using Mimic.Setup.Fluent;
+using SetupBase = Mimic.Setup.SetupBase;
 
 namespace Mimic;
 
@@ -47,6 +49,8 @@ public sealed partial class Mimic<T> : IMimic
         Name = $"Mimic<{TypeNameFormatter.GetFormattedName(typeof(T))}>:{instanceNumber}";
     }
 
+    public Mimic(bool strict) : this() => Strict = strict;
+
     public static Mimic<T> FromObject(T objectInstance)
     {
         if (objectInstance is not IMimicked<T> mimicked)
@@ -61,10 +65,22 @@ public sealed partial class Mimic<T> : IMimic
     {
         return _object ??= (T)ProxyGenerator.Instance.GenerateProxy(
             typeof(T),
-            [typeof(IMimicked<T>)],
+            [typeof(IMimicked), typeof(IMimicked<T>)],
             _constructorArguments ?? Array.Empty<object>(),
             this);
     }
 
     public override string ToString() => Name;
+
+    #region IMimic
+
+    object IMimic.Object => Object;
+
+    SetupCollection IMimic.Setups => _setups;
+
+    IReadOnlyList<Invocation> IMimic.Invocations => Invocations;
+
+    void IMimic.VerifyReceived(Predicate<SetupBase> predicate, HashSet<IMimic> verified) => VerifyReceived(predicate, verified);
+
+    #endregion
 }

@@ -36,8 +36,16 @@ mimic.Setup(m => m.Generic<Generic.AnyType>())
 
 SetupRef(mimic);
 
+mimic.Setup(m => m.NestingTest().NestedMethod())
+    .Returns("Returned from the nested method call")
+    .Expected();
+
 var mimickedObject = mimic.Object;
 mimickedObject.VoidMethod();
+
+bool isMimickedNestedType = mimickedObject.NestingTest() is IMimicked<INestedType>;
+Console.WriteLine($"Is IMimicked<INestedType> {isMimickedNestedType}");
+Console.WriteLine(mimickedObject.NestingTest().NestedMethod());
 
 string result = await mimickedObject.StringMethod("other");
 Console.WriteLine(result);
@@ -125,6 +133,13 @@ public interface ITypeToMimic
     void Generic<T>();
 
     void Ref(ref int reference, out string outValue);
+
+    INestedType NestingTest();
+}
+
+public interface INestedType
+{
+    public string NestedMethod();
 }
 
 public abstract class AbstractClass

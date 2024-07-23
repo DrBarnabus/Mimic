@@ -71,11 +71,13 @@ public partial class Mimic<T>
         if (!property.CanWriteProperty(out var setter, out _))
             throw MimicException.ExpressionNotPropertySetter(property);
 
-        var expectations = ExpressionSplitter.Split(propertyExpression);
-        if (expectations.Count != 1)
-            throw MimicException.NestedMethodCallIsNotAllowed(propertyExpression);
+        SetupRecursive(this, propertyExpression, (target, _, _) =>
+        {
+            var setup = new PropertyStubSetup(target, propertyExpression, getter, setter, initialValue);
+            target.Setups.Add(setup);
+            return setup;
+        });
 
-        _setups.Add(new PropertyStubSetup(this, propertyExpression, getter, setter, initialValue));
         return this;
     }
 
@@ -89,13 +91,12 @@ public partial class Mimic<T>
     {
         Guard.NotNull(expression);
 
-        var expectations = ExpressionSplitter.Split(expression);
-        if (expectations.Count != 1)
-            throw MimicException.NestedMethodCallIsNotAllowed(expression);
-
-        var setup = new MethodCallSetup(expression, mimic, expectations.Pop(), condition);
-        mimic._setups.Add(setup);
-        return setup;
+        return SetupRecursive(mimic, expression, (target, originalExpression, expectation) =>
+        {
+            var setup = new MethodCallSetup(originalExpression, target, expectation, condition);
+            target.Setups.Add(setup);
+            return setup;
+        });
     }
 
     internal static void ValidateSetterExpression(Expression<Action<T>> expression)
@@ -115,92 +116,60 @@ public partial class Mimic<T>
         throw MimicException.ExpressionNotPropertySetter(expression);
     }
 
-    private sealed class SetupCollection : IReadOnlyList<SetupBase>
+    private static TSetup SetupRecursive<TSetup>(
+        Mimic<T> mimic, LambdaExpression expression, Func<IMimic, Expression, MethodExpectation, TSetup> setup)
+        where TSetup : SetupBase
     {
-        private readonly List<SetupBase> _setups = new();
-        private readonly HashSet<IExpectation> _activeSetups = new();
+        Guard.NotNull(mimic);
+        Guard.NotNull(expression);
+        Guard.NotNull(setup);
 
-        public void Add(SetupBase setup)
+        return SetupRecursive(mimic, expression, ExpressionSplitter.Split(expression), setup);
+    }
+
+    private static TSetup SetupRecursive<TSetup>(IMimic mimic, LambdaExpression originalExpression, Stack<MethodExpectation> expectations, Func<IMimic, Expression, MethodExpectation, TSetup> setup) where TSetup : SetupBase
+    {
+        while (true)
         {
-            lock (_setups)
+            var expectation = expectations.Pop();
+            if (expectations.Count == 0)
+                return setup(mimic, originalExpression, expectation);
+
+            var nested = mimic.Setups.FindLast(s => s.Expectation.Equals(expectation))?.GetNested().SingleOrDefault();
+            if (nested is null)
             {
-                _setups.Add(setup);
+                object? returnValue = GetReturnValueForMethod(expectation.MethodInfo, mimic, out nested);
+                if (returnValue is null || nested is null)
+                    throw MimicException.TypeCannotBeMimicked(expectation.MethodInfo.ReturnType);
 
-                if (!_activeSetups.Add(setup.Expectation))
-                    MarkOverridenSetups();
-            }
-        }
-
-        public List<SetupBase> FindAll(Predicate<SetupBase> predicate)
-        {
-            lock (_setups)
-                return _setups.Where(setup => !setup.Overridden && predicate(setup)).ToList();
-        }
-
-        public SetupBase? FindLast(Predicate<SetupBase> predicate)
-        {
-            lock (_setups)
-            {
-                if (_setups.Count == 0)
-                    return null;
-
-                for (int i = _setups.Count - 1; i >= 0 ; i--)
-                {
-                    var setup = _setups[i];
-                    if (setup.Overridden)
-                        continue;
-
-                    if (predicate(setup))
-                        return setup;
-                }
+                mimic.Setups.Add(new NestedSetup(originalExpression, mimic, expectation, returnValue));
             }
 
-            return null;
+            Guard.NotNull(nested);
+            mimic = nested;
         }
 
-        public int Count
+        static object? GetReturnValueForMethod(MethodInfo method, IMimic mimic, out IMimic? nested)
         {
-            get
-            {
-                lock (_setups)
-                    return _setups.Count;
-            }
-        }
+            Guard.NotNull(method);
+            Guard.NotNull(method.ReturnType);
+            Guard.Assert(method.ReturnType != typeof(void));
 
-        public SetupBase this[int index]
-        {
-            get
-            {
-                lock (_setups)
-                {
-                    return _setups[index];
-                }
-            }
-        }
+            nested = null;
 
-        public IEnumerator<SetupBase> GetEnumerator()
-        {
-            lock (_setups)
-            {
-                return _setups.GetEnumerator();
-            }
-        }
+            object? emptyValue = DefaultValueFactory.GetDefaultValue(method.ReturnType);
+            if (emptyValue != null)
+                return emptyValue;
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            if (!method.ReturnType.CanBeMimicked())
+                return null;
 
-        private void MarkOverridenSetups()
-        {
-            var visitedExpectations = new HashSet<IExpectation>();
+            var newMimicType = typeof(Mimic<>).MakeGenericType(method.ReturnType);
+            var newMimic = (IMimic?)Activator.CreateInstance(newMimicType, mimic.Strict);
+            Guard.NotNull(newMimic);
 
-            for (int i = _setups.Count - 1; i >= 0 ; i--)
-            {
-                var setup = _setups[i];
-                if (setup.Overridden)
-                    continue;
-
-                if (!visitedExpectations.Add(setup.Expectation))
-                    setup.Override();
-            }
+            nested = newMimic;
+            return newMimic.Object;
         }
     }
 }

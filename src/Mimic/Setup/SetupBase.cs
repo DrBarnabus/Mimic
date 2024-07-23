@@ -48,11 +48,16 @@ internal abstract class SetupBase
 
     public void FlagAsExpected() => _flags |= Flags.Expected;
 
-    internal virtual void VerifyMatched()
+    internal virtual void VerifyMatched(Predicate<SetupBase> predicate, HashSet<IMimic> verified)
     {
         if (!Matched)
             throw MimicException.ExpectedSetupNotMatched(this);
+
+        foreach (var nested in GetNested())
+            nested.VerifyReceived(predicate, verified);
     }
+
+    internal virtual IReadOnlyList<IMimic> GetNested() => [];
 
     public override string ToString()
     {

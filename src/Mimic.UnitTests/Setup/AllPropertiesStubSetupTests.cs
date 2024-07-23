@@ -74,7 +74,7 @@ public class AllPropertiesStubSetupTests
 
     [Theory]
     [AutoData]
-    public void Execute_WhenCalledWithSetterAndGetterMethods_ShouldStoreAndRetriveProvidedValue(string value)
+    public void Execute_WhenCalledWithSetterAndGetterMethods_ShouldStoreAndRetrieveProvidedValue(string value)
     {
         var setMethod = typeof(ISubject).GetProperty(nameof(ISubject.StringProperty))!.GetSetMethod(true)!;
         var setInvocation = new InvocationFixture(typeof(ISubject), setMethod, [value]);
@@ -119,7 +119,24 @@ public class AllPropertiesStubSetupTests
     public void VerifyMatched_ShouldNotThrow()
     {
         var setup = new AllPropertiesStubSetup(_mimic);
-        Should.NotThrow(() => setup.VerifyMatched());
+        Should.NotThrow(() => setup.VerifyMatched(_ => true, []));
+    }
+
+    [Fact]
+    public void GetNested_ShouldReturnListContainingOnlyTheMimicObject()
+    {
+        var nestedMimic = new Mimic<INestedSubject>();
+        var setMethod = typeof(ISubject).GetProperty(nameof(ISubject.NestedSubject))!.GetSetMethod(true)!;
+        var setInvocation = new InvocationFixture(typeof(ISubject), setMethod, [nestedMimic.Object]);
+
+        var setup = new AllPropertiesStubSetup(_mimic);
+        setup.Execute(setInvocation);
+
+        var nestedMimics = setup.GetNested();
+        nestedMimics.ShouldNotBeNull();
+        nestedMimics.ShouldNotBeEmpty();
+        nestedMimics.Count.ShouldBe(1);
+        nestedMimics[0].ShouldBeSameAs(nestedMimic);
     }
 
     [Fact]
@@ -129,6 +146,51 @@ public class AllPropertiesStubSetupTests
         setup.ToString().ShouldBe("AllPropertiesStubSetupTests.ISubject m => FromObject(m).SetupAllProperties()");
     }
 
+    [Fact]
+    public void Equals_WhenCalledWithMatchingObject_ShouldReturnTrue()
+    {
+        var allPropertiesStubSetupExpectationOne = new AllPropertiesStubSetup(_mimic).Expectation;
+        var allPropertiesStubSetupExpectationTwo = new AllPropertiesStubSetup(_mimic).Expectation;
+
+        allPropertiesStubSetupExpectationOne.Equals(allPropertiesStubSetupExpectationTwo).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Equals_WhenCalledWithWrongObjectType_ShouldReturnFalse()
+    {
+        var allPropertiesStubSetupExpectation = new AllPropertiesStubSetup(_mimic).Expectation;
+
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        allPropertiesStubSetupExpectation.Equals("obviously wrong type").ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenCalledWithWrongExpectationType_ShouldReturnFalse()
+    {
+        var allPropertiesStubSetupExpectation = new AllPropertiesStubSetup(_mimic).Expectation;
+        var methodExpectation = MethodExpectationTests.ConstructMethodExpectation(m => m.MethodWithNoArguments());
+
+        allPropertiesStubSetupExpectation.Equals(methodExpectation).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenExpectationIsForDifferentMimicObject_ShouldReturnFalse()
+    {
+        var allPropertiesStubSetupExpectationOne = new AllPropertiesStubSetup(_mimic).Expectation;
+        var allPropertiesStubSetupExpectationTwo = new AllPropertiesStubSetup(new Mimic<INestedSubject>()).Expectation;
+
+        allPropertiesStubSetupExpectationOne.Equals(allPropertiesStubSetupExpectationTwo).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void GetHashCode_ShouldAlwaysReturnMatchingValues()
+    {
+        var allPropertiesStubSetupExpectationOne = new AllPropertiesStubSetup(_mimic).Expectation;
+        var allPropertiesStubSetupExpectationTwo = new AllPropertiesStubSetup(new Mimic<INestedSubject>()).Expectation;
+
+        allPropertiesStubSetupExpectationOne.GetHashCode().ShouldBe(allPropertiesStubSetupExpectationTwo.GetHashCode());
+    }
+
     private interface ISubject
     {
         public string StringProperty { get; set; }
@@ -136,5 +198,10 @@ public class AllPropertiesStubSetupTests
         public int IntProperty { get; set; }
 
         public void VoidMethod();
+
+        public INestedSubject NestedSubject { get; set; }
     }
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal interface INestedSubject;
 }

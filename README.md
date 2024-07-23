@@ -43,6 +43,7 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 - Mimic is **strict by default**, meaning it throws for methods without a corresponding setup, but it's possible to
   disable the default behaviour by setting `Strict = false` on construction
 - Quick and easy stubbing of properties to store and retrieve values
+- Implicit mocking of interfaces returned by mimicked methods allowing for easy setup of nested calls
 - Comprehensive set of behaviours for method setups such as; `Returns`, `Throws`, `Callback`, `When`, `Limit`,
   `Expected`, `AsSequence` and `Proceed`
 - Verification of expected, setup and received calls including asserting no additional calls
@@ -53,7 +54,6 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 Considering = ❓ | Planned = 📅 | In-Progress = 🚧
 ```
 
-- [📅] Implicit mimicking of nested setups (e.g. `m => m.MethodThatReturnsInterface().MethodOnThatInterface()`)
 - [📅] Delay behaviour (or Extension to `Returns`/`Throws`) for setups that allows for specific or random delays in
   execution time
 - [❓] Setup and Verification of Event's
