@@ -11,8 +11,8 @@ public sealed partial class Mimic<T> : IMimic
     // ReSharper disable once StaticMemberInGenericType
     private static int _instanceCounter;
 
-    private readonly SetupCollection _setups = new();
-    private readonly List<Invocation> _invocations = new();
+    private readonly SetupCollection _setups = [];
+    private readonly List<Invocation> _invocations = [];
 
     private object[]? _constructorArguments;
     private T? _object;
@@ -61,16 +61,16 @@ public sealed partial class Mimic<T> : IMimic
 
     public IConditionalSetup<T> When(Func<bool> condition) => new ConditionalSetup<T>(this, condition);
 
+    public override string ToString() => Name;
+
     private T GetOrInitializeObject()
     {
         return _object ??= (T)ProxyGenerator.Instance.GenerateProxy(
             typeof(T),
             [typeof(IMimicked), typeof(IMimicked<T>)],
-            _constructorArguments ?? Array.Empty<object>(),
+            _constructorArguments ?? [],
             this);
     }
-
-    public override string ToString() => Name;
 
     #region IMimic
 
