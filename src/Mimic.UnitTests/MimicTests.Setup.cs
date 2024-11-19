@@ -79,6 +79,16 @@ public partial class MimicTests
             Should.NotThrow(() => mimic.Object.GetNestedSubject(value).NestedVoidMethod());
         }
 
+        [Theory, InlineAutoData(true), InlineAutoData(false)]
+        public void Setup_WithChainedNestedMimic_AndNestedVoidReturnValue_ShouldInitializeNestedMimicWithTheSameStrictModeSetting(bool strict, string sValue)
+        {
+            var mimic = new Mimic<ISubject>(strict);
+            mimic.Setup(m => m.GetNestedSubject(sValue).NestedVoidMethod());
+
+            var nestedMimic = Mimic<INestedSubject>.FromObject(mimic.Object.GetNestedSubject(sValue));
+            nestedMimic.Strict.ShouldBe(strict);
+        }
+
         [Fact]
         public void Setup_WithChainedTypeThatCannotBeMimicked_ShouldThrowMimicException()
         {

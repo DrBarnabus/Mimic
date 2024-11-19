@@ -165,7 +165,7 @@ public partial class Mimic<T>
                 return null;
 
             var newMimicType = typeof(Mimic<>).MakeGenericType(method.ReturnType);
-            var newMimic = (IMimic?)Activator.CreateInstance(newMimicType, mimic.Strict);
+            var newMimic = (IMimic?)Activator.CreateInstance(newMimicType, args: [mimic.Strict]);
             Guard.NotNull(newMimic);
 
             nested = newMimic;
