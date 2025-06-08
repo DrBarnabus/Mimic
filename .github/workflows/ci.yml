@@ -87,7 +87,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        targetFramework: [net6.0, net7.0, net8.0]
+        targetFramework: [net8.0, net9.0]
 
     env:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
