@@ -43,7 +43,7 @@ internal sealed class ProxyGenerator
 
     public static void ThrowIfMethodIsInaccessible(MethodInfo method)
     {
-        if (!ProxyUtil.IsAccessible(method, out string message))
+        if (!ProxyUtil.IsAccessible(method, out string? message))
             throw MimicException.MethodNotAccessibleByProxyGenerator(method, message);
     }
 
@@ -96,7 +96,7 @@ internal sealed class ProxyGenerator
         }
     }
 
-    private sealed class Invocation : Mimic.Proxy.Invocation
+    private sealed class Invocation : Proxy.Invocation
     {
         private Castle.DynamicProxy.IInvocation? _underlyingInvocation;
 
