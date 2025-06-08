@@ -5,7 +5,7 @@ namespace Build.Tasks.Testing;
 
 [TaskName(nameof(UnitTest))]
 [TaskDescription("Run the unit tests")]
-[TaskArgument(Arguments.TargetFramework, Constants.NetVersion60, Constants.NetVersion70, Constants.NetVersion80)]
+[TaskArgument(Arguments.TargetFramework, Constants.NetVersion80, Constants.NetVersion90)]
 [IsDependentOn(typeof(Build))]
 public sealed class UnitTest : FrostingTask<BuildContext>
 {

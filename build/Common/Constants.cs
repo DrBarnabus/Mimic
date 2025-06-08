@@ -5,17 +5,15 @@ public static class Constants
     public const string RepoOwner = "DrBarnabus";
     public const string Repository = "Mimic";
 
-    public const string Version60 = "6.0";
-    public const string Version70 = "7.0";
     public const string Version80 = "8.0";
-    public const string VersionLatest = Version80;
+    public const string Version90 = "9.0";
+    public const string VersionLatest = Version90;
 
-    public const string NetVersion60 = $"net{Version60}";
-    public const string NetVersion70 = $"net{Version70}";
     public const string NetVersion80 = $"net{Version80}";
+    public const string NetVersion90 = $"net{Version90}";
     public const string NetVersionLatest = $"net{VersionLatest}";
 
-    public static readonly string[] TargetFrameworks = { NetVersion60, NetVersion70, NetVersion80 };
+    public static readonly string[] TargetFrameworks = { NetVersion80, NetVersion90 };
 
     public const string DefaultBranch = "main";
     public const string DefaultConfiguration = "Release";
