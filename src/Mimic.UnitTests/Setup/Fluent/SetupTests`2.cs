@@ -534,6 +534,28 @@ public static partial class SetupTests
 
         #endregion
 
+        [Theory, AutoData]
+        public void WithDelay_WhenCalledWithValue_ShouldCorrectlySetDelayBehaviour(int milliseconds)
+        {
+            var methodCallSetup = ToMethodCallSetup(m => m.MethodWithNoParameters());
+            var setup = new Setup<ISubject>(methodCallSetup);
+
+            setup.WithDelay(TimeSpan.FromMilliseconds(milliseconds)).ShouldBeSameAs(setup);
+
+            methodCallSetup.ConfiguredBehaviours.Delay.ShouldNotBeNull();
+        }
+
+        [Theory, AutoData]
+        public void WithDelay_WhenCalledWithFunction_ShouldCorrectlySetDelayBehaviour(int milliseconds)
+        {
+            var methodCallSetup = ToMethodCallSetup(m => m.MethodWithNoParameters());
+            var setup = new Setup<ISubject>(methodCallSetup);
+
+            setup.WithDelay(_ => TimeSpan.FromMilliseconds(milliseconds)).ShouldBeSameAs(setup);
+
+            methodCallSetup.ConfiguredBehaviours.Delay.ShouldNotBeNull();
+        }
+
         [Theory]
         [AutoData]
         public void Limit_ShouldCorrectlySetExecutionLimitBehaviour(int executionLimit)

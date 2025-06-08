@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using Mimic.Core;
 using Mimic.Exceptions;
 using Mimic.Setup;
@@ -135,6 +136,20 @@ public class MethodCallSetupTests
         arguments[0].ShouldBe(dValue);
         arguments[1].ShouldBe(!bValue);
         arguments[2].ShouldBe(iValue);
+    }
+
+    [Fact]
+    public void Execute_WhenSetupHasDelay_AndExecutionLimitIsNotExceeded_ShouldNotThrow()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
+
+        setup.SetDelayBehaviour(_ => TimeSpan.FromMilliseconds(500));
+
+        var invocation = InvocationFixture.ForMethod<ISubject>(nameof(ISubject.BasicVoidMethod));
+
+        var stopwatch = Stopwatch.StartNew();
+        Should.NotThrow(() => setup.Execute(invocation));
+        stopwatch.ElapsedMilliseconds.ShouldBeGreaterThanOrEqualTo(500);
     }
 
     [Fact]
@@ -625,6 +640,31 @@ public class MethodCallSetupTests
         var ex = Should.Throw<MimicException>(() => setup.SetCallbackBehaviour((int _, string _, double _, List<bool> _) => returnValue));
         ex.ShouldNotBeNull();
         ex.Message.ShouldBe("Setup on method cannot invoke a callback method with a non-void return type.");
+    }
+
+    #endregion
+
+    #region SetDelayBehaviour
+
+    [Fact]
+    public void SetDelayBehaviour_WhenDelayFunctionIsNull_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.SetDelayBehaviour(null!));
+        ex.ShouldNotBeNull();
+        ex.Message.ShouldContain("delayFunction must not be null");
+    }
+
+    [Fact]
+    public void SetDelayBehaviour_WhenDelayIsAlreadySet_ShouldThrowAssertionException()
+    {
+        var (setup, _, _, _) = ConstructMethodCallSetup(m => m.ParameterlessMethod());
+        setup.SetDelayBehaviour(_ => TimeSpan.Zero);
+
+        var ex = Should.Throw<Guard.AssertionException>(() => setup.SetDelayBehaviour(_ => TimeSpan.Zero));
+        ex.ShouldNotBeNull();
+        ex.Expression.ShouldBe("_delay is null");
     }
 
     #endregion

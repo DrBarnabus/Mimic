@@ -54,8 +54,6 @@ mimic.VerifyReceived(m => m.IsMimicEasyToUse("it's so intuitive"), CallCount.AtL
 Considering = ❓ | Planned = 📅 | In-Progress = 🚧
 ```
 
-- [📅] Delay behaviour (or Extension to `Returns`/`Throws`) for setups that allows for specific or random delays in
-  execution time
 - [❓] Setup and Verification of Event's
 - [❓] Configurable default return values instead of just `null` for reference and `default` for value types when
   `Strict = false`

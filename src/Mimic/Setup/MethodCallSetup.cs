@@ -8,6 +8,7 @@ using ConfiguredBehaviours = (
     Behaviour? ReturnOrThrow,
     CallbackBehaviour? PreReturnCallback,
     CallbackBehaviour? PostReturnCallback,
+    DelayBehaviour? Delay,
     ExecutionLimitBehaviour? ExecutionLimit);
 
 internal sealed class MethodCallSetup : SetupBase
@@ -18,11 +19,12 @@ internal sealed class MethodCallSetup : SetupBase
     private Behaviour? _returnOrThrow;
     private CallbackBehaviour? _preReturnCallback;
     private CallbackBehaviour? _postReturnCallback;
+    private DelayBehaviour? _delay;
     private ExecutionLimitBehaviour? _executionLimit;
 
     public MethodInfo MethodInfo => ((MethodExpectation)Expectation).MethodInfo;
 
-    internal ConfiguredBehaviours ConfiguredBehaviours => (_returnOrThrow, _preReturnCallback, _postReturnCallback, _executionLimit);
+    internal ConfiguredBehaviours ConfiguredBehaviours => (_returnOrThrow, _preReturnCallback, _postReturnCallback, _delay, _executionLimit);
 
     public MethodCallSetup(Expression originalExpression, IMimic mimic, MethodExpectation expectation, Func<bool>? condition)
         : base(originalExpression, mimic, expectation)
@@ -41,6 +43,8 @@ internal sealed class MethodCallSetup : SetupBase
 
         _executionLimit?.Execute(invocation);
         _preReturnCallback?.Execute(invocation);
+
+        _delay?.Execute(invocation);
 
         if (_returnOrThrow is not null)
             _returnOrThrow.Execute(invocation);
@@ -116,6 +120,14 @@ internal sealed class MethodCallSetup : SetupBase
 
             callbackBehaviour = new CallbackBehaviour(invocation => callbackFunction.Invoke(invocation.Arguments));
         }
+    }
+
+    public void SetDelayBehaviour(Func<int, TimeSpan> delayFunction)
+    {
+        Guard.NotNull(delayFunction);
+        Guard.Assert(_delay is null);
+
+        _delay = new DelayBehaviour(delayFunction);
     }
 
     public void SetExecutionLimitBehaviour(int executionLimit)

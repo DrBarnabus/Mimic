@@ -1,6 +1,6 @@
 ﻿namespace Mimic.Setup.Fluent;
 
-internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IExpected
+internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, ISequenceDelayable, IExpected
     where TNext : IFluent
 {
     protected MethodCallSetup Setup { get; }
@@ -156,6 +156,18 @@ internal abstract class SequenceSetupBase<TNext> : IThrows<TNext>, IExpected
     {
         Setup.AddProceedBehaviour();
         return This;
+    }
+
+    public IExpected WithDelay(TimeSpan delay)
+    {
+        Setup.SetDelayBehaviour(_ => delay);
+        return this;
+    }
+
+    public IExpected WithDelay(Func<int, TimeSpan> delayFunction)
+    {
+        Setup.SetDelayBehaviour(delayFunction);
+        return this;
     }
 
     public void Expected() => Setup.FlagAsExpected();

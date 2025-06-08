@@ -1,4 +1,5 @@
-﻿using Mimic;
+﻿using System.Diagnostics;
+using Mimic;
 
 var mimic = new Mimic<ITypeToMimic>();
 
@@ -32,6 +33,14 @@ reference.Throws(new Exception("Test Exception from void?"));
 mimic.SetupAllProperties();
 
 mimic.Setup(m => m.Generic<Generic.AnyType>())
+    .WithDelay(TimeSpan.FromMilliseconds(400))
+    .Expected();
+
+mimic.Setup(m => m.Generic<string>())
+    .WithDelay(TimeSpan.FromMilliseconds(800), TimeSpan.FromMilliseconds(1600))
+    .Expected();
+
+mimic.Setup(m => m.Generic<byte>())
     .Expected();
 
 SetupRef(mimic);
@@ -81,7 +90,17 @@ catch (Exception ex)
     Console.WriteLine($"Exception thrown with message: {ex.Message}");
 }
 
+var sw = Stopwatch.StartNew();
 mimickedObject.Generic<int>();
+Console.WriteLine($"Time taken with int {sw.ElapsedMilliseconds}ms");
+
+sw = Stopwatch.StartNew();
+mimickedObject.Generic<string>();
+Console.WriteLine($"Time taken with string {sw.ElapsedMilliseconds}ms");
+
+sw = Stopwatch.StartNew();
+mimickedObject.Generic<byte>();
+Console.WriteLine($"Time taken with byte {sw.ElapsedMilliseconds}ms");
 
 int refInt = 10;
 mimickedObject.Ref(ref refInt, out string outResult);

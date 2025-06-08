@@ -2,7 +2,7 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface ISetup<TMimic, in TResult> : ICallback<TResult>, IReturns<TResult>, ILimitable, IThrows, IExpected, IFluent
+public interface ISetup<TMimic, in TResult> : ICallback<TResult>, IReturns<TResult>, IDelayable, ILimitable, IThrows, IExpected, IFluent
     where TMimic : class
 {
     ISequenceSetup<TResult> AsSequence();
