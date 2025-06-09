@@ -27,17 +27,11 @@ public partial class Mimic<T>
     public void VerifyReceived(Expression<Action<T>> expression, CallCount callCount) =>
         VerifyReceivedInternal(expression, callCount);
 
-    public void VerifyReceived(Expression<Action<T>> expression, Func<CallCount> callCount) =>
-        VerifyReceivedInternal(expression, callCount());
-
     public void VerifyReceived(Expression<Action<T>> expression, string failureMessage) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
     public void VerifyReceived(Expression<Action<T>> expression, CallCount callCount, string failureMessage) =>
         VerifyReceivedInternal(expression, callCount, failureMessage);
-
-    public void VerifyReceived(Expression<Action<T>> expression, Func<CallCount> callCount, string failureMessage) =>
-        VerifyReceivedInternal(expression, callCount(), failureMessage);
 
     #endregion
 
@@ -49,17 +43,11 @@ public partial class Mimic<T>
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, CallCount callCount) =>
         VerifyReceivedInternal(expression, callCount);
 
-    public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, Func<CallCount> callCount) =>
-        VerifyReceivedInternal(expression, callCount());
-
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, string failureMessage) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, CallCount callCount, string failureMessage) =>
         VerifyReceivedInternal(expression, callCount, failureMessage);
-
-    public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, Func<CallCount> callCount, string failureMessage) =>
-        VerifyReceivedInternal(expression, callCount(), failureMessage);
 
     #endregion
 
@@ -71,17 +59,11 @@ public partial class Mimic<T>
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, CallCount callCount) =>
         VerifyGetReceivedInternal(expression, callCount);
 
-    public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, Func<CallCount> callCount) =>
-        VerifyGetReceivedInternal(expression, callCount());
-
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, string failureMessage) =>
         VerifyGetReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, CallCount callCount, string failureMessage) =>
         VerifyGetReceivedInternal(expression, callCount, failureMessage);
-
-    public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, Func<CallCount> callCount, string failureMessage) =>
-        VerifyGetReceivedInternal(expression, callCount(), failureMessage);
 
     #endregion
 
@@ -93,17 +75,11 @@ public partial class Mimic<T>
     public void VerifySetReceived(Action<T> setterExpression, CallCount callCount) =>
         VerifySetReceivedInternal(setterExpression, callCount);
 
-    public void VerifySetReceived(Action<T> setterExpression, Func<CallCount> callCount) =>
-        VerifySetReceivedInternal(setterExpression, callCount());
-
     public void VerifySetReceived(Action<T> setterExpression, string failureMessage) =>
         VerifySetReceivedInternal(setterExpression, CallCount.AtLeastOnce(), failureMessage);
 
     public void VerifySetReceived(Action<T> setterExpression, CallCount callCount, string failureMessage) =>
         VerifySetReceivedInternal(setterExpression, callCount, failureMessage);
-
-    public void VerifySetReceived(Action<T> setterExpression, Func<CallCount> callCount, string failureMessage) =>
-        VerifySetReceivedInternal(setterExpression, callCount(), failureMessage);
 
     #endregion
 
