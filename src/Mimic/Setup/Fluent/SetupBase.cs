@@ -1,6 +1,6 @@
 ﻿namespace Mimic.Setup.Fluent;
 
-internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
+internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult, IDelayableResult
 {
     protected SetupBase(MethodCallSetup setup)
     {
@@ -264,6 +264,18 @@ internal class SetupBase : ICallback, ICallbackResult, IThrows, IThrowsResult
     }
 
     #endregion
+
+    public IDelayableResult WithDelay(TimeSpan delay)
+    {
+        Setup.SetDelayBehaviour(_ => delay);
+        return this;
+    }
+
+    public IDelayableResult WithDelay(Func<int, TimeSpan> delayFunction)
+    {
+        Setup.SetDelayBehaviour(delayFunction);
+        return this;
+    }
 
     public IExpected Limit(int executionLimit = 1)
     {

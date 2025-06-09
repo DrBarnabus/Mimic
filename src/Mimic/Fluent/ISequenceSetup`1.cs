@@ -2,4 +2,4 @@
 
 [PublicAPI]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface ISequenceSetup<in TResult> : IReturns<TResult, ISequenceSetup<TResult>>, IThrows<ISequenceSetup<TResult>>, IExpected, IFluent;
+public interface ISequenceSetup<in TResult> : IReturns<TResult, ISequenceSetup<TResult>>, IThrows<ISequenceSetup<TResult>>, ISequenceDelayable, IExpected, IFluent;

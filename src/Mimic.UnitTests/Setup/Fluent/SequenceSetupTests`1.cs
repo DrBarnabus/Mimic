@@ -574,6 +574,28 @@ public class SequenceSetupOfTResultTests
         (methodCallSetup.ConfiguredBehaviours.ReturnOrThrow as SequenceBehaviour)!.Remaining.ShouldBe(1);
     }
 
+    [Theory, AutoData]
+    public void WithDelay_WhenCalledWithValue_ShouldCorrectlySetDelayBehaviour(int milliseconds)
+    {
+        var methodCallSetup = ToMethodCallSetup(m => m.MethodWithNoParameters());
+        var setup = new SequenceSetup(methodCallSetup);
+
+        setup.WithDelay(TimeSpan.FromMilliseconds(milliseconds)).ShouldBeSameAs(setup);
+
+        methodCallSetup.ConfiguredBehaviours.Delay.ShouldNotBeNull();
+    }
+
+    [Theory, AutoData]
+    public void WithDelay_WhenCalledWithFunction_ShouldCorrectlySetDelayBehaviour(int milliseconds)
+    {
+        var methodCallSetup = ToMethodCallSetup(m => m.MethodWithNoParameters());
+        var setup = new SequenceSetup(methodCallSetup);
+
+        setup.WithDelay(_ => TimeSpan.FromMilliseconds(milliseconds)).ShouldBeSameAs(setup);
+
+        methodCallSetup.ConfiguredBehaviours.Delay.ShouldNotBeNull();
+    }
+
     private static MethodCallSetup ToMethodCallSetup(Expression<Action<ISubject>> expression) => ToMethodCallSetup<ISubject>(expression);
 
     private static MethodCallSetup ToMethodCallSetup<T>(Expression<Action<T>> expression)
