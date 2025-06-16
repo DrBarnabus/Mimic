@@ -15,7 +15,8 @@ public sealed class Build : FrostingTask<BuildContext>
         {
             Verbosity = DotNetVerbosity.Minimal,
             Sources = new [] { Constants.NuGetOrgUrl },
-            MSBuildSettings = context.MsBuildSettings
+            MSBuildSettings = context.MsBuildSettings,
+            LockedMode = true
         });
 
         context.DotNetBuild(Constants.SolutionFile, new DotNetBuildSettings
