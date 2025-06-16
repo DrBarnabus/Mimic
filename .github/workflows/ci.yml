@@ -114,6 +114,14 @@ jobs:
         with:
           paths: artifacts/test-results/*.results.xml
 
+      - name: Upload Results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: artifacts/test-results/*.results.xml
+          flags: ${{ matrix.targetFramework }}
+
   publish:
     name: Publish
     needs: [package, test]
