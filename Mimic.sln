@@ -5,6 +5,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BC413DBD-20FC-498C-BB54-F52EEEB1FF0E}"
 	ProjectSection(SolutionItems) = preProject
 		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Packages.props = src\Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimic.Sandbox", "src\Mimic.Sandbox\Mimic.Sandbox.csproj", "{AFDCDBF9-17DF-4953-AA9C-838FC898B5A9}"
