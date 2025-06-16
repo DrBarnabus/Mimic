@@ -42,17 +42,4 @@
         <EmbeddedResource Update="Resources\Strings.resx" EmitFormatMethods="true" />
     </ItemGroup>
 
-    <!-- Extensions\ReturnsExtensions.tt -->
-    <ItemGroup>
-        <None Update="Extensions\ReturnsExtensions.tt">
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>ReturnsExtensions.Generated.cs</LastGenOutput>
-        </None>
-        <Compile Update="Extensions\ReturnsExtensions.Generated.cs">
-            <AutoGen>True</AutoGen>
-            <DesignTime>True</DesignTime>
-            <DependentUpon>ReturnsExtensions.tt</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
 </Project>
