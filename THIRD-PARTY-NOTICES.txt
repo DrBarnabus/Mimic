@@ -1,0 +1,8 @@
+﻿License notice for Castle.Core
+----------------------------------------
+
+https://github.com/castleproject/Core
+
+Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+
+License available at https://github.com/castleproject/Core/blob/master/LICENSE
