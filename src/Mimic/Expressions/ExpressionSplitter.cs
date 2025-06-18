@@ -129,7 +129,7 @@ internal static class ExpressionSplitter
         }
         else
         {
-            Guard.Assert(IsExtention(method), "Method must be an extension method");
+            Guard.Assert(IsExtension(method), "Method must be an extension method");
             Guard.Assert(arguments.Count > 0, "Method must have at least 1 argument");
 
             remainder = methodCallExpression.Arguments[0];
@@ -177,7 +177,7 @@ internal static class ExpressionSplitter
                 : EmptyParameterName);
     }
 
-    private static bool IsExtention(MethodBase method)
+    private static bool IsExtension(MethodBase method)
     {
         return method.IsStatic && method.IsDefined(typeof(ExtensionAttribute));
     }
