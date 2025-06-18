@@ -121,7 +121,7 @@ internal sealed class ExpressionEqualityComparer : IEqualityComparer<Expression>
         x.Type == y.Type && SequenceEqual(x.Expressions, y.Expressions, Equals);
 
     private bool Equals(IndexExpression x, IndexExpression y) =>
-        Equals(x.Object, x.Object) && Equals(x.Indexer, y.Indexer) && SequenceEqual(x.Arguments, x.Arguments, Equals);
+        Equals(x.Object, x.Object) && Equals(x.Indexer, y.Indexer) && SequenceEqual(x.Arguments, y.Arguments, Equals);
 
     private bool Equals(InvocationExpression x, InvocationExpression y) =>
         Equals(x.Expression, y.Expression) && SequenceEqual(x.Arguments, y.Arguments, Equals);
@@ -131,7 +131,6 @@ internal sealed class ExpressionEqualityComparer : IEqualityComparer<Expression>
 
     private bool Equals(ListInitExpression x, ListInitExpression y) =>
         Equals(x.NewExpression, y.NewExpression) && SequenceEqual(x.Initializers, y.Initializers, Equals);
-
 
     private bool Equals(MemberBinding x, MemberBinding y)
     {
