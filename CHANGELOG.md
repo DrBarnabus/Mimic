@@ -3,6 +3,23 @@
 All notable changes to this project will be automatically documented in this file.
 
 
+## [0.6.0](https://github.com/DrBarnabus/Mimic/compare/v0.5.0...v0.6.0) (2025-06-22)
+
+
+### Features
+
+* Add `WithDelay` method to allow setting up delays for function invocations ([#8](https://github.com/DrBarnabus/Mimic/issues/8)) ([55cad2b](https://github.com/DrBarnabus/Mimic/commit/55cad2b68aee829312af828d9354516c5e26f5f0))
+* Rename of `Verifiable` to `Expected` and `Verify*` to `Verify*Received` ([b5c73de](https://github.com/DrBarnabus/Mimic/commit/b5c73de90fff706d45aad32a1b9df3724e46f93a))
+* Support for `Proceed()`'ing to base implementation ([#5](https://github.com/DrBarnabus/Mimic/issues/5)) ([8d3cc63](https://github.com/DrBarnabus/Mimic/commit/8d3cc63f657d77d6cb010b94b67a022a94cd2c7e))
+* Support for mimicking classes ([#4](https://github.com/DrBarnabus/Mimic/issues/4)) ([26d73e9](https://github.com/DrBarnabus/Mimic/commit/26d73e96bc650fbb46e500d10609e791e0dc05a5))
+* Support for setup of nested method calls ([#6](https://github.com/DrBarnabus/Mimic/issues/6)) ([4d26ef5](https://github.com/DrBarnabus/Mimic/commit/4d26ef584c1a5809a38392726f14fd2dab37a95c))
+* Unify exceptions under `MimicException` type ([913103e](https://github.com/DrBarnabus/Mimic/commit/913103ea3860c4e78b501abd1ea365639a33735b))
+
+
+### Bug Fixes
+
+* Correct inheritance of `Strict` mode for nested `IMimic<T>` instances ([48470dd](https://github.com/DrBarnabus/Mimic/commit/48470dd9bd4a169951a340418db64930d6971688))
+
 ## [0.5.0](https://github.com/DrBarnabus/Mimic/compare/v0.4.0...v0.5.0) (2024-02-07)
 
 
