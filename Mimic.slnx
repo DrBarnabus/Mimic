@@ -1,0 +1,9 @@
+﻿<Solution>
+    <Folder Name="/src/">
+        <File Path="src\Directory.Build.props" />
+        <File Path="src\Directory.Packages.props" />
+
+        <Project Path="src\Mimic.UnitTests\Mimic.UnitTests.csproj" Type="Classic C#" />
+        <Project Path="src\Mimic\Mimic.csproj" Type="Classic C#" />
+    </Folder>
+</Solution>
