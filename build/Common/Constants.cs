@@ -18,7 +18,7 @@ public static class Constants
     public const string DefaultBranch = "main";
     public const string DefaultConfiguration = "Release";
 
-    public const string SolutionFile = "./Mimic.sln";
+    public const string SolutionFile = "./Mimic.slnx";
 
     public const string NuGetOrgUrl = "https://api.nuget.org/v3/index.json";
     public const string GithubPackagesUrl = "https://nuget.pkg.github.com/DrBarnabus/index.json";

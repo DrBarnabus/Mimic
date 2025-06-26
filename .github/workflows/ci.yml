@@ -45,7 +45,7 @@ jobs:
       # Prepare
       - name: '[Prepare]'
         if: steps.setup-job.outputs.cake-cache-hit != 'true'
-        run: dotnet build build/CI.sln -c Release
+        run: dotnet build build/CI.slnx -c Release
 
   package:
     name: Package

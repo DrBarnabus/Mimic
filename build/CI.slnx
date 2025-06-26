@@ -1,0 +1,5 @@
+﻿<Solution>
+    <Project Path="Build\Build.csproj" Type="Classic C#" />
+    <Project Path="Common\Common.csproj" Type="Classic C#" />
+    <Project Path="Publish\Publish.csproj" Type="Classic C#" />
+</Solution>
