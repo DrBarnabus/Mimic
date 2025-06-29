@@ -5,10 +5,20 @@ namespace Mimic;
 
 public partial class Mimic<T>
 {
+    /// <summary>
+    /// Verifies that the mimic has received all expected setups.
+    /// </summary>
     public void VerifyExpectedReceived() => VerifyReceived(s => s.Expected, []);
 
+    /// <summary>
+    /// Verifies that the mimic has received all configured setups.
+    /// </summary>
     public void VerifyAllSetupsReceived() => VerifyReceived((SetupBase _) => true, []);
 
+    /// <summary>
+    /// Verifies that the mimic has received no other calls beyond those already verified.
+    /// </summary>
+    /// <exception cref="MimicException">Thrown when unverified invocations are found.</exception>
     public void VerifyNoOtherCallsReceived()
     {
         lock (_invocations)
@@ -21,15 +31,43 @@ public partial class Mimic<T>
 
     #region VerifyReceived
 
+    /// <summary>
+    /// Verifies that the specified method call expression was received at least once.
+    /// </summary>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation was not received.</exception>
     public void VerifyReceived(Expression<Action<T>> expression) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce());
 
+    /// <summary>
+    /// Verifies that the specified method call expression was received the expected number of times.
+    /// </summary>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation count was not met.</exception>
     public void VerifyReceived(Expression<Action<T>> expression, CallCount callCount) =>
         VerifyReceivedInternal(expression, callCount);
 
+    /// <summary>
+    /// Verifies that the specified method call expression was received at least once, with a custom failure message.
+    /// </summary>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation was not received.</exception>
     public void VerifyReceived(Expression<Action<T>> expression, string failureMessage) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
+    /// <summary>
+    /// Verifies that the specified method call expression was received the expected number of times, with a custom failure message.
+    /// </summary>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation count was not met.</exception>
     public void VerifyReceived(Expression<Action<T>> expression, CallCount callCount, string failureMessage) =>
         VerifyReceivedInternal(expression, callCount, failureMessage);
 
@@ -37,15 +75,47 @@ public partial class Mimic<T>
 
     #region VerifyReceived<TResult>
 
+    /// <summary>
+    /// Verifies that the specified method call expression returning a value was received at least once.
+    /// </summary>
+    /// <typeparam name="TResult">The return type of the method being verified.</typeparam>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation was not received.</exception>
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce());
 
+    /// <summary>
+    /// Verifies that the specified method call expression returning a value was received the expected number of times.
+    /// </summary>
+    /// <typeparam name="TResult">The return type of the method being verified.</typeparam>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation count was not met.</exception>
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, CallCount callCount) =>
         VerifyReceivedInternal(expression, callCount);
 
+    /// <summary>
+    /// Verifies that the specified method call expression returning a value was received at least once, with a custom failure message.
+    /// </summary>
+    /// <typeparam name="TResult">The return type of the method being verified.</typeparam>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation was not received.</exception>
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, string failureMessage) =>
         VerifyReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
+    /// <summary>
+    /// Verifies that the specified method call expression returning a value was received the expected number of times, with a custom failure message.
+    /// </summary>
+    /// <typeparam name="TResult">The return type of the method being verified.</typeparam>
+    /// <param name="expression">The expression representing the method call to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when the expression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expected invocation count was not met.</exception>
     public void VerifyReceived<TResult>(Expression<Func<T, TResult>> expression, CallCount callCount, string failureMessage) =>
         VerifyReceivedInternal(expression, callCount, failureMessage);
 
@@ -53,15 +123,43 @@ public partial class Mimic<T>
 
     #region VerifyGetReceived<TProperty>
 
+    /// <summary>
+    /// Verifies that the specified property getter was accessed at least once.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being verified.</typeparam>
+    /// <param name="expression">The expression representing the property getter to verify.</param>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property getter or when the expected access was not received.</exception>
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression) =>
         VerifyGetReceivedInternal(expression, CallCount.AtLeastOnce());
 
+    /// <summary>
+    /// Verifies that the specified property getter was accessed the expected number of times.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being verified.</typeparam>
+    /// <param name="expression">The expression representing the property getter to verify.</param>
+    /// <param name="callCount">The expected number of accesses.</param>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property getter or when the expected access count was not met.</exception>
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, CallCount callCount) =>
         VerifyGetReceivedInternal(expression, callCount);
 
+    /// <summary>
+    /// Verifies that the specified property getter was accessed at least once, with a custom failure message.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being verified.</typeparam>
+    /// <param name="expression">The expression representing the property getter to verify.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property getter or when the expected access was not received.</exception>
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, string failureMessage) =>
         VerifyGetReceivedInternal(expression, CallCount.AtLeastOnce(), failureMessage);
 
+    /// <summary>
+    /// Verifies that the specified property getter was accessed the expected number of times, with a custom failure message.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being verified.</typeparam>
+    /// <param name="expression">The expression representing the property getter to verify.</param>
+    /// <param name="callCount">The expected number of accesses.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property getter or when the expected access count was not met.</exception>
     public void VerifyGetReceived<TProperty>(Expression<Func<T, TProperty>> expression, CallCount callCount, string failureMessage) =>
         VerifyGetReceivedInternal(expression, callCount, failureMessage);
 
@@ -69,15 +167,43 @@ public partial class Mimic<T>
 
     #region VerifySetReceived
 
+    /// <summary>
+    /// Verifies that the specified property setter was called at least once.
+    /// </summary>
+    /// <param name="setterExpression">The expression representing the property setter to verify.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when setterExpression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property setter or when the expected call was not received.</exception>
     public void VerifySetReceived(Action<T> setterExpression) =>
         VerifySetReceivedInternal(setterExpression, CallCount.AtLeastOnce());
 
+    /// <summary>
+    /// Verifies that the specified property setter was called the expected number of times.
+    /// </summary>
+    /// <param name="setterExpression">The expression representing the property setter to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when setterExpression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property setter or when the expected call count was not met.</exception>
     public void VerifySetReceived(Action<T> setterExpression, CallCount callCount) =>
         VerifySetReceivedInternal(setterExpression, callCount);
 
+    /// <summary>
+    /// Verifies that the specified property setter was called at least once, with a custom failure message.
+    /// </summary>
+    /// <param name="setterExpression">The expression representing the property setter to verify.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when setterExpression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property setter or when the expected call was not received.</exception>
     public void VerifySetReceived(Action<T> setterExpression, string failureMessage) =>
         VerifySetReceivedInternal(setterExpression, CallCount.AtLeastOnce(), failureMessage);
 
+    /// <summary>
+    /// Verifies that the specified property setter was called the expected number of times, with a custom failure message.
+    /// </summary>
+    /// <param name="setterExpression">The expression representing the property setter to verify.</param>
+    /// <param name="callCount">The expected number of calls.</param>
+    /// <param name="failureMessage">The custom message to display when verification fails.</param>
+    /// <exception cref="Guard.AssertionException">Thrown when setterExpression is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression is not a valid property setter or when the expected call count was not met.</exception>
     public void VerifySetReceived(Action<T> setterExpression, CallCount callCount, string failureMessage) =>
         VerifySetReceivedInternal(setterExpression, callCount, failureMessage);
 
