@@ -7,18 +7,39 @@ namespace Mimic;
 
 public partial class Mimic<T>
 {
+    /// <summary>
+    /// Sets up a method or property on the mocked object to be configured with behaviours.
+    /// </summary>
+    /// <param name="expression">An expression that specifies the method or property to set up.</param>
+    /// <returns>An <see cref="ISetup{T}"/> that can be used to configure the behaviour of the specified method or property.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="expression"/> is null.</exception>
     public ISetup<T> Setup(Expression<Action<T>> expression)
     {
         var setup = Setup(this, expression);
         return new Setup<T>(setup);
     }
 
+    /// <summary>
+    /// Sets up a method or property on the mocked object that returns a value to be configured with behaviours.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the return value of the method or property being set up.</typeparam>
+    /// <param name="expression">An expression that specifies the method or property to set up.</param>
+    /// <returns>An <see cref="ISetup{T, TResult}"/> that can be used to configure the behaviour and return value of the specified method or property.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="expression"/> is null.</exception>
     public ISetup<T, TResult> Setup<TResult>(Expression<Func<T, TResult>> expression)
     {
         var setup = Setup(this, expression);
         return new Setup<T, TResult>(setup);
     }
 
+    /// <summary>
+    /// Sets up a property getter on the mocked object to be configured with behaviours.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being set up.</typeparam>
+    /// <param name="expression">An expression that specifies the property getter to set up.</param>
+    /// <returns>An <see cref="IGetterSetup{T, TProperty}"/> that can be used to configure the behaviour of the specified property getter.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="expression"/> is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression does not represent a property or the property cannot be read.</exception>
     public IGetterSetup<T, TProperty> SetupGet<TProperty>(Expression<Func<T, TProperty>> expression)
     {
         Guard.NotNull(expression);
@@ -36,6 +57,13 @@ public partial class Mimic<T>
         return new Setup<T, TProperty>(setup);
     }
 
+    /// <summary>
+    /// Sets up a property setter on the mocked object to be configured with behaviours.
+    /// </summary>
+    /// <param name="setterExpression">An action that specifies the property setter to set up.</param>
+    /// <returns>An <see cref="ISetup{T}"/> that can be used to configure the behaviour of the specified property setter.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="setterExpression"/> is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression does not represent a valid property setter.</exception>
     public ISetup<T> SetupSet(Action<T> setterExpression)
     {
         Guard.NotNull(setterExpression);
@@ -47,6 +75,14 @@ public partial class Mimic<T>
         return new Setup<T>(setup);
     }
 
+    /// <summary>
+    /// Sets up a property setter on the mocked object to be configured with behaviours, with strongly typed property support.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being set up.</typeparam>
+    /// <param name="setterExpression">An action that specifies the property setter to set up.</param>
+    /// <returns>An <see cref="ISetterSetup{T, TProperty}"/> that can be used to configure the behaviour of the specified property setter.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="setterExpression"/> is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression does not represent a valid property setter.</exception>
     public ISetterSetup<T, TProperty> SetupSet<TProperty>(Action<T> setterExpression)
     {
         Guard.NotNull(setterExpression);
@@ -58,6 +94,15 @@ public partial class Mimic<T>
         return new SetterSetup<T, TProperty>(setup);
     }
 
+    /// <summary>
+    /// Sets up a property on the mocked object to behave like a real property with automatic getter and setter behaviour.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property being set up.</typeparam>
+    /// <param name="propertyExpression">An expression that specifies the property to set up.</param>
+    /// <param name="initialValue">The initial value to assign to the property. Defaults to the default value of <typeparamref name="TProperty"/>.</param>
+    /// <returns>The current <see cref="Mimic{T}"/> instance for method chaining.</returns>
+    /// <exception cref="Guard.AssertionException">Thrown when <paramref name="propertyExpression"/> is null.</exception>
+    /// <exception cref="MimicException">Thrown when the expression does not represent a property, or the property cannot be read or written.</exception>
     public Mimic<T> SetupProperty<TProperty>(Expression<Func<T, TProperty>> propertyExpression, TProperty? initialValue = default)
     {
         Guard.NotNull(propertyExpression);
@@ -81,6 +126,10 @@ public partial class Mimic<T>
         return this;
     }
 
+    /// <summary>
+    /// Sets up all properties on the mocked object to behave like real properties with automatic getter and setter behaviour.
+    /// </summary>
+    /// <returns>The current <see cref="Mimic{T}"/> instance for method chaining.</returns>
     public Mimic<T> SetupAllProperties()
     {
         _setups.Add(new AllPropertiesStubSetup(this));
