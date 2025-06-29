@@ -76,7 +76,7 @@ public partial class Mimic<T>
     }
 
     /// <summary>
-    /// Sets up a property setter on the mocked object to be configured with behaviours, with stronglytyped property support.
+    /// Sets up a property setter on the mocked object to be configured with behaviours, with strongly typed property support.
     /// </summary>
     /// <typeparam name="TProperty">The type of the property being set up.</typeparam>
     /// <param name="setterExpression">An action that specifies the property setter to set up.</param>
