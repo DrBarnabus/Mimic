@@ -355,6 +355,36 @@ public static class ReturnsExtensionsTests
 
             (await mimic.Object.Task(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15)).ShouldBe(value);
         }
+
+        [Theory, AutoData]
+        public static async Task Returns_WithSixteenParamsAndValueFunction_ShouldReturnValue(int value, int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15, int t16)
+        {
+            var mimic = new Mimic<ISubject>();
+
+            mimic.Setup(m => m.Task(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16))
+                .Returns((int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16) =>
+                {
+                    a1.ShouldBe(t1);
+                    a2.ShouldBe(t2);
+                    a3.ShouldBe(t3);
+                    a4.ShouldBe(t4);
+                    a5.ShouldBe(t5);
+                    a6.ShouldBe(t6);
+                    a7.ShouldBe(t7);
+                    a8.ShouldBe(t8);
+                    a9.ShouldBe(t9);
+                    a10.ShouldBe(t10);
+                    a11.ShouldBe(t11);
+                    a12.ShouldBe(t12);
+                    a13.ShouldBe(t13);
+                    a14.ShouldBe(t14);
+                    a15.ShouldBe(t15);
+                    a16.ShouldBe(t16);
+                    return value;
+                });
+
+            (await mimic.Object.Task(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16)).ShouldBe(value);
+        }
     }
 
     public static class ValueTaskOfT
@@ -710,6 +740,36 @@ public static class ReturnsExtensionsTests
 
             (await mimic.Object.ValueTask(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15)).ShouldBe(value);
         }
+
+        [Theory, AutoData]
+        public static async Task Returns_WithSixteenParamsAndValueFunction_ShouldReturnValue(int value, int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15, int t16)
+        {
+            var mimic = new Mimic<ISubject>();
+
+            mimic.Setup(m => m.ValueTask(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16))
+                .Returns((int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16) =>
+                {
+                    a1.ShouldBe(t1);
+                    a2.ShouldBe(t2);
+                    a3.ShouldBe(t3);
+                    a4.ShouldBe(t4);
+                    a5.ShouldBe(t5);
+                    a6.ShouldBe(t6);
+                    a7.ShouldBe(t7);
+                    a8.ShouldBe(t8);
+                    a9.ShouldBe(t9);
+                    a10.ShouldBe(t10);
+                    a11.ShouldBe(t11);
+                    a12.ShouldBe(t12);
+                    a13.ShouldBe(t13);
+                    a14.ShouldBe(t14);
+                    a15.ShouldBe(t15);
+                    a16.ShouldBe(t16);
+                    return value;
+                });
+
+            (await mimic.Object.ValueTask(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16)).ShouldBe(value);
+        }
     }
 
     // ReSharper disable once MemberCanBePrivate.Global
@@ -747,6 +807,8 @@ public static class ReturnsExtensionsTests
 
         public Task<int> Task(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15);
 
+        public Task<int> Task(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15, int t16);
+
         public ValueTask<int> ValueTask();
 
         public ValueTask<int> ValueTask(int t);
@@ -778,5 +840,7 @@ public static class ReturnsExtensionsTests
         public ValueTask<int> ValueTask(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14);
 
         public ValueTask<int> ValueTask(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15);
+
+        public ValueTask<int> ValueTask(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10, int t11, int t12, int t13, int t14, int t15, int t16);
     }
 }

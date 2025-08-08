@@ -409,11 +409,45 @@ public static class ReturnsExtensions
     /// <returns>An <see cref="IReturnsResult"/> that can be used to configure additional return behaviours.</returns>
     /// <remarks>
     /// This method allows the return value to be computed based on the method's arguments while automatically handling the task wrapping.
-    /// This is the maximum parameter count supported by these extension methods.
+    /// The function receives the arguments passed to the mocked method at invocation time.
     /// </remarks>
     public static IReturnsResult Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this IReturns<Task<TResult>> mimic, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> valueFunction)
     {
         return mimic.Returns((T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15) => Task.FromResult(valueFunction(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15)));
+    }
+
+    /// <summary>
+    /// Configures the setup to return a value computed by the specified function using the method's sixteen arguments,
+    /// wrapped in a completed <see cref="Task{TResult}"/>.
+    /// </summary>
+    /// <typeparam name="T1">The type of the method's first argument.</typeparam>
+    /// <typeparam name="T2">The type of the method's second argument.</typeparam>
+    /// <typeparam name="T3">The type of the method's third argument.</typeparam>
+    /// <typeparam name="T4">The type of the method's fourth argument.</typeparam>
+    /// <typeparam name="T5">The type of the method's fifth argument.</typeparam>
+    /// <typeparam name="T6">The type of the method's sixth argument.</typeparam>
+    /// <typeparam name="T7">The type of the method's seventh argument.</typeparam>
+    /// <typeparam name="T8">The type of the method's eighth argument.</typeparam>
+    /// <typeparam name="T9">The type of the method's ninth argument.</typeparam>
+    /// <typeparam name="T10">The type of the method's tenth argument.</typeparam>
+    /// <typeparam name="T11">The type of the method's eleventh argument.</typeparam>
+    /// <typeparam name="T12">The type of the method's twelfth argument.</typeparam>
+    /// <typeparam name="T13">The type of the method's thirteenth argument.</typeparam>
+    /// <typeparam name="T14">The type of the method's fourteenth argument.</typeparam>
+    /// <typeparam name="T15">The type of the method's fifteenth argument.</typeparam>
+    /// <typeparam name="T16">The type of the method's sixteenth argument.</typeparam>
+    /// <typeparam name="TResult">The type of the value to be returned.</typeparam>
+    /// <param name="mimic">The returns configuration instance.</param>
+    /// <param name="valueFunction">A function that takes the method's arguments and computes the return value.</param>
+    /// <returns>An <see cref="IReturnsResult"/> that can be used to configure additional return behaviours.</returns>
+    /// <remarks>
+    /// This method allows the return value to be computed based on the method's arguments while automatically handling the task wrapping.
+    /// The function receives the arguments passed to the mocked method at invocation time.
+    /// This is the maximum parameter count supported by these extension methods.
+    /// </remarks>
+    public static IReturnsResult Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IReturns<Task<TResult>> mimic, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> valueFunction)
+    {
+        return mimic.Returns((T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16) => Task.FromResult(valueFunction(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16)));
     }
 
     #endregion
@@ -821,11 +855,45 @@ public static class ReturnsExtensions
     /// <returns>An <see cref="IReturnsResult"/> that can be used to configure additional return behaviours.</returns>
     /// <remarks>
     /// This method allows the return value to be computed based on the method's arguments while automatically handling the ValueTask wrapping.
-    /// This is the maximum parameter count supported by these extension methods.
+    /// The function receives the arguments passed to the mocked method at invocation time.
     /// </remarks>
     public static IReturnsResult Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this IReturns<ValueTask<TResult>> mimic, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> valueFunction)
     {
         return mimic.Returns((T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15) => new ValueTask<TResult>(valueFunction(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15)));
+    }
+
+    /// <summary>
+    /// Configures the setup to return a value computed by the specified function using the method's sixteen arguments,
+    /// wrapped in a <see cref="ValueTask{TResult}"/>.
+    /// </summary>
+    /// <typeparam name="T1">The type of the method's first argument.</typeparam>
+    /// <typeparam name="T2">The type of the method's second argument.</typeparam>
+    /// <typeparam name="T3">The type of the method's third argument.</typeparam>
+    /// <typeparam name="T4">The type of the method's fourth argument.</typeparam>
+    /// <typeparam name="T5">The type of the method's fifth argument.</typeparam>
+    /// <typeparam name="T6">The type of the method's sixth argument.</typeparam>
+    /// <typeparam name="T7">The type of the method's seventh argument.</typeparam>
+    /// <typeparam name="T8">The type of the method's eighth argument.</typeparam>
+    /// <typeparam name="T9">The type of the method's ninth argument.</typeparam>
+    /// <typeparam name="T10">The type of the method's tenth argument.</typeparam>
+    /// <typeparam name="T11">The type of the method's eleventh argument.</typeparam>
+    /// <typeparam name="T12">The type of the method's twelfth argument.</typeparam>
+    /// <typeparam name="T13">The type of the method's thirteenth argument.</typeparam>
+    /// <typeparam name="T14">The type of the method's fourteenth argument.</typeparam>
+    /// <typeparam name="T15">The type of the method's fifteenth argument.</typeparam>
+    /// <typeparam name="T16">The type of the method's sixteenth argument.</typeparam>
+    /// <typeparam name="TResult">The type of the value to be returned.</typeparam>
+    /// <param name="mimic">The returns configuration instance.</param>
+    /// <param name="valueFunction">A function that takes the method's arguments and computes the return value.</param>
+    /// <returns>An <see cref="IReturnsResult"/> that can be used to configure additional return behaviours.</returns>
+    /// <remarks>
+    /// This method allows the return value to be computed based on the method's arguments while automatically handling the ValueTask wrapping.
+    /// The function receives the arguments passed to the mocked method at invocation time.
+    /// This is the maximum parameter count supported by these extension methods.
+    /// </remarks>
+    public static IReturnsResult Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this IReturns<ValueTask<TResult>> mimic, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> valueFunction)
+    {
+        return mimic.Returns((T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16) => new ValueTask<TResult>(valueFunction(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16)));
     }
 
     #endregion
