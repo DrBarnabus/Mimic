@@ -1,0 +1,277 @@
+#nullable enable
+
+Mimic.Arg
+Mimic.Arg.Ref<TValue>
+Mimic.CallCount
+Mimic.CallCount.CallCount() -> void
+Mimic.CallCount.Equals(Mimic.CallCount other) -> bool
+Mimic.CallCount.Validate(int count) -> bool
+Mimic.DelayableExtensions
+Mimic.Exceptions.MimicException
+Mimic.Exceptions.MimicException.MimicException(Mimic.Exceptions.Reason reason, string? message) -> void
+Mimic.Exceptions.MimicException.MimicException(Mimic.Exceptions.Reason reason, string? message, System.Exception? innerException) -> void
+Mimic.Exceptions.MimicException.Reason.get -> Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason.ExpectationFailed = 4 -> Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason.IncompatibleMimicType = 2 -> Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason.Unspecified = 0 -> Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason.UnsupportedExpression = 3 -> Mimic.Exceptions.Reason
+Mimic.Exceptions.Reason.UsageError = 1 -> Mimic.Exceptions.Reason
+Mimic.Generic
+Mimic.Generic.AnyReferenceType
+Mimic.Generic.AnyReferenceType.AnyReferenceType() -> void
+Mimic.Generic.AnyReferenceType.Matches(System.Type! genericType) -> bool
+Mimic.Generic.AnyType
+Mimic.Generic.AnyType.AnyType() -> void
+Mimic.Generic.AnyType.Matches(System.Type! genericType) -> bool
+Mimic.Generic.AnyValueType
+Mimic.Generic.AnyValueType.AnyValueType() -> void
+Mimic.Generic.AnyValueType.Matches(System.Type! genericType) -> bool
+Mimic.Generic.AssignableFromType<T>
+Mimic.Generic.AssignableFromType<T>.AssignableFromType() -> void
+Mimic.Generic.AssignableFromType<T>.Matches(System.Type! genericType) -> bool
+Mimic.Generic.Generic() -> void
+Mimic.ICallback
+Mimic.ICallback.Callback(System.Action! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback(System.Delegate! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7, T8>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6, T7>(System.Action<T1, T2, T3, T4, T5, T6, T7>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5, T6>(System.Action<T1, T2, T3, T4, T5, T6>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4, T5>(System.Action<T1, T2, T3, T4, T5>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3, T4>(System.Action<T1, T2, T3, T4>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2, T3>(System.Action<T1, T2, T3>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T1, T2>(System.Action<T1, T2>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback.Callback<T>(System.Action<T>! callback) -> Mimic.ICallbackResult!
+Mimic.ICallback<TResult>
+Mimic.ICallback<TResult>.Callback(System.Action! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback(System.Delegate! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7, T8>(System.Action<T1, T2, T3, T4, T5, T6, T7, T8>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6, T7>(System.Action<T1, T2, T3, T4, T5, T6, T7>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5, T6>(System.Action<T1, T2, T3, T4, T5, T6>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4, T5>(System.Action<T1, T2, T3, T4, T5>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3, T4>(System.Action<T1, T2, T3, T4>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2, T3>(System.Action<T1, T2, T3>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T1, T2>(System.Action<T1, T2>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallback<TResult>.Callback<T>(System.Action<T>! callback) -> Mimic.ICallbackResult<TResult>!
+Mimic.ICallbackResult
+Mimic.ICallbackResult<TResult>
+Mimic.IConditionalSetup<TMimic>
+Mimic.IConditionalSetup<TMimic>.Setup(System.Linq.Expressions.Expression<System.Action<TMimic!>!>! expression) -> Mimic.ISetup<TMimic!>!
+Mimic.IConditionalSetup<TMimic>.Setup<TResult>(System.Linq.Expressions.Expression<System.Func<TMimic!, TResult>!>! expression) -> Mimic.ISetup<TMimic!, TResult>!
+Mimic.IConditionalSetup<TMimic>.SetupGet<TProperty>(System.Linq.Expressions.Expression<System.Func<TMimic!, TProperty>!>! expression) -> Mimic.IGetterSetup<TMimic!, TProperty>!
+Mimic.IConditionalSetup<TMimic>.SetupSet(System.Action<TMimic!>! setterExpression) -> Mimic.ISetup<TMimic!>!
+Mimic.IConditionalSetup<TMimic>.SetupSet<TProperty>(System.Action<TMimic!>! setterExpression) -> Mimic.ISetterSetup<TMimic!, TProperty>!
+Mimic.IDelayable
+Mimic.IDelayable.WithDelay(System.Func<int, System.TimeSpan>! delayFunction) -> Mimic.IDelayableResult!
+Mimic.IDelayable.WithDelay(System.TimeSpan delay) -> Mimic.IDelayableResult!
+Mimic.IDelayableResult
+Mimic.IExpected
+Mimic.IExpected.Expected() -> void
+Mimic.IFluent
+Mimic.IFluent.Equals(object! obj) -> bool
+Mimic.IFluent.GetHashCode() -> int
+Mimic.IFluent.GetType() -> System.Type!
+Mimic.IFluent.ToString() -> string!
+Mimic.IGenericMatcher
+Mimic.IGenericMatcher.Matches(System.Type! genericType) -> bool
+Mimic.IGetterCallback<TProperty>
+Mimic.IGetterCallback<TProperty>.Callback(System.Action! callback) -> Mimic.IGetterCallbackResult<TProperty>!
+Mimic.IGetterCallbackResult<TProperty>
+Mimic.IGetterReturns<TProperty>
+Mimic.IGetterReturns<TProperty>.Returns(System.Func<TProperty?>! valueFunction) -> Mimic.IReturnsResult!
+Mimic.IGetterReturns<TProperty>.Returns(TProperty? value) -> Mimic.IReturnsResult!
+Mimic.IGetterSetup<TMimic, TProperty>
+Mimic.ILimitable
+Mimic.ILimitable.Limit(int executionLimit = 1) -> Mimic.IExpected!
+Mimic.IMimicked<T>
+Mimic.IMimicked<T>.Mimic.get -> Mimic.Mimic<T!>!
+Mimic.IProceed
+Mimic.IProceed.Proceed() -> Mimic.IProceedResult!
+Mimic.IProceedResult
+Mimic.IReturns<TResult, TNext>
+Mimic.IReturns<TResult, TNext>.Proceed() -> TNext
+Mimic.IReturns<TResult, TNext>.Returns(System.Func<TResult?>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns(TResult? value) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7, T8>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6, T7>(System.Func<T1, T2, T3, T4, T5, T6, T7, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5, T6>(System.Func<T1, T2, T3, T4, T5, T6, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4, T5>(System.Func<T1, T2, T3, T4, T5, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3, T4>(System.Func<T1, T2, T3, T4, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2, T3>(System.Func<T1, T2, T3, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T1, T2>(System.Func<T1, T2, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult, TNext>.Returns<T>(System.Func<T, TResult>! valueFunction) -> TNext
+Mimic.IReturns<TResult>
+Mimic.IReturnsResult
+Mimic.ISequenceDelayable
+Mimic.ISequenceDelayable.WithDelay(System.Func<int, System.TimeSpan>! delayFunction) -> Mimic.IExpected!
+Mimic.ISequenceDelayable.WithDelay(System.TimeSpan delay) -> Mimic.IExpected!
+Mimic.ISequenceSetup
+Mimic.ISequenceSetup.Next() -> Mimic.ISequenceSetup!
+Mimic.ISequenceSetup.Proceed() -> Mimic.ISequenceSetup!
+Mimic.ISequenceSetup<TResult>
+Mimic.ISetterCallback<TProperty>
+Mimic.ISetterCallback<TProperty>.Callback(System.Action<TProperty>! callback) -> Mimic.ICallbackResult!
+Mimic.ISetterSetup<TMimic, TProperty>
+Mimic.ISetup<TMimic, TResult>
+Mimic.ISetup<TMimic, TResult>.AsSequence() -> Mimic.ISequenceSetup<TResult>!
+Mimic.ISetup<TMimic>
+Mimic.ISetup<TMimic>.AsSequence() -> Mimic.ISequenceSetup!
+Mimic.IThrows
+Mimic.IThrows<TNext>
+Mimic.IThrows<TNext>.Throws(System.Delegate! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws(System.Exception! exception) -> TNext
+Mimic.IThrows<TNext>.Throws<T, TException>(System.Func<T, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, T8, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, T8, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, T7, TException>(System.Func<T1, T2, T3, T4, T5, T6, T7, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, T6, TException>(System.Func<T1, T2, T3, T4, T5, T6, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, T5, TException>(System.Func<T1, T2, T3, T4, T5, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, T4, TException>(System.Func<T1, T2, T3, T4, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, T3, TException>(System.Func<T1, T2, T3, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<T1, T2, TException>(System.Func<T1, T2, TException!>! exceptionFactory) -> TNext
+Mimic.IThrows<TNext>.Throws<TException>() -> TNext
+Mimic.IThrows<TNext>.Throws<TException>(System.Func<TException?>! exceptionFactory) -> TNext
+Mimic.IThrowsResult
+Mimic.Mimic<T>
+Mimic.Mimic<T>.ConstructorArguments.get -> object![]?
+Mimic.Mimic<T>.ConstructorArguments.init -> void
+Mimic.Mimic<T>.Mimic() -> void
+Mimic.Mimic<T>.Mimic(bool strict) -> void
+Mimic.Mimic<T>.Name.get -> string!
+Mimic.Mimic<T>.Name.init -> void
+Mimic.Mimic<T>.Object.get -> T!
+Mimic.Mimic<T>.Setup(System.Linq.Expressions.Expression<System.Action<T!>!>! expression) -> Mimic.ISetup<T!>!
+Mimic.Mimic<T>.Setup<TResult>(System.Linq.Expressions.Expression<System.Func<T!, TResult>!>! expression) -> Mimic.ISetup<T!, TResult>!
+Mimic.Mimic<T>.SetupAllProperties() -> Mimic.Mimic<T!>!
+Mimic.Mimic<T>.SetupGet<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! expression) -> Mimic.IGetterSetup<T!, TProperty>!
+Mimic.Mimic<T>.SetupProperty<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! propertyExpression, TProperty? initialValue = default(TProperty?)) -> Mimic.Mimic<T!>!
+Mimic.Mimic<T>.SetupSet(System.Action<T!>! setterExpression) -> Mimic.ISetup<T!>!
+Mimic.Mimic<T>.SetupSet<TProperty>(System.Action<T!>! setterExpression) -> Mimic.ISetterSetup<T!, TProperty>!
+Mimic.Mimic<T>.Strict.get -> bool
+Mimic.Mimic<T>.Strict.init -> void
+Mimic.Mimic<T>.VerifyAllSetupsReceived() -> void
+Mimic.Mimic<T>.VerifyExpectedReceived() -> void
+Mimic.Mimic<T>.VerifyGetReceived<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! expression) -> void
+Mimic.Mimic<T>.VerifyGetReceived<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! expression, Mimic.CallCount callCount) -> void
+Mimic.Mimic<T>.VerifyGetReceived<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! expression, Mimic.CallCount callCount, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifyGetReceived<TProperty>(System.Linq.Expressions.Expression<System.Func<T!, TProperty>!>! expression, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifyNoOtherCallsReceived() -> void
+Mimic.Mimic<T>.VerifyReceived(System.Linq.Expressions.Expression<System.Action<T!>!>! expression) -> void
+Mimic.Mimic<T>.VerifyReceived(System.Linq.Expressions.Expression<System.Action<T!>!>! expression, Mimic.CallCount callCount) -> void
+Mimic.Mimic<T>.VerifyReceived(System.Linq.Expressions.Expression<System.Action<T!>!>! expression, Mimic.CallCount callCount, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifyReceived(System.Linq.Expressions.Expression<System.Action<T!>!>! expression, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifyReceived<TResult>(System.Linq.Expressions.Expression<System.Func<T!, TResult>!>! expression) -> void
+Mimic.Mimic<T>.VerifyReceived<TResult>(System.Linq.Expressions.Expression<System.Func<T!, TResult>!>! expression, Mimic.CallCount callCount) -> void
+Mimic.Mimic<T>.VerifyReceived<TResult>(System.Linq.Expressions.Expression<System.Func<T!, TResult>!>! expression, Mimic.CallCount callCount, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifyReceived<TResult>(System.Linq.Expressions.Expression<System.Func<T!, TResult>!>! expression, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifySetReceived(System.Action<T!>! setterExpression) -> void
+Mimic.Mimic<T>.VerifySetReceived(System.Action<T!>! setterExpression, Mimic.CallCount callCount) -> void
+Mimic.Mimic<T>.VerifySetReceived(System.Action<T!>! setterExpression, Mimic.CallCount callCount, string! failureMessage) -> void
+Mimic.Mimic<T>.VerifySetReceived(System.Action<T!>! setterExpression, string! failureMessage) -> void
+Mimic.Mimic<T>.When(System.Func<bool>! condition) -> Mimic.IConditionalSetup<T!>!
+Mimic.Proxy.IInvocation
+Mimic.Proxy.IInvocation.Arguments.get -> System.Collections.Generic.IReadOnlyList<object?>!
+Mimic.Proxy.IInvocation.Exception.get -> System.Exception?
+Mimic.Proxy.IInvocation.Method.get -> System.Reflection.MethodInfo!
+Mimic.Proxy.IInvocation.ReturnValue.get -> object?
+Mimic.Proxy.IInvocation.Verified.get -> bool
+Mimic.ReturnsExtensions
+override Mimic.CallCount.Equals(object? obj) -> bool
+override Mimic.CallCount.GetHashCode() -> int
+override Mimic.Mimic<T>.ToString() -> string!
+static Mimic.Arg.Any<TValue>() -> TValue
+static Mimic.Arg.AnyNotNull<TValue>() -> TValue
+static Mimic.Arg.In<TValue>(params TValue[]! values) -> TValue
+static Mimic.Arg.In<TValue>(System.Collections.Generic.IEnumerable<TValue>! values) -> TValue
+static Mimic.Arg.In<TValue>(System.Collections.Generic.IEnumerable<TValue>! values, System.Collections.Generic.IEqualityComparer<TValue>! comparer) -> TValue
+static Mimic.Arg.Is<TValue>(System.Linq.Expressions.Expression<System.Func<object!, System.Type!, bool>!>! match) -> TValue
+static Mimic.Arg.Is<TValue>(System.Linq.Expressions.Expression<System.Func<TValue, bool>!>! match) -> TValue
+static Mimic.Arg.Is<TValue>(TValue value) -> TValue
+static Mimic.Arg.Is<TValue>(TValue value, System.Collections.Generic.IEqualityComparer<TValue>! comparer) -> TValue
+static Mimic.Arg.NotIn<TValue>(params TValue[]! values) -> TValue
+static Mimic.Arg.NotIn<TValue>(System.Collections.Generic.IEnumerable<TValue>! values) -> TValue
+static Mimic.Arg.NotIn<TValue>(System.Collections.Generic.IEnumerable<TValue>! values, System.Collections.Generic.IEqualityComparer<TValue>! comparer) -> TValue
+static Mimic.Arg.Ref<TValue>.Any -> TValue
+static Mimic.CallCount.AtLeast(int count) -> Mimic.CallCount
+static Mimic.CallCount.AtLeastOnce() -> Mimic.CallCount
+static Mimic.CallCount.AtMost(int count) -> Mimic.CallCount
+static Mimic.CallCount.AtMostOnce() -> Mimic.CallCount
+static Mimic.CallCount.Exactly(int count) -> Mimic.CallCount
+static Mimic.CallCount.ExclusiveBetween(int from, int to) -> Mimic.CallCount
+static Mimic.CallCount.InclusiveBetween(int from, int to) -> Mimic.CallCount
+static Mimic.CallCount.Never() -> Mimic.CallCount
+static Mimic.CallCount.Once() -> Mimic.CallCount
+static Mimic.CallCount.operator !=(Mimic.CallCount left, Mimic.CallCount right) -> bool
+static Mimic.CallCount.operator ==(Mimic.CallCount left, Mimic.CallCount right) -> bool
+static Mimic.DelayableExtensions.WithDelay(this Mimic.IDelayable! mimic, System.TimeSpan minDelay, System.TimeSpan maxDelay) -> Mimic.IDelayableResult!
+static Mimic.DelayableExtensions.WithDelay(this Mimic.IDelayable! mimic, System.TimeSpan minDelay, System.TimeSpan maxDelay, System.Random! random) -> Mimic.IDelayableResult!
+static Mimic.DelayableExtensions.WithDelay(this Mimic.ISequenceDelayable! mimic, System.TimeSpan minDelay, System.TimeSpan maxDelay) -> Mimic.IExpected!
+static Mimic.DelayableExtensions.WithDelay(this Mimic.ISequenceDelayable! mimic, System.TimeSpan minDelay, System.TimeSpan maxDelay, System.Random! random) -> Mimic.IExpected!
+static Mimic.Mimic<T>.FromObject(T! objectInstance) -> Mimic.Mimic<T!>!
+static Mimic.ReturnsExtensions.Returns<T, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, T7, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, T7, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, T6, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, T6, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, T6, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, T5, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, T5, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, T5, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, T4, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, T4, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, T4, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, T3, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, T3, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, T3, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<T1, T2, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<T1, T2, TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<T1, T2, TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, System.Func<TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<TResult>(this Mimic.IReturns<System.Threading.Tasks.Task<TResult>!>! mimic, TResult value) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, System.Func<TResult>! valueFunction) -> Mimic.IReturnsResult!
+static Mimic.ReturnsExtensions.Returns<TResult>(this Mimic.IReturns<System.Threading.Tasks.ValueTask<TResult>>! mimic, TResult value) -> Mimic.IReturnsResult!
