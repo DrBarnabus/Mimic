@@ -4,17 +4,38 @@ using Mimic.Setup;
 
 namespace Mimic.Exceptions;
 
+/// <summary>
+/// Represents errors that occur during Mimic library operations. This is the primary exception type thrown by
+/// Mimic to indicate various categories of errors such as usage errors, incompatible types, unsupported expressions,
+/// and expectation failures.
+/// </summary>
 [PublicAPI]
 public class MimicException : Exception
 {
+    /// <summary>
+    /// Gets the reason category that describes the type of mimic-related error that occurred.
+    /// </summary>
+    /// <value>A <see cref="Mimic.Exceptions.Reason"/> value indicating the category of error.</value>
     public Reason Reason { get; }
 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="MimicException"/> class with the specified reason and message.
+    /// </summary>
+    /// <param name="reason">The reason category that describes the type of error.</param>
+    /// <param name="message">The message that describes the error, or <c>null</c> to use a default message.</param>
     public MimicException(Reason reason, string? message)
         : base(message)
     {
         Reason = reason;
     }
 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="MimicException"/> class with the specified reason, message,
+    /// and inner exception.
+    /// </summary>
+    /// <param name="reason">The reason category that describes the type of error.</param>
+    /// <param name="message">The message that describes the error, or <c>null</c> to use a default message.</param>
+    /// <param name="innerException">The exception that is the cause of the current exception or <c>null</c> if no inner exception is specified.</param>
     public MimicException(Reason reason, string? message, Exception? innerException)
         : base(message, innerException)
     {
